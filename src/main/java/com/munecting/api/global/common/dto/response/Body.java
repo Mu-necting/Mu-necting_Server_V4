@@ -1,4 +1,4 @@
-package com.munecting.api.global.response;
+package com.munecting.api.global.common.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
