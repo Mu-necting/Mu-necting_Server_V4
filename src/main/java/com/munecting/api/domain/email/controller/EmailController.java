@@ -1,6 +1,9 @@
 package com.munecting.api.domain.email.controller;
 
 import com.munecting.api.domain.email.service.MailServiceImpl;
+import com.munecting.api.global.common.dto.response.ApiResponse;
+import com.munecting.api.global.common.dto.response.Status;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +17,21 @@ public class EmailController {
     private final MailServiceImpl mailService;
 
     @PostMapping("")
-    public void mailConfirm(@RequestParam(name = "email") String email) throws Exception {
+    @Operation(summary = "이메일 코드 발송")
+    public ApiResponse<?> mailConfirm(
+            @RequestParam(name = "email") String email) throws Exception {
         String code = mailService.sendSimpleMessage(email);
         log.info("사용자에게 발송한 인증코드 ==> " + code);
+        return ApiResponse.onSuccess(Status.OK.getCode(),
+                Status.CREATED.getMessage(), code); //data 부분은 회의후 설정
     }
 
     @GetMapping("/verifications")
-    public ResponseEntity<?> verificationEmail(@RequestParam("code") String code) {
-        return ResponseEntity.ok().body(mailService.verifyCode(code));
+    @Operation(summary = "이메일 코드 검증")
+    public ApiResponse<?> verificationEmail(
+            @RequestParam("code") String code) {
+        ResponseEntity<String> body = ResponseEntity.ok().body(mailService.verifyCode(code));
+        return ApiResponse.onSuccess(Status.OK.getCode(),
+                Status.CREATED.getMessage(), body);
     }
 }
