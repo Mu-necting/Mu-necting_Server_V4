@@ -44,6 +44,10 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+	//mail
+	implementation group: 'jakarta.mail', name: 'jakarta.mail-api', version: '2.1.3'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 	// Etc
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
