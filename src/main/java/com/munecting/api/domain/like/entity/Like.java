@@ -2,6 +2,7 @@ package com.munecting.api.domain.like.entity;
 
 import com.munecting.api.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,8 +23,9 @@ public class Like extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private Long userId;
 
-    //스포티 파이에서 제공하는 자료형 확인 후 수정 예정
-    private Long musicId;
+    @NotNull
+    private String musicUri;
 }

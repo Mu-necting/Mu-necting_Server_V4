@@ -25,10 +25,12 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private Long userId;
 
-    //스포티 파이에서 제공하는 자료형 확인 후 수정 예정
-    private Long musicId;
+    @NotNull
+    private String musicUri;
 
+    @NotNull
     private String content;
 }
