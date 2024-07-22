@@ -24,7 +24,7 @@ public class SpotifyController {
 
     private final SpotifyService spotifyService;
 
-    @GetMapping("/search/track/{keyword}")
+    @GetMapping("/search/tracks/{keyword}")
     @Operation(summary = "키워드로 트랙 검색하기")
     public ApiResponse<?> searchTracks(
             @PathVariable("keyword") String keyword,
@@ -35,7 +35,7 @@ public class SpotifyController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), musicResponseDtoList);
     }
 
-    @GetMapping("/search/album/{keyword}")
+    @GetMapping("/search/albums/{keyword}")
     @Operation(summary = "키워드로 앨범 검색하기")
     public ApiResponse<?> searchAlbums(
             @PathVariable("keyword") String keyword,
@@ -46,7 +46,7 @@ public class SpotifyController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), albumResponseDtoList);
     }
 
-    @GetMapping("/search/artist/{keyword}")
+    @GetMapping("/search/artists/{keyword}")
     @Operation(summary = "키워드로 아티스트 검색하기")
     public ApiResponse<?> searchArtists(
             @PathVariable("keyword") String keyword,
@@ -57,7 +57,7 @@ public class SpotifyController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), artistResponseDtoList);
     }
 
-    @GetMapping("/album/{id}/tracks")
+    @GetMapping("/albums/{id}/tracks")
     @Operation(summary = "앨범 아이디로 노래 조회하기")
     public ApiResponse<?> getTracksByAlbumId(
             @PathVariable("id") String albumId,
@@ -68,7 +68,7 @@ public class SpotifyController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), musicResponseDtoList);
     }
 
-    @GetMapping("/artist/{id}/albums")
+    @GetMapping("/artists/{id}/albums")
     @Operation(summary = "아티스트 아이디로 앨범 조회하기")
     public ApiResponse<?> getAlbumsByArtistId(
             @PathVariable("id") String albumId,
@@ -79,7 +79,7 @@ public class SpotifyController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), albumResponseDtoList);
     }
 
-    @GetMapping("/track/{id}")
+    @GetMapping("/tracks/{id}")
     @Operation(summary = "노래 아이디로 정보 조회하기")
     public ApiResponse<?> getAlbumsByArtistId(
             @PathVariable("id") String trackId
