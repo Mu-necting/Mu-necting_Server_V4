@@ -12,20 +12,19 @@ public class PlaylistMusicId implements Serializable {
     @NotNull
     private Long playlistId;
 
-    //스포티 파이에서 제공하는 자료형 확인 후 수정 예정
     @NotNull
-    private Long musicId;
+    private String musicUri;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlaylistMusicId that = (PlaylistMusicId) o;
-        return Objects.equals(playlistId, that.playlistId) && Objects.equals(musicId, that.musicId);
+        return Objects.equals(playlistId, that.playlistId) && Objects.equals(musicUri, that.musicUri);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(playlistId, musicId);
+        return Objects.hash(playlistId, musicUri);
     }
 }

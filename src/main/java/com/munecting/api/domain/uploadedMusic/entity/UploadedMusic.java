@@ -28,9 +28,8 @@ public class UploadedMusic extends BaseEntity {
     @NotNull
     private Long userId;
 
-    //스포티 파이에서 제공하는 자료형 확인 후 수정 예정
     @NotNull
-    private Long musicId;
+    private String musicUri;
 
     @NotNull
     private Double latitude;
