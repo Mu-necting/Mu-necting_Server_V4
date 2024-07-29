@@ -1,6 +1,7 @@
 package com.munecting.api.domain.playListMusic.entity;
 
 import com.munecting.api.global.common.domain.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
@@ -20,4 +21,17 @@ public class PlaylistMusic extends BaseEntity {
 
     @EmbeddedId
     private PlaylistMusicId id;
+
+    @Column(name = "play_order")
+    private Long playOrder;
+
+    public static PlaylistMusic toEntity (PlaylistMusicId playlistMusicId) {
+        return PlaylistMusic.builder()
+                .id(playlistMusicId)
+                .build();
+    }
+
+    public void updatePlayOrder (Long order) {
+        this.playOrder = order;
+    }
 }

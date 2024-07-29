@@ -22,6 +22,9 @@ public enum Status {
     //Playlist 오류 응답
     PLAY_LIST_NOT_FOUND(HttpStatus.NOT_FOUND, "PLAYLIST404", "플레이 리스트가 존재하지 않습니다."),
 
+    //PlaylistMusic 오류 응답
+    PLAY_LIST_MUSIC_NOT_FOUND(HttpStatus.NOT_FOUND, "PLAYLISTMUSIC404", "플레이 리스트에 해당 노래가 존재하지 않습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
