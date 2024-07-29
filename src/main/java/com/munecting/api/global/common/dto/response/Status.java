@@ -19,6 +19,9 @@ public enum Status {
     CONFLICT(HttpStatus.CONFLICT, "COMMON409", "이미 생성되었습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "서버에 오류가 발생했습니다."),
 
+    //Spotify 오류 응답
+    TRACK_NOT_FOUND(HttpStatus.NOT_FOUND, "SPOTIFY404", "스포티파이에서 track 정보를 찾을 수 없습니다."),
+
     //Playlist 오류 응답
     PLAY_LIST_NOT_FOUND(HttpStatus.NOT_FOUND, "PLAYLIST404", "플레이 리스트가 존재하지 않습니다."),
 

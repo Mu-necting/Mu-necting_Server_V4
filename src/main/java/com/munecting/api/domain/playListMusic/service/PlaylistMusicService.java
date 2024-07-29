@@ -33,14 +33,13 @@ public class PlaylistMusicService {
     private final PlaylistMusicRepository playlistMusicRepository;
     private final PlaylistService playlistService;
     private final SpotifyService spotifyService;
-    private final SpotifyDtoMapper spotifyDtoMapper;
 
     @Transactional
     public String addMusic(PlaylistMusicRequestDto playlistMusicRequestDto) {
         Long playlistId = playlistMusicRequestDto.getPlaylistId();
         String trackId = playlistMusicRequestDto.getTrackId();
-        Playlist playlist = playlistService.findPlaylistById(playlistId);
-        // trackId로 스포티파이에 존재하는 track인지 확인하는 로직
+        playlistService.findPlaylistById(playlistId);
+        spotifyService.getTrack(trackId);
         PlaylistMusicId playlistMusicId = PlaylistMusicId.toEntity(playlistId, trackId);
         PlaylistMusic playlistMusic = PlaylistMusic.toEntity(playlistMusicId);
         long order = playlistMusicRepository.countByPlaylistId(playlistId);
