@@ -40,7 +40,7 @@ public class PlaylistMusicController {
     }
 
     @GetMapping("/{playlistId}")
-    @Operation(summary = "playlist 속 노래 조회하기")
+    @Operation(summary = "playlist 속 노래 조회하기", description = "cursor 파라미터의 경우, cursor + 1번째부터 데이터를 조회하는데 사용됩니다.")
     public ApiResponse<?> getMusic(
             @PathVariable ("playlistId") Long playlistId,
             @RequestParam (name = "playlist 속 노래 순서") Long cursor,

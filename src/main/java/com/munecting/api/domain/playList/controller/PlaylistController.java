@@ -30,7 +30,7 @@ public class PlaylistController {
     @Operation(summary = "playlist 생성하기")
     public ApiResponse<?> createPlaylist(
             @RequestParam String playlistName,
-            @RequestParam Long userId) {
+            @RequestParam Long userId) { //userId는 추후 인증 과정에서 로그인한 사용자 정보 추출 로직 작성되면 삭제할 예정
         Long id = playlistService.createPlaylist(playlistName, userId);
         return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), id);
     }
@@ -38,7 +38,7 @@ public class PlaylistController {
     @GetMapping("/all")
     @Operation(summary = "내 playlist 전체 조회하기")
     public ApiResponse<?> getMyPlaylist(
-            @RequestParam Long userId,
+            @RequestParam Long userId, //userId는 추후 인증 과정에서 로그인한 사용자 정보 추출 로직 작성되면 삭제할 예정
             @RequestParam Long cursor,
             @RequestParam int limit) {
         List<PlaylistResponseDto> playlistResponseDtoList = playlistService.getMyPlaylist(userId, cursor, limit);
