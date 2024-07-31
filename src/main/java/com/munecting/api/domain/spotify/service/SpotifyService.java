@@ -5,6 +5,8 @@ import com.munecting.api.domain.spotify.dto.AlbumResponseDto;
 import com.munecting.api.domain.spotify.dto.ArtistResponseDto;
 import com.munecting.api.domain.spotify.dto.MusicResponseDto;
 import com.munecting.api.domain.spotify.dto.SpotifyDtoMapper;
+import com.munecting.api.global.common.dto.response.GeneralException;
+import com.munecting.api.global.common.dto.response.Status;
 import com.neovisionaries.i18n.CountryCode;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.enums.ModelObjectType;
@@ -119,7 +121,7 @@ public class SpotifyService {
                     .map(trackSimplified -> spotifyDtoMapper.convertToTrackResponseDto(trackSimplified))
                     .collect(Collectors.toList());
         } catch (IOException | ParseException | SpotifyWebApiException ex) {
-            throw new RuntimeException(ex);
+            throw new GeneralException(Status.ALBUM_NOT_FOUND);
         }
 
     }
@@ -139,7 +141,7 @@ public class SpotifyService {
                     .map(albumSimplified -> spotifyDtoMapper.convertToAlbumResponseDto(albumSimplified))
                     .collect(Collectors.toList());
         } catch (IOException | ParseException | SpotifyWebApiException ex) {
-            throw new RuntimeException(ex);
+            throw new GeneralException(Status.ARTIST_NOT_FOUND);
         }
 
     }
@@ -153,7 +155,7 @@ public class SpotifyService {
             Track track = getTrackRequest.execute();
             return spotifyDtoMapper.convertToTrackResponseDto(track);
         } catch (IOException | ParseException | SpotifyWebApiException ex) {
-            throw new RuntimeException(ex);
+            throw new GeneralException(Status.TRACK_NOT_FOUND);
         }
 
     }
