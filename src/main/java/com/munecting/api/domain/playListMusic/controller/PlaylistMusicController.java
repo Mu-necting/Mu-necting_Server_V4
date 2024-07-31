@@ -53,7 +53,7 @@ public class PlaylistMusicController {
     @Operation(summary = "playlist에서 노래 삭제하기")
     public ApiResponse<?> deleteMusic(
             @RequestBody PlaylistMusicRequestDto playlistMusicRequestDto) {
-        String trackId = playlistMusicService.deleteMusic(playlistMusicRequestDto);
+        String trackId = playlistMusicService.deleteMusicFromPlaylist(playlistMusicRequestDto);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), trackId);
     }
 

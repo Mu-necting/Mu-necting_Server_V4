@@ -26,7 +26,7 @@ public class PlaylistService {
     @Transactional
     public Long createPlaylist(String playlistName, Long userId) {
         Playlist playlist = Playlist.toEntity(playlistName, userId);
-        Long id = save(playlist);
+        Long id = savePlaylistEntity(playlist);
         return id;
     }
 
@@ -44,22 +44,22 @@ public class PlaylistService {
     public Long modifyPlaylistName(Long playlistId, String playlistName) {
         Playlist playlist = findPlaylistById(playlistId);
         playlist.updateName(playlistName);
-        save(playlist);
+        savePlaylistEntity(playlist);
         return playlist.getId();
     }
 
     @Transactional
     public Long deletePlaylist(Long playlistId) {
         Playlist playlist = findPlaylistById(playlistId);
-        delete(playlist);
+        deletePlaylistEntity(playlist);
         return playlist.getId();
     }
 
-    public Long save(Playlist playlist) {
+    public Long savePlaylistEntity(Playlist playlist) {
         return playlistRepository.save(playlist).getId();
     }
 
-    public void delete(Playlist playlist) {
+    public void deletePlaylistEntity(Playlist playlist) {
         playlistRepository.delete(playlist);
         // playlistmusic의 delete도 처리
     }

@@ -44,7 +44,7 @@ public class PlaylistMusicService {
         PlaylistMusic playlistMusic = PlaylistMusic.toEntity(playlistMusicId);
         long order = playlistMusicRepository.countByPlaylistId(playlistId);
         playlistMusic.updatePlayOrder(order + 1);
-        save(playlistMusic);
+        savePlaylistMusicEntity(playlistMusic);
         return trackId;
     }
 
@@ -80,20 +80,20 @@ public class PlaylistMusicService {
     }
 
     @Transactional
-    public String deleteMusic(PlaylistMusicRequestDto playlistMusicRequestDto) {
+    public String deleteMusicFromPlaylist(PlaylistMusicRequestDto playlistMusicRequestDto) {
         Long playlistId = playlistMusicRequestDto.getPlaylistId();
         String trackId = playlistMusicRequestDto.getTrackId();
         PlaylistMusicId playlistMusicId = PlaylistMusicId.toEntity(playlistId, trackId);
         PlaylistMusic playlistMusic = getPlaylistById(playlistMusicId);
-        delete(playlistMusic);
+        deletePlaylistMusicEntity(playlistMusic);
         return trackId;
     }
 
-    public void save(PlaylistMusic playlistMusic) {
+    public void savePlaylistMusicEntity(PlaylistMusic playlistMusic) {
         playlistMusicRepository.save(playlistMusic);
     }
 
-    public void delete(PlaylistMusic playlistMusic) {
+    public void deletePlaylistMusicEntity(PlaylistMusic playlistMusic) {
         playlistMusicRepository.delete(playlistMusic);
     }
 
