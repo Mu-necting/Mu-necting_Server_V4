@@ -4,6 +4,7 @@ import com.munecting.api.domain.comment.dao.CommentRepository;
 import com.munecting.api.domain.comment.dto.CommentRequestDto;
 import com.munecting.api.domain.comment.dto.CommentResponseDto;
 import com.munecting.api.domain.comment.entity.Comment;
+import com.munecting.api.domain.spotify.service.SpotifyService;
 import com.munecting.api.global.common.dto.response.GeneralException;
 import com.munecting.api.global.common.dto.response.PagedResponseDto;
 import com.munecting.api.global.common.dto.response.Status;
@@ -23,8 +24,11 @@ import org.springframework.stereotype.Service;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final SpotifyService spotifyService;
 
     public Long createComment(CommentRequestDto commentRequestDto) {
+        String trackId = commentRequestDto.getTrackId();
+        spotifyService.getTrack(trackId);
         Comment comment = Comment.toEntity(commentRequestDto);
         Long id = saveCommentEntity(comment);
         return id;
