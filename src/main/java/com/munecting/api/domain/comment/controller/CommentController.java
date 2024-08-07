@@ -26,13 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/comment")
-@Tag(name = "comment", description = "댓글 관련 api")
+@RequestMapping("/tracks")
+@Tag(name = "comments", description = "댓글 관련 api")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/")
+    @PostMapping("/comments")
     @Operation(summary = "댓글 등록하기")
     public ApiResponse<?> createComment(
             @RequestBody CommentRequestDto commentRequestDto) {
@@ -48,16 +48,16 @@ public class CommentController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), id);
     }
 
-    @PatchMapping("/{commentId}")
+    @PatchMapping("/comments/{commentId}")
     @Operation(summary = "댓글 수정하기")
-    public ApiResponse<?> deleteComment(
+    public ApiResponse<?> updateComment(
             @PathVariable (name = "commentId") Long commentId,
             @RequestBody CommentRequestDto commentRequestDto) {
         Long id = commentService.updateComment(commentId, commentRequestDto);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), id);
     }
 
-    @GetMapping("/{trackId}")
+    @GetMapping("/{trackId}/comments")
     @Operation(summary = "댓글 조회하기")
     public ApiResponse<?> getCommentsByTrackId(
             @PathVariable (name = "trackId") String trackId,
