@@ -15,6 +15,8 @@ spring :
       hibernate:
         show_sql: true
         format_sql: true
+        jdbc:
+          timezone: Asia/Seoul
 
   datasource:
     url: jdbc:${DATASOURCE}://${HOST}:${PORT}/${TABLE}

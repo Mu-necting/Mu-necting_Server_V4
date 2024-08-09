@@ -1,5 +1,6 @@
 package com.munecting.api.domain.comment.entity;
 
+import com.munecting.api.domain.comment.dto.CommentRequestDto;
 import com.munecting.api.global.common.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,8 +30,21 @@ public class Comment extends BaseEntity {
     private Long userId;
 
     @NotNull
-    private String musicUri;
+    private String trackId;
 
     @NotNull
     private String content;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public static Comment toEntity(CommentRequestDto commentRequestDto) {
+        return Comment.builder()
+                .userId(commentRequestDto.getUserId())
+                .trackId(commentRequestDto.getTrackId())
+                .content(commentRequestDto.getContent())
+                .build();
+    }
+
 }
