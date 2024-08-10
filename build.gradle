@@ -51,7 +51,15 @@ dependencies {
 	// Spotify
 	implementation 'se.michaelthelin.spotify:spotify-web-api-java:6.5.2'
 
+	//jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	//spring security
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	// Etc
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
