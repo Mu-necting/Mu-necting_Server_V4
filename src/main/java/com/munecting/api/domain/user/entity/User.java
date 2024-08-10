@@ -1,24 +1,22 @@
 package com.munecting.api.domain.user.entity;
 
+import com.munecting.api.domain.user.dto.Role;
+import com.munecting.api.domain.user.dto.SocialType;
 import com.munecting.api.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+import lombok.*;
+
+@ToString
 @Entity
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Table(name = "\"user\"")
+@Table(name = "users")
 public class User extends BaseEntity {
 
     @Id
@@ -27,17 +25,20 @@ public class User extends BaseEntity {
 
     @NotNull
     private String email;
-
     @NotNull
     private String password;
-
     @NotNull
     private String nickname;
 
-    @NotNull
     private String profileImageUrl;
 
-    // Enum으로 설정 후 수정 해야 함.
     @NotNull
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
+
+
+
 }
