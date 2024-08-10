@@ -30,7 +30,12 @@ public enum Status {
     //PlaylistMusic 오류 응답
     PLAY_LIST_MUSIC_NOT_FOUND(HttpStatus.NOT_FOUND, "PLAYLISTMUSIC404", "플레이 리스트에 해당 노래가 존재하지 않습니다."),
 
+
+    //User 오류 응답
+    ALREADY_EXISTS_EMAIL(HttpStatus.CONFLICT, "Conflict409", "이미 존재하는 이메일입니다."),
+    ALREADY_EXISTS_NICKNAME(HttpStatus.CONFLICT,"Conflict409","이미 존재하는 닉네임입니다.")
     ;
+
 
     private final HttpStatus httpStatus;
     private final String code;
