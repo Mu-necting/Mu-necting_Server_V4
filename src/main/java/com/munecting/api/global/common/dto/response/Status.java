@@ -32,10 +32,6 @@ public enum Status {
 
     //댓글 오류 응답
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT404", "댓글이 존재하지 않습니다."),
-    //User 오류 응답
-    ALREADY_EXISTS_EMAIL(HttpStatus.CONFLICT, "Conflict409", "이미 존재하는 이메일입니다."),
-    ALREADY_EXISTS_NICKNAME(HttpStatus.CONFLICT,"Conflict409","이미 존재하는 닉네임입니다.")
-    ;
     ;
 
     private final HttpStatus httpStatus;

@@ -30,10 +30,10 @@ public class UserService {
      */
     public UserResponseDto register(UserRegisterDto userRegisterDto){
         if (userRepository.existsByEmail(userRegisterDto.getEmail())) {
-            throw new GeneralException(Status.ALREADY_EXISTS_EMAIL);
+            throw new GeneralException(Status.BAD_REQUEST);
         }
         if (userRepository.existsByNickname(userRegisterDto.getNickname())) {
-            throw new GeneralException(Status.ALREADY_EXISTS_NICKNAME);
+            throw new GeneralException(Status.BAD_REQUEST);
         }
         User user = User.builder()
                 .email(userRegisterDto.getEmail())
