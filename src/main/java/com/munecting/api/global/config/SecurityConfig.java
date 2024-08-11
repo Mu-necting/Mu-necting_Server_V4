@@ -59,7 +59,8 @@ public class SecurityConfig {
             "/webjars/**",
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            "/css/**","/images/**","/js/**","/favicon.ico"
+            "/css/**","/images/**","/js/**","/favicon.ico",
+            "/musics/**"
 
     };
 
