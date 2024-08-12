@@ -23,6 +23,7 @@ public class MusicService {
     private final SpotifyService spotifyService;
 
     public Long uploadMusic(MusicRequestDto musicRequestDto) {
+        spotifyService.getTrack(musicRequestDto.getTrackId());
         UploadedMusic uploadedMusic = UploadedMusic.toEntity(musicRequestDto);
         return saveUploadMusicEntity(uploadedMusic);
     }
