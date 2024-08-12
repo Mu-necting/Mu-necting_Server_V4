@@ -1,4 +1,4 @@
-package com.munecting.api.domain.user.dto;
+package com.munecting.api.domain.user.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,5 +7,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Role {
     USER("ROLE_USER"), ADMIN("ROLE_ADMIN");
-    private final String key;
+    private final String authority;
 }

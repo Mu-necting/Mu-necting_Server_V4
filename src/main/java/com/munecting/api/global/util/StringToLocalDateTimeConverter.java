@@ -1,4 +1,4 @@
-package com.munecting.api.global.common.util;
+package com.munecting.api.global.util;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

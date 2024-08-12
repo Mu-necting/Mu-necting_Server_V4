@@ -1,7 +1,7 @@
 package com.munecting.api.global.oauth2.dto;
 
-import com.munecting.api.domain.user.dto.Role;
-import com.munecting.api.domain.user.dto.SocialType;
+import com.munecting.api.domain.user.constant.Role;
+import com.munecting.api.domain.user.constant.SocialType;
 import com.munecting.api.domain.user.entity.User;
 
 import java.util.Map;
