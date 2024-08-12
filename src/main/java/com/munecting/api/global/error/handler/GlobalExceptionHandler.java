@@ -1,5 +1,9 @@
-package com.munecting.api.global.common.dto.response;
+package com.munecting.api.global.error.handler;
 
+import com.munecting.api.global.common.dto.response.ApiResponse;
+import com.munecting.api.global.common.dto.response.Body;
+import com.munecting.api.global.common.dto.response.Status;
+import com.munecting.api.global.error.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,26 +18,21 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(GeneralException.class)
+    public ResponseEntity<Body> handleGeneralException(
+            GeneralException e
+    ) {
+        log.warn(">>> handle: GeneralException | " + e.getStatus() + " " + e.getMessage());
+        return new ResponseEntity<>(e.getBody(), e.getStatus().getHttpStatus());
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Object>> unexpectedException(
+    public ResponseEntity<Body> unexpectedException(
             Exception unexpectedException
     ) {
         log.error("예상치 못한 오류 발생: {}", unexpectedException.getMessage());
         log.error("발생 지점: {}", unexpectedException.getStackTrace()[0]);
-        Body body = Status.INTERNAL_SERVER_ERROR.getBody();
-        ApiResponse<Object> response = ApiResponse.onFailure(body.getCode(), body.getMessage(), null);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-
-    }
-
-    @ExceptionHandler(GeneralException.class)
-    public ResponseEntity<ApiResponse<Object>> exception(
-            GeneralException generalException
-    ) {
-        Body body = generalException.getBody();
-        ApiResponse<Object> response = ApiResponse.onFailure(body.getCode(), body.getMessage(), null);
-        log.warn(response.getCode() + " " + response.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(Status.INTERNAL_SERVER_ERROR.getBody(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

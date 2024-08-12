@@ -3,8 +3,7 @@ package com.munecting.api.domain.playList.service;
 import com.munecting.api.domain.playList.dao.PlaylistRepository;
 import com.munecting.api.domain.playList.dto.PlaylistResponseDto;
 import com.munecting.api.domain.playList.entity.Playlist;
-import com.munecting.api.domain.playListMusic.entity.PlaylistMusic;
-import com.munecting.api.global.common.dto.response.GeneralException;
+import com.munecting.api.global.error.exception.EntityNotFoundException;
 import com.munecting.api.global.common.dto.response.Status;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -66,7 +65,7 @@ public class PlaylistService {
 
     public Playlist findPlaylistById(Long id) {
         return playlistRepository.findById(id)
-                .orElseThrow(() -> new GeneralException(Status.PLAY_LIST_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(Status.PLAY_LIST_NOT_FOUND));
     }
 
 }

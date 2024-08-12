@@ -5,12 +5,14 @@ import com.munecting.api.global.common.dto.response.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
-@Getter
-public class GeneralException extends RuntimeException {
-    private Status status;
+public class EntityNotFoundException extends GeneralException{
 
-    public Body getBody() {
-        return this.status.getBody();
+    public EntityNotFoundException() {
+        super(Status.ENTITY_NOT_FOUND);
     }
+
+    public EntityNotFoundException(Status errorStatus) {
+        super(errorStatus);
+    }
+
 }

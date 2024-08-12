@@ -3,18 +3,15 @@ package com.munecting.api.domain.playListMusic.service;
 import com.munecting.api.domain.playList.entity.Playlist;
 import com.munecting.api.domain.playList.service.PlaylistService;
 import com.munecting.api.domain.playListMusic.dao.PlaylistMusicRepository;
-import com.munecting.api.domain.playListMusic.dto.requestDto.PlaylistMusicPlayOrderRequestDto;
 import com.munecting.api.domain.playListMusic.dto.requestDto.PlaylistMusicPlayOrderUpdateRequestDto;
 import com.munecting.api.domain.playListMusic.dto.requestDto.PlaylistMusicRequestDto;
 import com.munecting.api.domain.playListMusic.entity.PlaylistMusic;
 import com.munecting.api.domain.playListMusic.entity.PlaylistMusicId;
 import com.munecting.api.domain.spotify.dto.MusicResponseDto;
-import com.munecting.api.domain.spotify.dto.SpotifyDtoMapper;
 import com.munecting.api.domain.spotify.service.SpotifyService;
-import com.munecting.api.global.common.dto.response.GeneralException;
+import com.munecting.api.global.error.exception.EntityNotFoundException;
 import com.munecting.api.global.common.dto.response.PagedResponseDto;
 import com.munecting.api.global.common.dto.response.Status;
-import com.wrapper.spotify.model_objects.specification.Track;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -99,7 +96,7 @@ public class PlaylistMusicService {
 
     public PlaylistMusic getPlaylistById (PlaylistMusicId playlistMusicId) {
         return playlistMusicRepository.findById(playlistMusicId)
-                .orElseThrow(() -> new GeneralException(Status.PLAY_LIST_MUSIC_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(Status.PLAY_LIST_MUSIC_NOT_FOUND));
     }
 
 }
