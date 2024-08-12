@@ -60,7 +60,8 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/css/**","/images/**","/js/**","/favicon.ico",
-            "/musics/**"
+            "/musics/**",
+            "/address/**"
 
     };
 
