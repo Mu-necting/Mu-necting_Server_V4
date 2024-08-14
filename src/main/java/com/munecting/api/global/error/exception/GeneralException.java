@@ -5,10 +5,19 @@ import com.munecting.api.global.common.dto.response.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public class GeneralException extends RuntimeException {
     private Status status;
+
+    public GeneralException(String message, Status errorStatus) {
+        super(message);
+        this.status = errorStatus;
+    }
+
+    public GeneralException(Status errorStatus) {
+        super(errorStatus.getMessage());
+        this.status = errorStatus;
+    }
 
     public Body getBody() {
         return this.status.getBody();
