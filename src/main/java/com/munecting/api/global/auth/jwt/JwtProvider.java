@@ -1,24 +1,21 @@
 package com.munecting.api.global.auth.jwt;
 
 import com.munecting.api.domain.user.entity.User;
-import com.munecting.api.domain.user.repository.UserRepository;
+import com.munecting.api.domain.user.dao.UserRepository;
+import com.munecting.api.global.auth.user.UserPrincipalDetails;
+import com.munecting.api.global.error.exception.InternalServerException;
+import com.munecting.api.global.error.exception.OidcException;
 import com.munecting.api.global.error.exception.UnauthorizedException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.security.PublicKey;
 import java.util.Date;
 
 import static com.munecting.api.global.common.dto.response.Status.*;
@@ -103,7 +100,10 @@ public class JwtProvider {
 
     public UsernamePasswordAuthenticationToken getAuthentication(String accessToken) {
         Long userId = getSubject(accessToken);
-        User user = userRepository.findById(userId).orElseThrow(() -> new UnauthorizedException(INVALID_TOKEN));
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+                log.warn("토큰을 발급받은 user의 회원 정보가 존재하지 않습니다.");
+                throw new UnauthorizedException(INVALID_TOKEN);
+        });
         UserPrincipalDetails principal = new UserPrincipalDetails(user);
         return new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
     }
@@ -113,6 +113,21 @@ public class JwtProvider {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject());
+    }
+
+    public Claims parseClaims(String token, PublicKey publicKey) {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(publicKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (ExpiredJwtException e) {
+            log.warn("id token expired");
+            throw new OidcException();
+        } catch (RuntimeException e) {
+            throw new InternalServerException();
+        }
     }
 
 }
