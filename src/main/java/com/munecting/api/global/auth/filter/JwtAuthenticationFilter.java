@@ -1,6 +1,6 @@
 package com.munecting.api.global.auth.filter;
 
-import com.munecting.api.domain.user.repository.UserRepository;
+import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.global.auth.jwt.JwtProvider;
 import com.munecting.api.global.error.exception.UnauthorizedException;
 import jakarta.servlet.FilterChain;
