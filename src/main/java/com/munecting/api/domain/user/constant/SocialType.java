@@ -1,5 +1,5 @@
 package com.munecting.api.domain.user.constant;
 
 public enum SocialType {
-    GOOGLE,KAKAO,NAVER,SPOTIFY,EMAIL
+    GOOGLE, KAKAO, APPLE
 }
