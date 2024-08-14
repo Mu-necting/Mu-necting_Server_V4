@@ -1,4 +1,4 @@
-package com.munecting.api.global.auth.jwt;
+package com.munecting.api.global.auth.user;
 
 
 import com.munecting.api.domain.user.entity.User;
@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
-class UserPrincipalDetails implements UserDetails {
+public class UserPrincipalDetails implements UserDetails {
 
     private User user;
 
-    UserPrincipalDetails(User user) {
+    public UserPrincipalDetails(User user) {
         this.user = user;
     }
 
