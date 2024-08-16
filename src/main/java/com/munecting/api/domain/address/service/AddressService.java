@@ -11,6 +11,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -20,7 +21,8 @@ import org.springframework.web.client.RestClient;
 @Slf4j
 public class AddressService {
 
-    private final String apiKey = "b6ad748785001b2abee8bf6e58168698";
+    @Value("${kakado-map.api-key}")
+    private String apiKey;
     private final String BASE_URL = "https://dapi.kakao.com/v2/local/geo/coord2address";
     private final RestClient restClient;
     private final ObjectMapper objectMapper = new ObjectMapper();

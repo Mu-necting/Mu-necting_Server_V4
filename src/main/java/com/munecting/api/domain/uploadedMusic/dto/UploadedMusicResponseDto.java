@@ -16,17 +16,16 @@ public class UploadedMusicResponseDto {
 
     private MusicResponseDto musicResponseDto;
 
-    private User user;
+    //인증 작업 완료 후 User 정보 dto로 반환하기
 
     private Double latitude;
 
     private Double longitude;
 
-    public static UploadedMusicResponseDto toDto(UploadedMusic uploadedMusic, MusicResponseDto musicResponseDto, User user) {
+    public static UploadedMusicResponseDto toDto(UploadedMusic uploadedMusic, MusicResponseDto musicResponseDto) {
         return UploadedMusicResponseDto.builder()
                 .id(uploadedMusic.getId())
                 .musicResponseDto(musicResponseDto)
-                .user(user)
                 .latitude(uploadedMusic.getLatitude())
                 .longitude(uploadedMusic.getLongitude())
                 .build();

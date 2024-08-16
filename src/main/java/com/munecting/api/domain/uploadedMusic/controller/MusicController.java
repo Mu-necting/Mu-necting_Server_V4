@@ -9,6 +9,7 @@ import com.munecting.api.global.common.dto.response.ApiResponse;
 import com.munecting.api.global.common.dto.response.Status;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,15 +29,15 @@ public class MusicController {
 
     private final MusicService musicService;
 
-    @PostMapping("/")
+    @PostMapping("")
     @Operation(summary = "음악 업로드 하기")
     public ApiResponse<?> uploadMusic(
-            @RequestBody MusicRequestDto musicRequestDto) {
+           @Valid @RequestBody MusicRequestDto musicRequestDto) {
         Long id = musicService.uploadMusic(musicRequestDto);
         return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), id);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     @Operation(summary = "음악 조회하기")
     public ApiResponse<?> getUploadedMusic(
             @RequestParam Double latitude,

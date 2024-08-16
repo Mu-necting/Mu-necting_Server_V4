@@ -27,11 +27,11 @@ public class AddressController {
 
     private final AddressService addressService;
 
-    @GetMapping("/")
+    @GetMapping("")
     @Operation(summary = "위도/경도로 주소 조회하기")
     public ApiResponse<?> getAddressByLocation(
-            @RequestParam(name = "위도") Double latitude,
-            @RequestParam(name = "경도") Double longitude) {
+            @RequestParam(name = "latitude") Double latitude,
+            @RequestParam(name = "longitude") Double longitude) {
         JsonNode address = addressService.getAddressByLocation(latitude, longitude);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), address);
     }

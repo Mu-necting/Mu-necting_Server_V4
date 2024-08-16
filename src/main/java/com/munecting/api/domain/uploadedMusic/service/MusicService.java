@@ -35,7 +35,7 @@ public class MusicService {
                 .map(uploadedMusic -> {
                     MusicResponseDto musicResponseDto = spotifyService.getTrack(uploadedMusic.getTrackId());
                     User user = null; // 인증 부분 완료되면 수정 예정
-                    return UploadedMusicResponseDto.toDto(uploadedMusic, musicResponseDto, user);
+                    return UploadedMusicResponseDto.toDto(uploadedMusic, musicResponseDto);
                 }).collect(Collectors.toList());
         return uploadedMusicResponseDtos;
     }
