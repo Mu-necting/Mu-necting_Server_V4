@@ -41,7 +41,7 @@ public class AuthController {
     public ApiResponse<?> login(
             @RequestBody @Valid UserLoginRequestDto userLoginRequestDto
     ) {
-        UserTokenResponseDto dto = authService.login(userLoginRequestDto);
+        UserTokenResponseDto dto = authService.getOrCreateUser(userLoginRequestDto);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), dto);
     }
 

@@ -76,7 +76,7 @@ public class AuthService {
     }
 
     @Transactional
-    public UserTokenResponseDto login(UserLoginRequestDto dto) {
+    public UserTokenResponseDto getOrCreateUser(UserLoginRequestDto dto) {
         String email = oidcProviderFactory.getEmail(dto.socialType(), dto.idToken());
         User user = userRepository.findByEmail(email)
                 .orElseGet(() -> createUser(email, dto.socialType()));
