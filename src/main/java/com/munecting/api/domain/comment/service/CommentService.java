@@ -5,12 +5,12 @@ import com.munecting.api.domain.comment.dto.CommentRequestDto;
 import com.munecting.api.domain.comment.dto.CommentResponseDto;
 import com.munecting.api.domain.comment.entity.Comment;
 import com.munecting.api.domain.spotify.service.SpotifyService;
-import com.munecting.api.global.common.dto.response.GeneralException;
+import com.munecting.api.global.error.exception.EntityNotFoundException;
 import com.munecting.api.global.common.dto.response.PagedResponseDto;
 import com.munecting.api.global.common.dto.response.Status;
-import java.sql.Timestamp;
+
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -69,7 +69,7 @@ public class CommentService {
 
     public Comment getCommentEntityById(Long id) {
         return commentRepository.findById(id)
-                .orElseThrow(() -> new GeneralException(Status.COMMENT_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(Status.COMMENT_NOT_FOUND));
     }
 
 }

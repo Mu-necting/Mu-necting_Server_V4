@@ -28,7 +28,7 @@ spring :
 
   data:
     redis:
-      host: localhost
+      host: ${REDIS_HOST}
       port: 6379
 #      password: 1234
   mail:
@@ -45,6 +45,27 @@ spring :
             enable: true
           ssl:
             enable: true
+
+  security:
+    cors:
+      allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
+      allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,PATCH,DELETE}
+      allowed-headers: ${CORS_ALLOWED_HEADERS:*}
+      allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
+      path-pattern: "/**"
+
+    auth:
+      header: ${AUTH_HEADER:Authorization}
+      prefix: ${AUTH_PREFIX:Bearer }
+
+    oauth:
+      kakao:
+        public-key-info: https://kauth.kakao.com/.well-known/jwks.json
+      apple:
+        public-key-url: https://appleid.apple.com/auth/keys
+      google:
+        client-id: ${GOOGLE_CLIENT_ID}
+
 naver:
   id: ${MAIL_USERNAME}
   password: ${MAIL_PASSWORD}
@@ -52,6 +73,13 @@ naver:
 spotify:
   client-id: ${CLIENT_ID}
   client-secret: ${CLIENT_SECRET}
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  access:
+    expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refresh:
+    expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
 
 kakao-map:
   api-key: ${KAKAO_MAP_API_KEY}

@@ -1,18 +1,15 @@
 package com.munecting.api.domain.user.entity;
 
-import com.munecting.api.domain.user.dto.Role;
-import com.munecting.api.domain.user.dto.SocialType;
+import com.munecting.api.domain.user.constant.Role;
+import com.munecting.api.domain.user.constant.SocialType;
 import com.munecting.api.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 import lombok.*;
 
-@ToString
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -25,20 +22,19 @@ public class User extends BaseEntity {
 
     @NotNull
     private String email;
-    @NotNull
-    private String password;
-    @NotNull
+
+
+    @Column(nullable = true)
     private String nickname;
 
+    @Column(nullable = true)
     private String profileImageUrl;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
-
-
-
 }

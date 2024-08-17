@@ -16,8 +16,16 @@ public enum Status {
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON400", "잘못된 요청입니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
+    ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND,"COMMON404", "엔티티를 찾을 수 없습니다."),
     CONFLICT(HttpStatus.CONFLICT, "COMMON409", "이미 생성되었습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "서버에 오류가 발생했습니다."),
+
+    // 토큰 오류 응답
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "AUTH401", "토큰이 유효하지 않습니다."),
+    INVALID_ID_TOKEN(HttpStatus.UNAUTHORIZED, "AUTH401","인증에 실패했습니다. 다시 시도하거나 관리자에게 문의해주세요."),
+    EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "AUTH401", "액세스 토큰이 만료되었습니다. 재발급 받아주세요."),
+    EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "AUTH401", "리프레시 토큰이 만료되었습니다. 다시 로그인해 주세요."),
+    NOT_MATCH_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED,"AUTH401", "리프레시 토큰이 저장된 값과 일치하지 않습니다."),
 
     //Spotify 오류 응답
     TRACK_NOT_FOUND(HttpStatus.NOT_FOUND, "SPOTIFY_TRACK404", "스포티파이에서 track 정보를 찾을 수 없습니다."),
@@ -46,6 +54,7 @@ public enum Status {
                 .httpStatus(httpStatus)
                 .build();
     }
+
 
 }
 

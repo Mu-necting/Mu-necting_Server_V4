@@ -1,53 +1,40 @@
 package com.munecting.api.global.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.munecting.api.global.login.filter.CustomLoginFilter;
-import com.munecting.api.global.login.filter.CustomLogoutFilter;
-import com.munecting.api.global.jwt.filter.JWTFilter;
-import com.munecting.api.global.jwt.util.JWTUtil;
-import com.munecting.api.global.login.handler.LoginFailureHandler;
-import com.munecting.api.global.login.handler.LoginSuccessHandler;
-import com.munecting.api.global.login.service.CustomUserDetailService;
-import com.munecting.api.global.oauth2.service.CustomOAuth2UserService;
-import com.munecting.api.global.oauth2.handler.OAuth2LoginFailureHandler;
-import com.munecting.api.global.oauth2.handler.OAuth2LoginSuccessHandler;
-import com.munecting.api.global.Redis.repository.RefreshRepository;
+import com.munecting.api.global.auth.filter.ExceptionHandlerFilter;
+import com.munecting.api.global.auth.filter.JwtAuthenticationFilter;
+import com.munecting.api.global.auth.jwt.JwtProvider;
+import com.munecting.api.global.error.exception.ForbiddenException;
+import com.munecting.api.global.error.exception.UnauthorizedException;
+import com.munecting.api.global.util.ResponseUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.Arrays;
+import java.io.IOException;
 
-@RequiredArgsConstructor
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
+@RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
-    private final JWTUtil jwtUtil;
-    private final ObjectMapper objectMapper;
-    private final RefreshRepository refreshRepository;
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final CustomUserDetailService customUserDetailService;
+    private final CorsConfig corsConfig;
+    private final ResponseUtil responseUtil;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+
     private static final String[] ALLOWED_URL = {
-            "/",
-            "/login",
-            "/login/auth",
-            "/login/register",
+            "/api/auth/**",
             "/error/**",
             "/reissue",
             "/v2/api-docs",
@@ -68,101 +55,52 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(
-                        cors -> cors.configurationSource(
-                                corsConfigurationSource()
-                        )
-                );
-        //csrf disable
-        http
-                .csrf((auth) -> auth.disable());
-        //From 로그인 방식 disable
-        http
-                .formLogin((auth) -> auth.disable());
-        //HTTP Basic 인증 방식 disable
-        http
-                .httpBasic((auth) -> auth.disable());
-        //세션 설정 : STATELESS
-        http
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http
-                .headers(httpSecurityHeadersConfigurer ->
-                        httpSecurityHeadersConfigurer.frameOptions(
-                                HeadersConfigurer.FrameOptionsConfig::disable)
+                // csrf disable
+                .csrf(AbstractHttpConfigurer::disable)
 
-                );
-        //== URL별 권한 관리 옵션 ==//
-        http
-                .authorizeHttpRequests((auth) -> auth
+                // From 로그인 방식 disable
+                .formLogin(AbstractHttpConfigurer::disable)
+
+                // HTTP Basic 인증 방식 disable
+                .httpBasic(AbstractHttpConfigurer::disable)
+
+                // 세션 설정
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+
+                // URL 권한 설정
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers(ALLOWED_URL).permitAll()
-                        .anyRequest().authenticated());
-        //oauth2
-        http
-                .oauth2Login((oauth2) -> oauth2
-                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
-                                .userService(customOAuth2UserService))
-                        .successHandler(oAuth2LoginSuccessHandler)
-                        .failureHandler(oAuth2LoginFailureHandler));
-        //== Filter ==//
+                        .anyRequest().authenticated())
 
-        http
-                .addFilterBefore(customLogoutFilter(), LogoutFilter.class);
+                // filter
+                .addFilter(corsConfig.corsFilter())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
 
-        http
-                .addFilterAfter(customLoginFilter(),LogoutFilter.class);
-        http
-                .addFilterBefore(jwtFilter(), CustomLoginFilter.class);
-
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
+                        httpSecurityExceptionHandlingConfigurer
+                                .authenticationEntryPoint((request, response, authException) ->
+                                        handleAuthenticationEntryPoint(response)
+                                )
+                                .accessDeniedHandler((request, response, accessDeniedException) ->
+                                        handleAccessDenied(response)
+                                )
+                )
+        ;
 
         return http.build();
     }
-    @Bean
-    public AuthenticationManager authenticationManager() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(customPasswordEncoder());
-        provider.setUserDetailsService(customUserDetailService);
-        return new ProviderManager(provider);
-    }
-    @Bean
-    public CustomLoginFilter customLoginFilter() {
-        CustomLoginFilter customJsonUsernamePasswordLoginFilter
-                = new CustomLoginFilter(objectMapper);
-        customJsonUsernamePasswordLoginFilter.setAuthenticationManager(authenticationManager());
-        customJsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
-        customJsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
-        return customJsonUsernamePasswordLoginFilter;
-    }
-    @Bean
-    public LoginSuccessHandler loginSuccessHandler() {
-        return new LoginSuccessHandler(jwtUtil, refreshRepository);
-    }
-    @Bean
-    public LoginFailureHandler loginFailureHandler() {
-        return new LoginFailureHandler();
+
+    private void handleAuthenticationEntryPoint(HttpServletResponse response) throws IOException {
+        log.warn("인증되지 않은 사용자의 접근입니다.");
+        responseUtil.sendException(response, new UnauthorizedException());
     }
 
-    @Bean
-    public JWTFilter jwtFilter() {
-        return new JWTFilter(jwtUtil);
+    private void handleAccessDenied(HttpServletResponse response) throws IOException {
+        log.warn("권한이 없는 사용자의 접근입니다.");
+        responseUtil.sendException(response, new ForbiddenException());
     }
-    @Bean
-    public CustomLogoutFilter customLogoutFilter() {
-        return new CustomLogoutFilter(jwtUtil,refreshRepository);
-    }
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
-        @Bean
-        public PasswordEncoder customPasswordEncoder() {
-            return new BCryptPasswordEncoder();
 
-        }
 }
