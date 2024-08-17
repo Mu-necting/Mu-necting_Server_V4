@@ -21,7 +21,7 @@ import org.springframework.web.client.RestClient;
 @Slf4j
 public class AddressService {
 
-    @Value("${kakado-map.api-key}")
+    @Value("${KAKAO_MAP_API_KEY}")
     private String apiKey;
     private final String BASE_URL = "https://dapi.kakao.com/v2/local/geo/coord2address";
     private final RestClient restClient;

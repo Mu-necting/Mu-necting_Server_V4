@@ -53,5 +53,5 @@ spotify:
   client-id: ${CLIENT_ID}
   client-secret: ${CLIENT_SECRET}
 
-kakado-map:
-  api-key: 40788ed90ea937fce84ca887d1470ff5
+kakao-map:
+  api-key: ${KAKAO_MAP_API_KEY}
