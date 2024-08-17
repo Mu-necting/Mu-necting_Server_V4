@@ -1,5 +1,6 @@
 package com.munecting.api.domain.uploadedMusic.entity;
 
+import com.munecting.api.domain.uploadedMusic.dto.MusicRequestDto;
 import com.munecting.api.global.common.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class UploadedMusic extends BaseEntity {
     private Long userId;
 
     @NotNull
-    private String musicUri;
+    private String trackId;
 
     @NotNull
     private Double latitude;
@@ -39,4 +40,14 @@ public class UploadedMusic extends BaseEntity {
 
     @NotNull
     private Integer uploadDuration;
+
+    public static UploadedMusic toEntity (MusicRequestDto musicRequestDto) {
+        return UploadedMusic.builder().
+                userId(musicRequestDto.getUserId())
+                .trackId(musicRequestDto.getTrackId())
+                .latitude(musicRequestDto.getLatitude())
+                .longitude(musicRequestDto.getLongitude())
+                .uploadDuration(musicRequestDto.getUploadDuration())
+                .build();
+    }
 }

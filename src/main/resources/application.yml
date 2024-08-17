@@ -52,3 +52,6 @@ naver:
 spotify:
   client-id: ${CLIENT_ID}
   client-secret: ${CLIENT_SECRET}
+
+kakao-map:
+  api-key: ${KAKAO_MAP_API_KEY}
