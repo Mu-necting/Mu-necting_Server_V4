@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,7 +26,7 @@ public class GlobalExceptionHandler {
 
 
     /**
-     * Valid & Validated annotation의 binding error를 handling합니다.
+     * Valid & Validated annotation의 binding error를 handling 합니다.
      */
     @ExceptionHandler({MethodArgumentNotValidException.class})
     protected ResponseEntity<ApiResponse<?>> handleMethodArgumentNotValidException(
@@ -45,7 +46,19 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * GeneralException을 handling합니다.
+     * 필수 쿼리 파라미터를 누락한 경우 발생하는 error를 handling 합니다.
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ApiResponse<Object>> handleMissingServletRequestParameterException(
+            MissingServletRequestParameterException e
+    ) {
+        ApiResponse<Object> response = ApiResponse.onFailure(HttpStatus.BAD_REQUEST.toString(), e.getMessage(), null);
+        log.warn(response.getCode() + " " + response.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * GeneralException을 handling 합니다.
      */
     @ExceptionHandler(GeneralException.class)
     public ResponseEntity<ApiResponse<?>> handleGeneralException(

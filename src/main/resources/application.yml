@@ -81,3 +81,5 @@ jwt:
   refresh:
     expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
 
+kakao-map:
+  api-key: ${KAKAO_MAP_API_KEY}
