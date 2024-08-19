@@ -5,6 +5,7 @@ import com.munecting.api.domain.user.dto.RefreshTokenRequestDto;
 import com.munecting.api.domain.user.dto.UserLoginRequestDto;
 import com.munecting.api.domain.user.dto.UserTokenResponseDto;
 import com.munecting.api.domain.user.service.AuthService;
+import com.munecting.api.global.auth.user.UserId;
 import com.munecting.api.global.common.dto.response.ApiResponse;
 import com.munecting.api.global.common.dto.response.Status;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,6 +45,16 @@ public class AuthController {
         UserTokenResponseDto dto = authService.getOrCreateUser(userLoginRequestDto);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), dto);
     }
+
+    @PostMapping("/logout")
+    @Operation(summary = "로그아웃")
+    public ApiResponse<?> logout(
+            @UserId Long userId
+    ) {
+        authService.logout(userId);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
+    }
+
 
     @PostMapping("/refresh")
     @Operation(summary = "토큰 재발급하기")

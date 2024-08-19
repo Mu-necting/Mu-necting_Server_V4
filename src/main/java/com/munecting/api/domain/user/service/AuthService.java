@@ -124,4 +124,16 @@ public class AuthService {
     private String issueNewRefreshToken(Long userId) {
         return jwtProvider.getIssueToken(userId, false);
     }
+
+    public void logout(Long userId) {
+        String key = getRedisKey(userId);
+        String savedRefreshToken = redisTemplate.opsForValue().get(key);
+
+        if (savedRefreshToken != null) {
+            redisTemplate.delete(key);
+            log.info("User {} logged out successfully", userId);
+        } else {
+            log.info("User {} logged out, no refresh token found", userId);
+        }
+    }
 }
