@@ -1,9 +1,10 @@
 package com.munecting.api.domain.user.service;
 
 import com.munecting.api.domain.user.constant.Role;
-import com.munecting.api.domain.user.dto.RefreshTokenRequestDto;
-import com.munecting.api.domain.user.dto.UserLoginRequestDto;
-import com.munecting.api.domain.user.dto.UserTokenResponseDto;
+import com.munecting.api.domain.user.dto.request.LogoutRequestDto;
+import com.munecting.api.domain.user.dto.request.RefreshTokenRequestDto;
+import com.munecting.api.domain.user.dto.request.LoginRequestDto;
+import com.munecting.api.domain.user.dto.response.UserTokenResponseDto;
 import com.munecting.api.domain.user.entity.User;
 import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.global.auth.jwt.JwtProvider;
@@ -12,6 +13,7 @@ import com.munecting.api.domain.user.constant.SocialType;
 import com.munecting.api.global.common.dto.response.Status;
 import com.munecting.api.global.error.exception.GeneralException;
 import com.munecting.api.global.error.exception.UnauthorizedException;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +41,7 @@ public class AuthService {
 
     public UserTokenResponseDto refreshToken(RefreshTokenRequestDto requestDto) {
         String providedToken = requestDto.refreshToken();
-        Long userId = getUserIdFromToken(providedToken);
+        Long userId = getUserIdFromRefreshToken(providedToken);
         String savedRefreshToken = getSavedUserRefreshToken(userId);
 
         if (savedRefreshToken == null || !savedRefreshToken.equals(providedToken)) {
@@ -56,7 +58,7 @@ public class AuthService {
         return UserTokenResponseDto.of(newAccessToken, newRefreshToken);
     }
 
-    private Long getUserIdFromToken(String token) {
+    private Long getUserIdFromRefreshToken(String token) {
         jwtProvider.validateRefreshToken(token);
         return jwtProvider.getSubject(token);
     }
@@ -76,7 +78,7 @@ public class AuthService {
     }
 
     @Transactional
-    public UserTokenResponseDto getOrCreateUser(UserLoginRequestDto dto) {
+    public UserTokenResponseDto getOrCreateUser(LoginRequestDto dto) {
         String email = oidcProviderFactory.getEmail(dto.socialType(), dto.idToken());
         User user = userRepository.findByEmail(email)
                 .orElseGet(() -> createUser(email, dto.socialType()));
@@ -125,7 +127,22 @@ public class AuthService {
         return jwtProvider.getIssueToken(userId, false);
     }
 
-    public void logout(Long userId) {
+    public void logout(LogoutRequestDto dto) {
+        Long userId = getUserIdFromAccessToken(dto.accessToken());
+        processLogout(userId);
+    }
+
+    private Long getUserIdFromAccessToken(String token) {
+        try {
+            jwtProvider.validateTokenAtLogout(token);
+        } catch (ExpiredJwtException e) {
+            log.warn("tried to log out with expired access token");
+        } finally {
+            return jwtProvider.getSubjectByDecode(token);
+        }
+    }
+
+    private void processLogout(Long userId) {
         String key = getRedisKey(userId);
         String savedRefreshToken = redisTemplate.opsForValue().get(key);
 
