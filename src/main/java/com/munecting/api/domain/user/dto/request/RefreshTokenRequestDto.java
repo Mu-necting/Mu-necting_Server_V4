@@ -1,4 +1,4 @@
-package com.munecting.api.domain.user.dto;
+package com.munecting.api.domain.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
