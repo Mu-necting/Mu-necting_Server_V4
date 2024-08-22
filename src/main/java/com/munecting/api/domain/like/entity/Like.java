@@ -8,11 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -27,5 +25,6 @@ public class Like extends BaseEntity {
     private Long userId;
 
     @NotNull
-    private String musicUri;
+    private String trackId;
+
 }
