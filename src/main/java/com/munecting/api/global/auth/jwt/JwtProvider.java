@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
@@ -157,6 +158,13 @@ public class JwtProvider {
         } catch (RuntimeException e) {
             throw new InternalServerException();
         }
+    }
+
+    public String extractAccessToken(String bearerToken) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(prefix)) {
+            return bearerToken.substring(7);
+        }
+        throw new UnauthorizedException(INVALID_TOKEN);
     }
 
 }

@@ -132,7 +132,9 @@ public class AuthService {
         processLogout(userId);
     }
 
-    private Long getUserIdFromAccessToken(String token) {
+    private Long getUserIdFromAccessToken(String requestToken) {
+        String token = jwtProvider.extractAccessToken(requestToken);
+
         try {
             jwtProvider.validateTokenAtLogout(token);
         } catch (ExpiredJwtException e) {
