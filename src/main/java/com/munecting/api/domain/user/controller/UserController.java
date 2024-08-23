@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @Operation(description = " access token을 통해 user id를 정상적으로 받아오는지 확인합니다. (삭제 예정)")
     @GetMapping("/test")
+    @Operation(
+            summary = "@UserId 테스트용 (삭제 예정)",
+            description = " access token을 통해 user id를 정상적으로 받아오는지 확인합니다. (삭제 예정)")
     public ApiResponse<?> test(
             @UserId Long userId
     ) {
