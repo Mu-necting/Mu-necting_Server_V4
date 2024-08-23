@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,20 +31,12 @@ public class CommentService {
         String trackId = commentRequestDto.getTrackId();
         spotifyService.getTrack(trackId);
         Comment comment = Comment.toEntity(commentRequestDto);
-        Long id = saveCommentEntity(comment);
+        Long id = saveComment(comment);
         return id;
     }
 
-    public Long deleteComment(Long commentId) {
-        Comment comment = getCommentEntityById(commentId);
-        deleteCommentEntity(comment);
-        return commentId;
-    }
-
-    public Long updateComment(Long commentId, CommentRequestDto commentRequestDto) {
-        Comment comment = getCommentEntityById(commentId);
-        comment.updateContent(commentRequestDto.getContent());
-        return saveCommentEntity(comment);
+    public Long saveComment(Comment comment) {
+        return commentRepository.save(comment).getId();
     }
 
     public PagedResponseDto<CommentResponseDto> getCommentsByTrackId(String trackId, LocalDateTime cursor, int limit) {
@@ -54,20 +47,19 @@ public class CommentService {
         return new PagedResponseDto<>(pagedCommentResponseDto);
     }
 
-    public Long saveCommentEntity(Comment comment) {
-        return commentRepository.save(comment).getId();
-    }
-
-    public void deleteCommentEntity(Comment comment) {
-        commentRepository.delete(comment);
-    }
-
     public Page<Comment> getCommentsByTrackIdWithCursor(String trackId, LocalDateTime cursor, Pageable pageable) {
         log.info(String.valueOf(cursor));
         return commentRepository.findCommentsByTrackIdWithCursor(trackId, cursor.toString(), pageable);
     }
 
-    public Comment getCommentEntityById(Long id) {
+    @Transactional
+    public Long updateComment(Long commentId, CommentRequestDto commentRequestDto) {
+        Comment comment = getCommentById(commentId);
+        comment.updateContent(commentRequestDto.getContent());
+        return commentId;
+    }
+
+    public Comment getCommentById(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Status.COMMENT_NOT_FOUND));
     }

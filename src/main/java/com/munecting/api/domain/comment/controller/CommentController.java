@@ -2,7 +2,6 @@ package com.munecting.api.domain.comment.controller;
 
 import com.munecting.api.domain.comment.dto.CommentRequestDto;
 import com.munecting.api.domain.comment.dto.CommentResponseDto;
-import com.munecting.api.domain.comment.entity.Comment;
 import com.munecting.api.domain.comment.service.CommentService;
 import com.munecting.api.global.common.dto.response.ApiResponse;
 import com.munecting.api.global.common.dto.response.PagedResponseDto;
@@ -12,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -44,7 +42,7 @@ public class CommentController {
     @Operation(summary = "댓글 삭제하기")
     public ApiResponse<?> deleteComment(
             @PathVariable Long commentId) {
-        Long id = commentService.deleteComment(commentId);
+        Long id = commentService.deleteCommentById(commentId);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), id);
     }
 
