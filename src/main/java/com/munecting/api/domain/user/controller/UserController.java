@@ -9,13 +9,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "user" , description = "user 관련 api")
+@RequestMapping("/api/users")
+@Tag(name = "user", description = "user 관련 api")
 public class UserController {
     private final UserService userService;
 
@@ -27,4 +27,12 @@ public class UserController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), userId);
     }
 
+    @DeleteMapping("/{userId}")
+    @Operation(summary = "회원 탈퇴")
+    public ApiResponse<?> deleteUser(
+            @PathVariable(name = "userId") Long userId
+    ) {
+        userService.deleteUser(userId);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
+    }
 }
