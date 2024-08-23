@@ -72,4 +72,17 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException(Status.COMMENT_NOT_FOUND));
     }
 
+    public Long deleteCommentById(Long commentId) {
+        Comment comment = getCommentById(commentId);
+        deleteComment(comment);
+        return commentId;
+    }
+
+    public void deleteComment(Comment comment) {
+        commentRepository.delete(comment);
+    }
+
+    public void deleteCommentsByUserId(Long userId) {
+        commentRepository.deleteByUserId(userId);
+    }
 }
