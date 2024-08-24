@@ -7,4 +7,6 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     int countByTrackId(String trackId);
 
     boolean existsByUserIdAndTrackId(Long userId, String trackId);
+
+    void deleteByTrackIdAndUserId(String trackId, Long userId);
 }

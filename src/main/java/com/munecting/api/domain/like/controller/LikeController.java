@@ -32,4 +32,13 @@ public class LikeController {
         return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), dto);
     }
 
+    @DeleteMapping("/{trackId}/likes")
+    @Operation(summary = "좋아요 취소")
+    public ApiResponse<?> deleteTrackLike (
+            @PathVariable(name = "trackId") String trackId,
+            @UserId Long userId
+    ) {
+        DeleteTrackLikeResponseDto dto = likeService.deleteTrackLike(trackId, userId);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), dto);
+    }
 }
