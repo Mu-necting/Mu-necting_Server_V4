@@ -159,6 +159,7 @@ public class SpotifyService {
 
     }
 
-
-
+    public void validateTrackId(String trackId) {
+        getTrack(trackId);
+    }
 }

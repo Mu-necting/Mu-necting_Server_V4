@@ -19,4 +19,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT c FROM Comment c WHERE c.trackId = :trackId AND (:cursorStr IS NULL OR c.createdAt < CAST(:cursorStr AS TIMESTAMP)) ORDER BY c.createdAt DESC")
     Page<Comment> findCommentsByTrackIdWithCursor(
             @Param("trackId") String trackId, @Param("cursorStr") String cursorStr, Pageable pageable);
+
+    int countByTrackId(String musicId);
 }

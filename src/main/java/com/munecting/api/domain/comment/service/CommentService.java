@@ -28,7 +28,7 @@ public class CommentService {
 
     public Long createComment(CommentRequestDto commentRequestDto) {
         String trackId = commentRequestDto.getTrackId();
-        spotifyService.getTrack(trackId);
+        spotifyService.validateTrackId(trackId);
         Comment comment = Comment.toEntity(commentRequestDto);
         Long id = saveCommentEntity(comment);
         return id;
