@@ -18,9 +18,28 @@ import java.util.List;
 public class LikeService {
 
     private final LikeRepository likeRepository;
+    private final SpotifyService spotifyService;
+    private final UserService userService;
 
     public boolean isTrackLikedByUser(String trackId, Long userId) {
         return likeRepository.existsByUserIdAndTrackId(userId, trackId);
+    }
+
+    @Transactional
+    public AddTrackLikeResponseDto addTrackLike(String trackId, Long userId) {
+        spotifyService.validateTrackId(trackId);
+        userService.validateUserExists(userId);
+
+        boolean isLikedTrack = isTrackLikedByUser(trackId, userId);
+        if (!isLikedTrack) {
+            Like like = Like.toEntity(userId, trackId);
+            likeRepository.save(like);
+            isLikedTrack = true;
+        }
+
+        int likeCount = likeRepository.countByTrackId(trackId);
+
+        return AddTrackLikeResponseDto.of(trackId,likeCount, isLikedTrack);
     }
 
 }
