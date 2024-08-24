@@ -40,6 +40,9 @@ public enum Status {
 
     //댓글 오류 응답
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT404", "댓글이 존재하지 않습니다."),
+
+    // User 오류 응답
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER404", "존재하지 않는 회원입니다.")
     ;
 
     private final HttpStatus httpStatus;
