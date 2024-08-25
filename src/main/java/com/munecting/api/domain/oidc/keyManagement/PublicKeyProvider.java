@@ -1,8 +1,7 @@
-package com.munecting.api.global.auth.oidc.publicKey;
+package com.munecting.api.domain.oidc.keyManagement;
 
-import com.munecting.api.global.auth.oidc.publicKey.OidcPublicKey;
-import com.munecting.api.global.auth.oidc.publicKey.OidcPublicKeyList;
-import com.munecting.api.global.error.exception.InternalServerException;
+import com.munecting.api.domain.oidc.dto.OidcPublicKey;
+import com.munecting.api.domain.oidc.dto.OidcPublicKeyList;
 import com.munecting.api.global.error.exception.OidcException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,8 +20,8 @@ import static com.munecting.api.global.util.DecodeUtil.decodeBase64;
 @Slf4j
 public class PublicKeyProvider {
 
-    public PublicKey generatePublicKey(final Map<String, String> tokenHeaders, final OidcPublicKeyList publicKeys) {
-        OidcPublicKey publicKey = publicKeys.getMatchedKey(tokenHeaders.get("kid"), tokenHeaders.get("alg"));
+    public PublicKey generatePublicKey(final Map<String, String> header, final OidcPublicKeyList publicKeys) {
+        OidcPublicKey publicKey = publicKeys.getMatchedKey( header.get("kid"), header.get("alg"));
         return getPublicKey(publicKey);
     }
 

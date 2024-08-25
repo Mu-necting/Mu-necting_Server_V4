@@ -1,6 +1,6 @@
-package com.munecting.api.global.auth.oidc.publicKey;
+package com.munecting.api.domain.oidc.dto;
 
-import com.munecting.api.global.auth.oidc.publicKey.OidcPublicKey;
+import com.munecting.api.domain.oidc.dto.OidcPublicKey;
 import com.munecting.api.global.error.exception.InternalServerException;
 
 import java.util.List;

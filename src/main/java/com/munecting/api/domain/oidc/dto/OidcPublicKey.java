@@ -1,4 +1,4 @@
-package com.munecting.api.global.auth.oidc.publicKey;
+package com.munecting.api.domain.oidc.dto;
 
 public record OidcPublicKey(
         String kid,
