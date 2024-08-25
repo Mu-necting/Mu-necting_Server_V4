@@ -1,6 +1,7 @@
 package com.munecting.api.domain.spotify.service;
 
 
+import com.munecting.api.domain.like.dto.response.GetLikedTrackResponseDto;
 import com.munecting.api.domain.spotify.dto.AlbumResponseDto;
 import com.munecting.api.domain.spotify.dto.ArtistResponseDto;
 import com.munecting.api.domain.spotify.dto.MusicResponseDto;
@@ -157,6 +158,26 @@ public class SpotifyService {
             throw new EntityNotFoundException(Status.TRACK_NOT_FOUND);
         }
 
+    }
+
+    public GetLikedTrackResponseDto getTrackForLiked(String trackId, Long likeId) {
+        GetTrackRequest getTrackRequest = spotifyApi.getTrack(trackId)
+                .market(CountryCode.KR)
+                .build();
+
+        return handleSpotifyApiCall(() -> {
+            Track track = getTrackRequest.execute();
+            return spotifyDtoMapper.convertToLikedTrackResponseDto(track, likeId);
+
+        }, Status.TRACK_NOT_FOUND);
+    }
+
+    private <T> T handleSpotifyApiCall(SpotifyApiCall<T> apiCall, Status status) {
+        try {
+            return apiCall.execute();
+        } catch (IOException | ParseException | SpotifyWebApiException ex) {
+            throw new EntityNotFoundException(status);
+        }
     }
 
     public void validateTrackId(String trackId) {

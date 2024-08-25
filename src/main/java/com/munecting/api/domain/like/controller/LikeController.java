@@ -2,7 +2,7 @@ package com.munecting.api.domain.like.controller;
 
 import com.munecting.api.domain.like.dto.response.AddTrackLikeResponseDto;
 import com.munecting.api.domain.like.dto.response.DeleteTrackLikeResponseDto;
-import com.munecting.api.domain.like.dto.response.GetLikedTrackResponseDto;
+import com.munecting.api.domain.like.dto.response.GetLikedTrackListResponseDto;
 import com.munecting.api.domain.like.service.LikeService;
 import com.munecting.api.global.auth.user.UserId;
 import com.munecting.api.global.common.dto.response.ApiResponse;
@@ -11,8 +11,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +28,17 @@ public class LikeController {
     ) {
         AddTrackLikeResponseDto dto = likeService.addTrackLike(trackId, userId);
         return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), dto);
+    }
+
+    @GetMapping("/liked")
+    @Operation(summary = "좋아요한 음악 조회")
+    public ApiResponse<?> getLikedTracks (
+            @UserId Long userId,
+            @RequestParam(required = false) Long cursor,
+            @RequestParam(required = false, defaultValue = "20") int size
+    ) {
+        GetLikedTrackListResponseDto dto = likeService.getLikedTracks(userId, cursor, size);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), dto);
     }
 
     @DeleteMapping("/{trackId}/likes")
