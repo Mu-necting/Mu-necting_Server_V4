@@ -1,5 +1,6 @@
 package com.munecting.api.global.auth.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.munecting.api.domain.user.entity.User;
 import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.global.auth.user.UserPrincipalDetails;
@@ -14,11 +15,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.io.IOException;
 import java.security.Key;
 import java.security.PublicKey;
 import java.util.Date;
+import java.util.Map;
 
 import static com.munecting.api.global.common.dto.response.Status.*;
+import static com.munecting.api.global.util.DecodeUtil.decodeBase64;
 
 @Component
 @Slf4j
@@ -36,19 +40,23 @@ public class JwtProvider {
 
     private final UserRepository userRepository;
 
+    private final ObjectMapper objectMapper;
+
     public JwtProvider(
             @Value("${jwt.secret}") String secretKey,
             @Value("${jwt.access.expiration}") long accessTokenExpireTime,
             @Value("${jwt.refresh.expiration}") long refreshTokenExpireTime,
             @Value("${spring.security.auth.header}") String authorization,
             @Value("${spring.security.auth.prefix}") String prefix,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            ObjectMapper objectMapper) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
         this.access_token_expire_time = accessTokenExpireTime;
         this.refresh_token_expire_time = refreshTokenExpireTime;
         this.authHeader = authorization;
         this.prefix = prefix;
         this.userRepository = userRepository;
+        this.objectMapper = objectMapper;
     }
 
     public String getIssueToken(Long userId, boolean isAccessToken) {
@@ -129,5 +137,58 @@ public class JwtProvider {
             throw new InternalServerException();
         }
     }
+
+    public Map<String, String> getHeader(String token) {
+        String header = token.split("\\.")[0];
+
+        try {
+            return objectMapper.readValue(decodeBase64(header), Map.class);
+
+        } catch (IOException e) {
+            log.warn("Failed to parse token headers");
+            throw new OidcException();
+        }
+
+    }
+
+    public void validatePayload(String token, String issuer, String audience) {
+        String payload = token.split("\\.")[1];
+
+        try {
+            Map payloadMap = objectMapper.readValue(decodeBase64(payload), Map.class);
+
+            String issFromToken = (String) payloadMap.get("iss");
+            validateIssue(issFromToken, issuer);
+
+            String audFromToken = (String) payloadMap.get("aud");
+            validateAudience(audFromToken, audience);
+
+        } catch (IOException e) {
+            log.warn("Failed to parse token payload");
+            throw new OidcException();
+        }
+    }
+
+    private void validateIssue(String issFromToken, String issuer) {
+        if (issFromToken == null) {
+            log.warn("Issuer claim from token is null");
+            throw new OidcException();
+        }
+        if (!issFromToken.equals(issuer)) {
+            log.warn("Invalid issuer: expected {}, but got {}.", issuer, issFromToken);
+            throw new OidcException();
+        }
+    }
+
+    private void validateAudience(String audFromToken, String audience) {
+        if (audFromToken == null) {
+            log.warn("Audience claim from token is null.");
+        }
+        if (!audFromToken.equals(audience)) {
+            log.warn("Invalid audience: expected {}, but got {}.", audience, audFromToken);
+            throw new OidcException();
+        }
+    }
+
 
 }
