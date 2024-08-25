@@ -1,16 +1,16 @@
 package com.munecting.api.domain.user.service;
 
+import com.munecting.api.domain.oidc.dto.OidcUserInfo;
+import com.munecting.api.domain.oidc.service.OidcService;
 import com.munecting.api.domain.user.constant.Role;
-import com.munecting.api.domain.user.dto.RefreshTokenRequestDto;
-import com.munecting.api.domain.user.dto.UserLoginRequestDto;
-import com.munecting.api.domain.user.dto.UserTokenResponseDto;
+import com.munecting.api.domain.user.dto.reqeust.RefreshTokenRequestDto;
+import com.munecting.api.domain.user.dto.reqeust.UserLoginRequestDto;
+import com.munecting.api.domain.user.dto.response.UserTokenResponseDto;
 import com.munecting.api.domain.user.entity.User;
 import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.global.auth.jwt.JwtProvider;
-import com.munecting.api.global.auth.oidc.provider.OidcProviderFactory;
 import com.munecting.api.domain.user.constant.SocialType;
 import com.munecting.api.global.common.dto.response.Status;
-import com.munecting.api.global.error.exception.GeneralException;
 import com.munecting.api.global.error.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class AuthService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    private final OidcProviderFactory oidcProviderFactory;
+    private final OidcService oidcService;
 
     private final UserRepository userRepository;
 
@@ -77,25 +77,26 @@ public class AuthService {
 
     @Transactional
     public UserTokenResponseDto getOrCreateUser(UserLoginRequestDto dto) {
-        String email = oidcProviderFactory.getEmail(dto.socialType(), dto.idToken());
-        User user = userRepository.findByEmail(email)
-                .orElseGet(() -> createUser(email, dto.socialType()));
-        validateUser(dto.socialType(), user.getSocialType());
+
+        OidcUserInfo oidcUserInfo = oidcService.getOidcUserInfo(dto.socialType(), dto.idToken());
+        String socialId = dto.socialType().toString() + "_" + oidcUserInfo.sub();
+
+        User user = userRepository.findBySocialId(socialId)
+                .orElseGet(() ->
+                        createUser(socialId, oidcUserInfo.email(), dto.socialType())
+                );
+
         return issueTokensForUser(user);
     }
 
-    private void validateUser(SocialType providedSocial, SocialType savedSocial) {
-        if (providedSocial != savedSocial) {
-            throw new GeneralException("이미 가입된 이메일입니다. 이전에 사용한 로그인 수단을 사용해주세요.", Status.BAD_REQUEST);
-        }
-    }
-
-    private User createUser(String email, SocialType socialType) {
+    private User createUser(String socialId, String email, SocialType socialType) {
         User newUser = User.builder()
-                .email(email)
+                .socialId(socialId)
+                .nickname(email.split("@")[0])
                 .role(Role.USER)
                 .socialType(socialType)
                 .build();
+
         return userRepository.save(newUser);
     }
 
