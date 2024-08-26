@@ -1,5 +1,7 @@
-package com.munecting.api.global.auth.user;
+package com.munecting.api.global.auth.resolver;
 
+import com.munecting.api.global.auth.user.UserId;
+import com.munecting.api.global.auth.user.UserPrincipalDetails;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -23,6 +25,6 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
         UserPrincipalDetails principal = (UserPrincipalDetails) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
-        return principal.getUser().getId();
+        return principal.getId();
     }
 }
