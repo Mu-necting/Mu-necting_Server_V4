@@ -47,7 +47,4 @@ public class MusicService {
         return uploadedMusicRepository.findUploadedMusicByLocationAndRadius(latitude, longitude, radius);
     }
 
-    public void deleteUploadedMusicsByUserId(Long userId) {
-        uploadedMusicRepository.deleteByUserId(userId);
-    }
 }

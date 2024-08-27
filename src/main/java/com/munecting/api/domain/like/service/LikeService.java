@@ -84,8 +84,4 @@ public class LikeService {
         return DeleteTrackLikeResponseDto.of(trackId, isLikedTrack, likeCount);
     }
 
-    public void deleteLikesByUserId(Long userId) {
-        likeRepository.deleteByUserId(userId);
-    }
-
 }
