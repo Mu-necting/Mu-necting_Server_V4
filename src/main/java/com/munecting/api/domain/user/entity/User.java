@@ -21,8 +21,7 @@ public class User extends BaseEntity {
     private Long id;
 
     @NotNull
-    private String email;
-
+    private String socialId;
 
     @Column(nullable = true)
     private String nickname;

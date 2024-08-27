@@ -61,8 +61,12 @@ spring :
     oauth:
       kakao:
         public-key-info: https://kauth.kakao.com/.well-known/jwks.json
+        issuer: https://kauth.kakao.com
+        audience: ${KAKAO_APP_ID}}
       apple:
         public-key-url: https://appleid.apple.com/auth/keys
+        issuer: https://appleid.apple.com
+        audience: ${APPLE_APP_ID}
       google:
         client-id: ${GOOGLE_CLIENT_ID}
 
