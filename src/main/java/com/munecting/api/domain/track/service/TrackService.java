@@ -4,7 +4,6 @@ import com.munecting.api.domain.comment.dao.CommentRepository;
 import com.munecting.api.domain.like.dao.LikeRepository;
 import com.munecting.api.domain.like.service.LikeService;
 import com.munecting.api.domain.spotify.service.SpotifyService;
-import com.munecting.api.domain.track.dto.response.GetRecentTracksResponseDto;
 import com.munecting.api.domain.track.dto.response.GetTrackDetailsResponseDto;
 import com.munecting.api.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,5 @@
 package com.munecting.api.domain.track.controller;
 
-import com.munecting.api.domain.track.dto.response.GetRecentTracksResponseDto;
 import com.munecting.api.domain.track.dto.response.GetTrackDetailsResponseDto;
 import com.munecting.api.domain.track.service.TrackService;
 import com.munecting.api.global.auth.user.UserId;
