@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
+
     int countByTrackId(String trackId);
 
     boolean existsByUserIdAndTrackId(Long userId, String trackId);
@@ -19,7 +20,9 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
     Slice<Like> findByUserId(@Param("userId") Long userId, Pageable pageable);
 
-
     @Query("SELECT l from Like l where l.userId = :userId and l.id < :id")
     Slice<Like> findByUserId(@Param("userId") Long userId, @Param("id") Long cursor, Pageable pageable);
+
+    void deleteByUserId(Long userId);
+
 }

@@ -15,7 +15,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,6 +82,10 @@ public class LikeService {
 
         int likeCount = likeRepository.countByTrackId(trackId);
         return DeleteTrackLikeResponseDto.of(trackId, isLikedTrack, likeCount);
+    }
+
+    public void deleteLikesByUserId(Long userId) {
+        likeRepository.deleteByUserId(userId);
     }
 
 }

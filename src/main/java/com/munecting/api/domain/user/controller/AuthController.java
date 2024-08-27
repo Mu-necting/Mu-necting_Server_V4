@@ -1,10 +1,12 @@
 package com.munecting.api.domain.user.controller;
 
 
-import com.munecting.api.domain.user.dto.RefreshTokenRequestDto;
-import com.munecting.api.domain.user.dto.UserLoginRequestDto;
-import com.munecting.api.domain.user.dto.UserTokenResponseDto;
+import com.munecting.api.domain.user.dto.request.LogoutRequestDto;
+import com.munecting.api.domain.user.dto.request.RefreshTokenRequestDto;
+import com.munecting.api.domain.user.dto.request.LoginRequestDto;
+import com.munecting.api.domain.user.dto.response.UserTokenResponseDto;
 import com.munecting.api.domain.user.service.AuthService;
+import com.munecting.api.global.auth.user.UserId;
 import com.munecting.api.global.common.dto.response.ApiResponse;
 import com.munecting.api.global.common.dto.response.Status;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,11 +41,21 @@ public class AuthController {
             summary = "로그인 또는 회원가입하기",
             description = "회원가입이 되어 있는 경우 로그인을 수행, 그렇지 않은 경우 회원가입을 수행합니다.")
     public ApiResponse<?> login(
-            @RequestBody @Valid UserLoginRequestDto userLoginRequestDto
+            @RequestBody @Valid LoginRequestDto loginRequestDto
     ) {
-        UserTokenResponseDto dto = authService.getOrCreateUser(userLoginRequestDto);
+        UserTokenResponseDto dto = authService.getOrCreateUser(loginRequestDto);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), dto);
     }
+
+    @PostMapping("/logout")
+    @Operation(summary = "로그아웃")
+    public ApiResponse<?> logout(
+            @RequestBody @Valid LogoutRequestDto logoutRequestDto
+            ) {
+        authService.logout(logoutRequestDto);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
+    }
+
 
     @PostMapping("/refresh")
     @Operation(summary = "토큰 재발급하기")
