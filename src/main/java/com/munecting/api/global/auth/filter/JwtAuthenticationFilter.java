@@ -48,18 +48,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         Optional<String> bearerToken = Optional.ofNullable(request.getHeader(authHeader));
         bearerToken.ifPresent(it -> {
-            String accessToken = extractAccessToken(it);
+            String accessToken = jwtProvider.extractAccessToken(it);
             jwtProvider.validateAccessToken(accessToken);
             setAuthentication(accessToken);
         });
         filterChain.doFilter(request, response);
-    }
-
-    public String extractAccessToken(String bearerToken) {
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(prefix)) {
-            return bearerToken.substring(7);
-        }
-        throw new UnauthorizedException(INVALID_TOKEN);
     }
 
     private void setAuthentication(String accessToken) {

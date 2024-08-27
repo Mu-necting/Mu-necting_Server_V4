@@ -7,7 +7,6 @@ import com.munecting.api.domain.uploadedMusic.dto.MusicRequestDto;
 import com.munecting.api.domain.uploadedMusic.dto.UploadedMusicResponseDto;
 import com.munecting.api.domain.uploadedMusic.entity.UploadedMusic;
 import com.munecting.api.domain.user.entity.User;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +45,9 @@ public class MusicService {
 
     private List<UploadedMusic> getUploadedMusicByLocationAndRadius(Double latitude, Double longitude, Integer radius) {
         return uploadedMusicRepository.findUploadedMusicByLocationAndRadius(latitude, longitude, radius);
+    }
+
+    public void deleteUploadedMusicsByUserId(Long userId) {
+        uploadedMusicRepository.deleteByUserId(userId);
     }
 }

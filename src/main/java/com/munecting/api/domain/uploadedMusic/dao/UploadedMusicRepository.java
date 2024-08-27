@@ -28,4 +28,6 @@ public interface UploadedMusicRepository extends JpaRepository<UploadedMusic, Lo
             @Param("longitude") double longitude,
             @Param("radius") Integer radius
     );
+
+    void deleteByUserId(Long userId);
 }

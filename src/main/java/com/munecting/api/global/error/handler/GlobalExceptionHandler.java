@@ -8,18 +8,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
 
-@RestControllerAdvice(annotations = {RestController.class})
+@RestControllerAdvice
 @RequiredArgsConstructor
 @Slf4j
 public class GlobalExceptionHandler {
@@ -58,6 +59,26 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 지원하지 않는 HTTP method로 요청 시 발생하는 error를 handling합니다.
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    protected ResponseEntity<ApiResponse<Object>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        log.warn(">>> handle: HttpRequestMethodNotSupportedException");
+        ApiResponse<Object> response = ApiResponse.onFailure(HttpStatus.METHOD_NOT_ALLOWED.toString(), e.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
+    }
+
+    /**
+     * 존재하지 않는 HTTP URI 요청 시 발생하는 error를 handling합니다.
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    protected ResponseEntity<ApiResponse<Object>> handleNoResourceException(final NoResourceFoundException e) {
+        log.warn(">>> handle: NoResourceException ");
+        ApiResponse<Object> response = ApiResponse.onFailure(HttpStatus.NOT_FOUND.toString(), e.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    /**
      * GeneralException을 handling 합니다.
      */
     @ExceptionHandler(GeneralException.class)
@@ -76,7 +97,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Object>> unexpectedException(
             Exception unexpectedException
     ) {
-        log.error("예상치 못한 오류 발생: {}", unexpectedException.getMessage());
+        log.error("예상치 못한 오류 발생: {}", unexpectedException.getMessage(), unexpectedException);
         log.error("발생 지점: {}", unexpectedException.getStackTrace()[0]);
         Body body = Status.INTERNAL_SERVER_ERROR.getBody();
         ApiResponse<Object> response = ApiResponse.onFailure(body.getCode(), body.getMessage(), null);

@@ -10,14 +10,17 @@ import com.munecting.api.global.error.exception.UnauthorizedException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.security.Key;
 import java.security.PublicKey;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
@@ -100,10 +103,31 @@ public class JwtProvider {
         }
     }
 
-    private JwtParser getJwtParser() {
-        return Jwts.parser()
-                .verifyWith((SecretKey) key)
-                .build();
+    public void validateTokenAtLogout(String token) {
+        try {
+            getJwtParser().parseSignedClaims(token);
+        } catch (ExpiredJwtException e) {
+            log.warn("JWT token expired");
+            throw e;
+        } catch (UnsupportedJwtException e) {
+            log.warn("unsupported JWT token: {}", e.getMessage());
+            throw new UnauthorizedException(INVALID_TOKEN);
+        } catch (JwtException | IllegalArgumentException e) {
+            log.warn("Invalid JWT token: {}", e.getMessage());
+            throw new UnauthorizedException(INVALID_TOKEN);
+        }
+    }
+
+    public Long getSubjectByDecode(String token) {
+
+        // Header, Payload, Signature 분리
+        String[] parts = token.split("\\.");
+
+        String payload = new String(Base64.getUrlDecoder().decode(parts[1]));
+        JSONObject jsonObject = new JSONObject(payload);
+        String subject = jsonObject.getString("sub");
+
+        return Long.valueOf(subject);
     }
 
     public UsernamePasswordAuthenticationToken getAuthentication(String accessToken) {
@@ -121,6 +145,12 @@ public class JwtProvider {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject());
+    }
+
+    private JwtParser getJwtParser() {
+        return Jwts.parser()
+                .verifyWith((SecretKey) key)
+                .build();
     }
 
     public Claims parseClaims(String token, PublicKey publicKey) {
@@ -190,5 +220,11 @@ public class JwtProvider {
         }
     }
 
+    public String extractAccessToken(String bearerToken) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(prefix)) {
+            return bearerToken.substring(7);
+        }
+        throw new UnauthorizedException(INVALID_TOKEN);
+    }
 
 }
