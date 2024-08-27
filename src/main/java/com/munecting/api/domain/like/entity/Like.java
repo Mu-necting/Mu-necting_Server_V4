@@ -27,4 +27,10 @@ public class Like extends BaseEntity {
     @NotNull
     private String trackId;
 
+    public static Like toEntity(Long userId, String trackId) {
+        return Like.builder()
+                .userId(userId)
+                .trackId(trackId)
+                .build();
+    }
 }

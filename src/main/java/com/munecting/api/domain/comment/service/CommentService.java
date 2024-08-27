@@ -29,7 +29,7 @@ public class CommentService {
 
     public Long createComment(CommentRequestDto commentRequestDto) {
         String trackId = commentRequestDto.getTrackId();
-        spotifyService.getTrack(trackId);
+        spotifyService.validateTrackId(trackId);
         Comment comment = Comment.toEntity(commentRequestDto);
         Long id = saveComment(comment);
         return id;
@@ -74,7 +74,4 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
-    public void deleteCommentsByUserId(Long userId) {
-        commentRepository.deleteByUserId(userId);
-    }
 }

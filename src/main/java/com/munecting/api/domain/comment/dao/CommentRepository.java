@@ -15,5 +15,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Page<Comment> findCommentsByTrackIdWithCursor(
             @Param("trackId") String trackId, @Param("cursorStr") String cursorStr, Pageable pageable);
 
+    int countByTrackId(String musicId);
+
     void deleteByUserId(Long userId);
+
 }
