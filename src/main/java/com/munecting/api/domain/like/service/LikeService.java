@@ -55,7 +55,7 @@ public class LikeService {
         List<GetLikedTrackResponseDto> likedTracks = likes.stream()
                 .map(like -> {
                     String trackId = like.getTrackId();
-                    return spotifyService.getTrackForLiked(trackId, like.getId());
+                    return spotifyService.getLikedTrack(trackId, like.getId());
                 })
                 .collect(Collectors.toList());
 

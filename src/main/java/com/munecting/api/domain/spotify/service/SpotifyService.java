@@ -147,29 +147,26 @@ public class SpotifyService {
     }
 
     public MusicResponseDto getTrack(String trackId) {
-        GetTrackRequest getTrackRequest = spotifyApi.getTrack(trackId)
-                .market(CountryCode.KR)
-                .build();
-
-        try {
-            Track track = getTrackRequest.execute();
-            return spotifyDtoMapper.convertToTrackResponseDto(track);
-        } catch (IOException | ParseException | SpotifyWebApiException ex) {
-            throw new EntityNotFoundException(Status.TRACK_NOT_FOUND);
-        }
-
+        Track track = fetchTrackById(trackId);
+        return spotifyDtoMapper.convertToTrackResponseDto(track);
     }
 
-    public GetLikedTrackResponseDto getTrackForLiked(String trackId, Long likeId) {
+    public GetLikedTrackResponseDto getLikedTrack(String trackId, Long likeId) {
+        Track track = fetchTrackById(trackId);
+        return spotifyDtoMapper.convertToLikedTrackResponseDto(track, likeId);
+    }
+
+    public void validateTrackId(String trackId) {
+        fetchTrackById(trackId);
+    }
+
+    private Track fetchTrackById(String trackId) {
         GetTrackRequest getTrackRequest = spotifyApi.getTrack(trackId)
                 .market(CountryCode.KR)
                 .build();
 
-        return handleSpotifyApiCall(() -> {
-            Track track = getTrackRequest.execute();
-            return spotifyDtoMapper.convertToLikedTrackResponseDto(track, likeId);
-
-        }, Status.TRACK_NOT_FOUND);
+        return handleSpotifyApiCall(
+                getTrackRequest::execute, Status.TRACK_NOT_FOUND);
     }
 
     private <T> T handleSpotifyApiCall(SpotifyApiCall<T> apiCall, Status status) {
@@ -178,9 +175,5 @@ public class SpotifyService {
         } catch (IOException | ParseException | SpotifyWebApiException ex) {
             throw new EntityNotFoundException(status);
         }
-    }
-
-    public void validateTrackId(String trackId) {
-        getTrack(trackId);
     }
 }
