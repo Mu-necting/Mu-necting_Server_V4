@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/address")
-@Tag(name = "address", description = "주소 관련 api")
+@Tag(name = "address", description = "주소 관련 api </br> <i> 담당자 : 전민주 </i>")
 public class AddressController {
 
     private final AddressService addressService;

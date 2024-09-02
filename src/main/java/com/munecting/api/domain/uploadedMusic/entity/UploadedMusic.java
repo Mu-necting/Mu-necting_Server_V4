@@ -42,11 +42,11 @@ public class UploadedMusic extends BaseEntity {
 
     public static UploadedMusic toEntity (MusicRequestDto musicRequestDto) {
         return UploadedMusic.builder().
-                userId(musicRequestDto.getUserId())
-                .trackId(musicRequestDto.getTrackId())
-                .latitude(musicRequestDto.getLatitude())
-                .longitude(musicRequestDto.getLongitude())
-                .uploadDuration(musicRequestDto.getUploadDuration())
+                userId(musicRequestDto.userId())
+                .trackId(musicRequestDto.trackId())
+                .latitude(musicRequestDto.latitude())
+                .longitude(musicRequestDto.longitude())
+                .uploadDuration(musicRequestDto.uploadDuration())
                 .build();
     }
 }
