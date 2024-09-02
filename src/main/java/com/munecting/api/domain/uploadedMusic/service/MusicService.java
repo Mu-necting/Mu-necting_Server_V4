@@ -22,7 +22,7 @@ public class MusicService {
     private final SpotifyService spotifyService;
 
     public Long uploadMusic(MusicRequestDto musicRequestDto) {
-        spotifyService.getTrack(musicRequestDto.getTrackId());
+        spotifyService.getTrack(musicRequestDto.trackId());
         UploadedMusic uploadedMusic = UploadedMusic.toEntity(musicRequestDto);
         return saveUploadMusicEntity(uploadedMusic);
     }
@@ -34,7 +34,7 @@ public class MusicService {
                 .map(uploadedMusic -> {
                     MusicResponseDto musicResponseDto = spotifyService.getTrack(uploadedMusic.getTrackId());
                     User user = null; // 인증 부분 완료되면 수정 예정
-                    return UploadedMusicResponseDto.toDto(uploadedMusic, musicResponseDto);
+                    return UploadedMusicResponseDto.of(uploadedMusic, musicResponseDto);
                 }).collect(Collectors.toList());
         return uploadedMusicResponseDtos;
     }

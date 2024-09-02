@@ -2,6 +2,7 @@ package com.munecting.api.domain.spotify.dto;
 
 import com.munecting.api.domain.like.dto.response.GetLikedTrackResponseDto;
 import com.munecting.api.domain.like.dto.response.LikedTrackArtistResponseDto;
+import com.wrapper.spotify.model_objects.specification.Album;
 import com.wrapper.spotify.model_objects.specification.AlbumSimplified;
 import com.wrapper.spotify.model_objects.specification.Artist;
 import com.wrapper.spotify.model_objects.specification.Track;
@@ -17,27 +18,12 @@ import org.springframework.stereotype.Component;
 public class SpotifyDtoMapper {
 
     public MusicResponseDto convertToTrackResponseDto(Track track) {
-        MusicResponseDto responseDto = MusicResponseDto.builder()
-                .trackUri(track.getUri())
-                .trackId(track.getId())
-                .trackTitle(track.getName())
-                .trackPreview(track.getPreviewUrl())
-                .images(track.getAlbum().getImages())
-                .build();
-
         List<ArtistResponseDto> artistResponseDtos = Stream.of(track.getArtists())
-                .map(artist -> ArtistResponseDto.builder()
-                        .artistId(artist.getId())
-                        .artistUri(artist.getUri())
-                        .artistId(artist.getId())
-                        .artistName(artist.getName())
-                        .build())
+                .map(ArtistResponseDto::of)
                 .collect(Collectors.toList());
-        responseDto.setArtists(artistResponseDtos);
 
-        return responseDto;
+        return MusicResponseDto.of(track, artistResponseDtos);
     }
-
 
     public GetLikedTrackResponseDto convertToLikedTrackResponseDto(Track track, Long likeId) {
         return GetLikedTrackResponseDto.builder()
@@ -54,55 +40,25 @@ public class SpotifyDtoMapper {
     }
 
     public MusicResponseDto convertToTrackResponseDto(TrackSimplified trackSimplified) {
-        MusicResponseDto responseDto = MusicResponseDto.builder()
-                .trackUri(trackSimplified.getUri())
-                .trackId(trackSimplified.getId())
-                .trackTitle(trackSimplified.getName())
-                .trackPreview(trackSimplified.getPreviewUrl())
-                .build();
-
         List<ArtistResponseDto> artistResponseDtos = Stream.of(trackSimplified.getArtists())
-                .map(artist -> ArtistResponseDto.builder()
-                        .artistUri(artist.getUri())
-                        .artistName(artist.getName())
-                        .artistId(artist.getId())
-                        .build())
+                .map(ArtistResponseDto::of)
                 .collect(Collectors.toList());
-        responseDto.setArtists(artistResponseDtos);
-
-        return responseDto;
+        return MusicResponseDto.of(trackSimplified, artistResponseDtos);
     }
 
     public AlbumResponseDto convertToAlbumResponseDto(AlbumSimplified albumSimplified) {
-        AlbumResponseDto responseDto = AlbumResponseDto.builder()
-                .albumId(albumSimplified.getId())
-                .albumUri(albumSimplified.getUri())
-                .albumTitle(albumSimplified.getName())
-                .images(albumSimplified.getImages())
-                .build();
 
         List<ArtistResponseDto> artistResponseDtos = Stream.of(albumSimplified.getArtists())
-                .map(artist -> ArtistResponseDto.builder()
-                        .artistUri(artist.getUri())
-                        .artistId(artist.getId())
-                        .artistName(artist.getName())
-                        .build())
+                .map(ArtistResponseDto::of)
                 .collect(Collectors.toList());
-        responseDto.setArtists(artistResponseDtos);
+
+        AlbumResponseDto responseDto = AlbumResponseDto.of(albumSimplified, artistResponseDtos);
 
         return responseDto;
     }
 
     public ArtistResponseDto convertToArtistResponseDto(Artist artist) {
-
-        ArtistResponseDto artistResponseDto = ArtistResponseDto.builder()
-                .artistId(artist.getId())
-                .artistName(artist.getName())
-                .artistUri(artist.getUri())
-                .images(artist.getImages())
-                .build();
-
-        return artistResponseDto;
+        return ArtistResponseDto.of(artist);
     }
 
 }

@@ -28,7 +28,7 @@ public class CommentService {
     private final SpotifyService spotifyService;
 
     public Long createComment(CommentRequestDto commentRequestDto) {
-        String trackId = commentRequestDto.getTrackId();
+        String trackId = commentRequestDto.trackId();
         spotifyService.validateTrackId(trackId);
         Comment comment = Comment.toEntity(commentRequestDto);
         Long id = saveComment(comment);
@@ -43,7 +43,7 @@ public class CommentService {
         Pageable pageable = PageRequest.of(0, limit);
         //Timestamp cursorTimestamp = LocalDateTimeUtil.toTimestamp(cursor);
         Page<Comment> pagedComment = getCommentsByTrackIdWithCursor(trackId, cursor, pageable);
-        Page<CommentResponseDto> pagedCommentResponseDto = pagedComment.map(CommentResponseDto::toDto);
+        Page<CommentResponseDto> pagedCommentResponseDto = pagedComment.map(CommentResponseDto::of);
         return new PagedResponseDto<>(pagedCommentResponseDto);
     }
 
@@ -55,7 +55,7 @@ public class CommentService {
     @Transactional
     public Long updateComment(Long commentId, CommentRequestDto commentRequestDto) {
         Comment comment = getCommentById(commentId);
-        comment.updateContent(commentRequestDto.getContent());
+        comment.updateContent(commentRequestDto.content());
         return commentId;
     }
 

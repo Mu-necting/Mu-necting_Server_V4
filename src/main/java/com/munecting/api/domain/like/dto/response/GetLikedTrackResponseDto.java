@@ -13,5 +13,4 @@ public record GetLikedTrackResponseDto(
         List<LikedTrackArtistResponseDto> artists,
         String trackPreview,
         Image[] images
-) {
-}
+) {}

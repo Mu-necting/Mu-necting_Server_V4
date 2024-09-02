@@ -10,5 +10,4 @@ public record LoginRequestDto(
         @Schema(description = "Identity Provider")
         SocialType socialType,
         @NotBlank String idToken
-) {
-}
+) {}
