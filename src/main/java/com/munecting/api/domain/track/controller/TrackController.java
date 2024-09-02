@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/tracks")
+@RequestMapping("/api/tracks")
 @Tag(name = "track", description = "track 관련 기타 api </br> <i> 담당자 : 김송은 </i>")
 public class TrackController {
 

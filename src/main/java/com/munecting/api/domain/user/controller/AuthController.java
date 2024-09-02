@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RestController
 @RequiredArgsConstructor
 @Validated

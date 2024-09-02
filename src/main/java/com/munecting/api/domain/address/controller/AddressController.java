@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/addresses")
+@RequestMapping("/api/addresses")
 @Tag(name = "address", description = "주소 관련 api </br> <i> 담당자 : 전민주 </i>")
 public class AddressController {
 

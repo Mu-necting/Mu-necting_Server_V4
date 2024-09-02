@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/tracks")
+@RequestMapping("/api/tracks")
 @Tag(name = "like", description = "Like 관련 api </br> <i> 담당자 : 김송은 </i>")
 public class LikeController {
 

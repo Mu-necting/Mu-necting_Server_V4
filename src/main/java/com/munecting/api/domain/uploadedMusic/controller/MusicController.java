@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/musics")
+@RequestMapping("/api/musics")
 @Tag(name = "musics", description = "음악 관련 api </br> <i> 담당자 : 전민주 </i>")
 public class MusicController {
 

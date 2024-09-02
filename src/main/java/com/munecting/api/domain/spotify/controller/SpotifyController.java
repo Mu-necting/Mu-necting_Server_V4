@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/spotify")
+@RequestMapping("/api/spotify")
 @Tag(name = "spotify", description = "spotify 관련 api </br> <i> 담당자 : 전민주 </i>")
 public class SpotifyController {
 
