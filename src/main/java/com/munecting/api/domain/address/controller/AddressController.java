@@ -33,7 +33,7 @@ public class AddressController {
             @RequestParam(name = "latitude") Double latitude,
             @RequestParam(name = "longitude") Double longitude) {
         JsonNode address = addressService.getAddressByLocation(latitude, longitude);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), address);
+        return ApiResponse.ok(address);
     }
 
 }

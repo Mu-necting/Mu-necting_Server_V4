@@ -32,7 +32,7 @@ public class SpotifyController {
             @RequestParam Integer offset
             ) {
         List<MusicResponseDto> musicResponseDtoList = spotifyService.searchTracks(keyword, limit, offset);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), musicResponseDtoList);
+        return ApiResponse.ok(musicResponseDtoList);
     }
 
     @GetMapping("/search/albums/{keyword}")
@@ -43,7 +43,7 @@ public class SpotifyController {
             @RequestParam Integer offset
     ) {
         List<AlbumResponseDto> albumResponseDtoList = spotifyService.searchAlbums(keyword, limit, offset);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), albumResponseDtoList);
+        return ApiResponse.ok(albumResponseDtoList);
     }
 
     @GetMapping("/search/artists/{keyword}")
@@ -54,7 +54,7 @@ public class SpotifyController {
             @RequestParam Integer offset
     ) {
         List<ArtistResponseDto> artistResponseDtoList = spotifyService.searchArtists(keyword, limit, offset);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), artistResponseDtoList);
+        return ApiResponse.ok(artistResponseDtoList);
     }
 
     @GetMapping("/albums/{id}/tracks")
@@ -65,7 +65,7 @@ public class SpotifyController {
             @RequestParam Integer offset
     ) {
         List<MusicResponseDto> musicResponseDtoList = spotifyService.getTracksByAlbumId(albumId, limit, offset);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), musicResponseDtoList);
+        return ApiResponse.ok(musicResponseDtoList);
     }
 
     @GetMapping("/artists/{id}/albums")
@@ -76,7 +76,7 @@ public class SpotifyController {
             @RequestParam Integer offset
     ) {
         List<AlbumResponseDto> albumResponseDtoList = spotifyService.getAlbumsByArtistId(albumId, limit, offset);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), albumResponseDtoList);
+        return ApiResponse.ok(albumResponseDtoList);
     }
 
     @GetMapping("/tracks/{id}")
@@ -85,7 +85,7 @@ public class SpotifyController {
             @PathVariable("id") String trackId
     ) {
         MusicResponseDto musicResponseDto = spotifyService.getTrack(trackId);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), musicResponseDto);
+        return ApiResponse.ok(musicResponseDto);
     }
 
 }

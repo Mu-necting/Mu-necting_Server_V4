@@ -27,7 +27,7 @@ public class LikeController {
             @UserId Long userId
     ) {
         AddTrackLikeResponseDto dto = likeService.addTrackLike(trackId, userId);
-        return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), dto);
+        return ApiResponse.created(dto);
     }
 
     @GetMapping("/liked")
@@ -38,7 +38,7 @@ public class LikeController {
             @RequestParam(required = false, defaultValue = "20") int size
     ) {
         GetLikedTrackListResponseDto dto = likeService.getLikedTracks(userId, cursor, size);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), dto);
+        return ApiResponse.ok(dto);
     }
 
     @DeleteMapping("/{trackId}/likes")
@@ -48,6 +48,6 @@ public class LikeController {
             @UserId Long userId
     ) {
         DeleteTrackLikeResponseDto dto = likeService.deleteTrackLike(trackId, userId);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), dto);
+        return ApiResponse.ok(dto);
     }
 }
