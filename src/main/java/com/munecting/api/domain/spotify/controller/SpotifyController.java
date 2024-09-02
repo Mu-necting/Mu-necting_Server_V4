@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/spotify")
-@Tag(name = "spotify", description = "spotify 관련 api")
+@Tag(name = "spotify", description = "spotify 관련 api </br> <i> 담당자 : 전민주 </i>")
 public class SpotifyController {
 
     private final SpotifyService spotifyService;
 
-    @GetMapping("/search/tracks/{keyword}")
+    @GetMapping("/tracks/{keyword}")
     @Operation(summary = "키워드로 트랙 검색하기")
     public ApiResponse<?> searchTracks(
             @PathVariable("keyword") String keyword,
@@ -35,7 +35,7 @@ public class SpotifyController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), musicResponseDtoList);
     }
 
-    @GetMapping("/search/albums/{keyword}")
+    @GetMapping("/albums/{keyword}")
     @Operation(summary = "키워드로 앨범 검색하기")
     public ApiResponse<?> searchAlbums(
             @PathVariable("keyword") String keyword,
@@ -46,7 +46,7 @@ public class SpotifyController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.CREATED.getMessage(), albumResponseDtoList);
     }
 
-    @GetMapping("/search/artists/{keyword}")
+    @GetMapping("artists/{keyword}")
     @Operation(summary = "키워드로 아티스트 검색하기")
     public ApiResponse<?> searchArtists(
             @PathVariable("keyword") String keyword,

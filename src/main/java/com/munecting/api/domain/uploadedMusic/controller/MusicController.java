@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/musics")
-@Tag(name = "musics", description = "음악 관련 api")
+@Tag(name = "musics", description = "음악 관련 api </br> <i> 담당자 : 전민주 </i>")
 public class MusicController {
 
     private final MusicService musicService;
@@ -44,7 +44,7 @@ public class MusicController {
             @RequestParam Double longitude,
             @RequestParam Integer radius) {
         List<UploadedMusicResponseDto> musicResponseDtoList = musicService.getUploadedMusics(latitude, longitude, radius);
-        return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), musicResponseDtoList);
+        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), musicResponseDtoList);
     }
 
 }

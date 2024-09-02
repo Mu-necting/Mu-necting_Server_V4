@@ -17,11 +17,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @RestController
 @RequiredArgsConstructor
 @Validated
-@Tag(name = "auth", description = "유저 인증/인가 관련 API")
+@Tag(name = "auth", description = "유저 인증/인가 관련 API </br> <i> 담당자 : 김송은 </i>")
 public class AuthController {
 
     private final AuthService authService;
@@ -51,7 +51,7 @@ public class AuthController {
     @Operation(summary = "로그아웃")
     public ApiResponse<?> logout(
             @RequestBody @Valid LogoutRequestDto logoutRequestDto
-            ) {
+    ) {
         authService.logout(logoutRequestDto);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
     }
@@ -63,6 +63,6 @@ public class AuthController {
             @Valid RefreshTokenRequestDto refreshTokenRequestDto
     ) {
         UserTokenResponseDto dto = authService.refreshToken(refreshTokenRequestDto);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), dto);
+        return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), dto);
     }
 }
