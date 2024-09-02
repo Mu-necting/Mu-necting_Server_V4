@@ -34,7 +34,7 @@ public class MusicController {
     public ApiResponse<?> uploadMusic(
            @Valid @RequestBody MusicRequestDto musicRequestDto) {
         Long id = musicService.uploadMusic(musicRequestDto);
-        return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), id);
+        return ApiResponse.created(id);
     }
 
     @GetMapping("")
@@ -44,7 +44,7 @@ public class MusicController {
             @RequestParam Double longitude,
             @RequestParam Integer radius) {
         List<UploadedMusicResponseDto> musicResponseDtoList = musicService.getUploadedMusics(latitude, longitude, radius);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), musicResponseDtoList);
+        return ApiResponse.ok(musicResponseDtoList);
     }
 
 }
