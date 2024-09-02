@@ -4,11 +4,11 @@ import lombok.Builder;
 
 @Builder
 public record GetTrackDetailsResponseDto(
-        boolean isLiked,
-        int likeCount,
-        int commentCount
+        Boolean isLiked,
+        Integer likeCount,
+        Integer commentCount
 ) {
-    public static GetTrackDetailsResponseDto of (boolean isLiked, int likeCount, int commentCount) {
+    public static GetTrackDetailsResponseDto of (Boolean isLiked, Integer likeCount, Integer commentCount) {
         return GetTrackDetailsResponseDto.builder()
                 .isLiked(isLiked)
                 .likeCount(likeCount)

@@ -5,10 +5,10 @@ import lombok.Builder;
 @Builder
 public record DeleteTrackLikeResponseDto(
         String trackId,
-        boolean isLiked,
-        int likeCount
+        Boolean isLiked,
+        Integer likeCount
 ) {
-    public static DeleteTrackLikeResponseDto of(String trackId, boolean isLiked, int likeCount) {
+    public static DeleteTrackLikeResponseDto of(String trackId, Boolean isLiked, Integer likeCount) {
         return DeleteTrackLikeResponseDto.builder()
                 .trackId(trackId)
                 .isLiked(isLiked)
