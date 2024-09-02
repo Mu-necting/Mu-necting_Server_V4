@@ -1,4 +1,4 @@
-package com.munecting.api.domain.comment.dto;
+package com.munecting.api.domain.comment.dto.request;
 
 public record CommentRequestDto(
         Long userId,

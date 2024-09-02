@@ -1,11 +1,10 @@
 package com.munecting.api.domain.comment.controller;
 
-import com.munecting.api.domain.comment.dto.CommentRequestDto;
-import com.munecting.api.domain.comment.dto.CommentResponseDto;
+import com.munecting.api.domain.comment.dto.request.CommentRequestDto;
+import com.munecting.api.domain.comment.dto.response.CommentResponseDto;
 import com.munecting.api.domain.comment.service.CommentService;
 import com.munecting.api.global.common.dto.response.ApiResponse;
 import com.munecting.api.global.common.dto.response.PagedResponseDto;
-import com.munecting.api.global.common.dto.response.Status;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDateTime;

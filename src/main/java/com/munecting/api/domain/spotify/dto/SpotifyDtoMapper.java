@@ -2,7 +2,9 @@ package com.munecting.api.domain.spotify.dto;
 
 import com.munecting.api.domain.like.dto.response.GetLikedTrackResponseDto;
 import com.munecting.api.domain.like.dto.response.LikedTrackArtistResponseDto;
-import com.wrapper.spotify.model_objects.specification.Album;
+import com.munecting.api.domain.spotify.dto.response.AlbumResponseDto;
+import com.munecting.api.domain.spotify.dto.response.ArtistResponseDto;
+import com.munecting.api.domain.spotify.dto.response.MusicResponseDto;
 import com.wrapper.spotify.model_objects.specification.AlbumSimplified;
 import com.wrapper.spotify.model_objects.specification.Artist;
 import com.wrapper.spotify.model_objects.specification.Track;

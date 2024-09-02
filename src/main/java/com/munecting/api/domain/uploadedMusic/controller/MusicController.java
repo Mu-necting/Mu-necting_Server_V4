@@ -1,12 +1,9 @@
 package com.munecting.api.domain.uploadedMusic.controller;
 
-import com.munecting.api.domain.spotify.dto.MusicResponseDto;
-import com.munecting.api.domain.uploadedMusic.dto.MusicRequestDto;
-import com.munecting.api.domain.uploadedMusic.dto.UploadedMusicResponseDto;
-import com.munecting.api.domain.uploadedMusic.entity.UploadedMusic;
+import com.munecting.api.domain.uploadedMusic.dto.request.MusicRequestDto;
+import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicResponseDto;
 import com.munecting.api.domain.uploadedMusic.service.MusicService;
 import com.munecting.api.global.common.dto.response.ApiResponse;
-import com.munecting.api.global.common.dto.response.Status;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

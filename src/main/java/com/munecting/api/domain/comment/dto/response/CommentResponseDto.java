@@ -1,4 +1,4 @@
-package com.munecting.api.domain.comment.dto;
+package com.munecting.api.domain.comment.dto.response;
 
 import com.munecting.api.domain.comment.entity.Comment;
 import java.time.LocalDateTime;

@@ -2,9 +2,9 @@ package com.munecting.api.domain.spotify.service;
 
 
 import com.munecting.api.domain.like.dto.response.GetLikedTrackResponseDto;
-import com.munecting.api.domain.spotify.dto.AlbumResponseDto;
-import com.munecting.api.domain.spotify.dto.ArtistResponseDto;
-import com.munecting.api.domain.spotify.dto.MusicResponseDto;
+import com.munecting.api.domain.spotify.dto.response.AlbumResponseDto;
+import com.munecting.api.domain.spotify.dto.response.ArtistResponseDto;
+import com.munecting.api.domain.spotify.dto.response.MusicResponseDto;
 import com.munecting.api.domain.spotify.dto.SpotifyDtoMapper;
 import com.munecting.api.global.error.exception.EntityNotFoundException;
 import com.munecting.api.global.common.dto.response.Status;

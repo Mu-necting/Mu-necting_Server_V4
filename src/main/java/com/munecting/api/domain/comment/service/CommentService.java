@@ -1,8 +1,8 @@
 package com.munecting.api.domain.comment.service;
 
 import com.munecting.api.domain.comment.dao.CommentRepository;
-import com.munecting.api.domain.comment.dto.CommentRequestDto;
-import com.munecting.api.domain.comment.dto.CommentResponseDto;
+import com.munecting.api.domain.comment.dto.request.CommentRequestDto;
+import com.munecting.api.domain.comment.dto.response.CommentResponseDto;
 import com.munecting.api.domain.comment.entity.Comment;
 import com.munecting.api.domain.spotify.service.SpotifyService;
 import com.munecting.api.global.error.exception.EntityNotFoundException;

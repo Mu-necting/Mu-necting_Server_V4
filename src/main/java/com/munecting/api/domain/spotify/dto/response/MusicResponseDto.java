@@ -1,14 +1,10 @@
-package com.munecting.api.domain.spotify.dto;
+package com.munecting.api.domain.spotify.dto.response;
 
-import com.wrapper.spotify.model_objects.specification.Artist;
-import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.Image;
 import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 import java.util.List;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
 @Builder
 public record MusicResponseDto (

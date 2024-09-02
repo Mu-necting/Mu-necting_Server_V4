@@ -1,10 +1,10 @@
 package com.munecting.api.domain.uploadedMusic.service;
 
-import com.munecting.api.domain.spotify.dto.MusicResponseDto;
+import com.munecting.api.domain.spotify.dto.response.MusicResponseDto;
 import com.munecting.api.domain.spotify.service.SpotifyService;
 import com.munecting.api.domain.uploadedMusic.dao.UploadedMusicRepository;
-import com.munecting.api.domain.uploadedMusic.dto.MusicRequestDto;
-import com.munecting.api.domain.uploadedMusic.dto.UploadedMusicResponseDto;
+import com.munecting.api.domain.uploadedMusic.dto.request.MusicRequestDto;
+import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicResponseDto;
 import com.munecting.api.domain.uploadedMusic.entity.UploadedMusic;
 import com.munecting.api.domain.user.entity.User;
 import java.util.List;

@@ -1,11 +1,10 @@
 package com.munecting.api.domain.spotify.controller;
 
-import com.munecting.api.domain.spotify.dto.AlbumResponseDto;
-import com.munecting.api.domain.spotify.dto.ArtistResponseDto;
-import com.munecting.api.domain.spotify.dto.MusicResponseDto;
+import com.munecting.api.domain.spotify.dto.response.AlbumResponseDto;
+import com.munecting.api.domain.spotify.dto.response.ArtistResponseDto;
+import com.munecting.api.domain.spotify.dto.response.MusicResponseDto;
 import com.munecting.api.domain.spotify.service.SpotifyService;
 import com.munecting.api.global.common.dto.response.ApiResponse;
-import com.munecting.api.global.common.dto.response.Status;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;

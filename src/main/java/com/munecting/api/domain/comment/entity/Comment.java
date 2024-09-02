@@ -1,6 +1,6 @@
 package com.munecting.api.domain.comment.entity;
 
-import com.munecting.api.domain.comment.dto.CommentRequestDto;
+import com.munecting.api.domain.comment.dto.request.CommentRequestDto;
 import com.munecting.api.global.common.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,4 +1,4 @@
-package com.munecting.api.domain.uploadedMusic.dto;
+package com.munecting.api.domain.uploadedMusic.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

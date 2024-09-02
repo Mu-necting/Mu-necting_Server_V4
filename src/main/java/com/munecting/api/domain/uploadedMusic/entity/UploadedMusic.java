@@ -1,6 +1,6 @@
 package com.munecting.api.domain.uploadedMusic.entity;
 
-import com.munecting.api.domain.uploadedMusic.dto.MusicRequestDto;
+import com.munecting.api.domain.uploadedMusic.dto.request.MusicRequestDto;
 import com.munecting.api.global.common.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter

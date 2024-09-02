@@ -1,11 +1,8 @@
-package com.munecting.api.domain.uploadedMusic.dto;
+package com.munecting.api.domain.uploadedMusic.dto.response;
 
-import com.munecting.api.domain.spotify.dto.MusicResponseDto;
+import com.munecting.api.domain.spotify.dto.response.MusicResponseDto;
 import com.munecting.api.domain.uploadedMusic.entity.UploadedMusic;
-import com.munecting.api.domain.user.entity.User;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
 @Builder
 public record UploadedMusicResponseDto(
