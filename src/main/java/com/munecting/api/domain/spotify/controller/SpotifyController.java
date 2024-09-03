@@ -23,7 +23,7 @@ public class SpotifyController {
 
     private final SpotifyService spotifyService;
 
-    @GetMapping("/tracks/{keyword}")
+    @GetMapping("/search/tracks/{keyword}")
     @Operation(summary = "키워드로 트랙 검색하기")
     public ApiResponse<?> searchTracks(
             @PathVariable("keyword") String keyword,
@@ -34,7 +34,7 @@ public class SpotifyController {
         return ApiResponse.ok(musicResponseDtoList);
     }
 
-    @GetMapping("/albums/{keyword}")
+    @GetMapping("/search/albums/{keyword}")
     @Operation(summary = "키워드로 앨범 검색하기")
     public ApiResponse<?> searchAlbums(
             @PathVariable("keyword") String keyword,
@@ -45,7 +45,7 @@ public class SpotifyController {
         return ApiResponse.ok(albumResponseDtoList);
     }
 
-    @GetMapping("artists/{keyword}")
+    @GetMapping("/search/artists/{keyword}")
     @Operation(summary = "키워드로 아티스트 검색하기")
     public ApiResponse<?> searchArtists(
             @PathVariable("keyword") String keyword,
