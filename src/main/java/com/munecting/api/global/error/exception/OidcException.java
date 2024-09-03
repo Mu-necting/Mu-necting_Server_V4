@@ -17,5 +17,4 @@ public class OidcException extends GeneralException{
     public OidcException(String message) {
         super(message, INVALID_ID_TOKEN);
     }
-
 }

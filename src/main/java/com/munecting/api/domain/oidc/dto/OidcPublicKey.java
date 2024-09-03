@@ -7,5 +7,4 @@ public record OidcPublicKey(
         String use,
         String n,
         String e
-) {
-}
+) {}

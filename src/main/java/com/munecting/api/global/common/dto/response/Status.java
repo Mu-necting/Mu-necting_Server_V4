@@ -57,7 +57,5 @@ public enum Status {
                 .httpStatus(httpStatus)
                 .build();
     }
-
-
 }
 

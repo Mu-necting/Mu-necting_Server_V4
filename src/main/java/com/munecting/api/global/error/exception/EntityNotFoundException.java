@@ -14,5 +14,4 @@ public class EntityNotFoundException extends GeneralException{
     public EntityNotFoundException(Status errorStatus) {
         super(errorStatus);
     }
-
 }

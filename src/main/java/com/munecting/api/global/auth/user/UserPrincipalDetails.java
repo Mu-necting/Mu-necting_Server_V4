@@ -38,5 +38,4 @@ public class UserPrincipalDetails implements UserDetails {
     public Long getId() {
         return user.getId();
     }
-
 }

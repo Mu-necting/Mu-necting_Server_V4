@@ -32,17 +32,11 @@ import static com.munecting.api.global.util.DecodeUtil.decodeBase64;
 public class JwtProvider {
 
     private final Key key;
-
     private final long access_token_expire_time;
-
     private final long refresh_token_expire_time;
-
     private final String authHeader;
-
     private final String prefix;
-
     private final UserRepository userRepository;
-
     private final ObjectMapper objectMapper;
 
     public JwtProvider(
@@ -226,5 +220,4 @@ public class JwtProvider {
         }
         throw new UnauthorizedException(INVALID_TOKEN);
     }
-
 }

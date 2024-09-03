@@ -15,5 +15,4 @@ public class Body {
     private final String code;
 
     private final String message;
-
 }

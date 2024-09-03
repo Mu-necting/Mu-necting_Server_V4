@@ -18,5 +18,4 @@ public class OidcService {
         OidcUserInfo userInfo = oidcStrategy.authenticate(idToken);
         return userInfo;
     }
-
 }

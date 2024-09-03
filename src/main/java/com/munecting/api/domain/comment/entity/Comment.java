@@ -44,5 +44,4 @@ public class Comment extends BaseEntity {
                 .content(commentRequestDto.content())
                 .build();
     }
-
 }

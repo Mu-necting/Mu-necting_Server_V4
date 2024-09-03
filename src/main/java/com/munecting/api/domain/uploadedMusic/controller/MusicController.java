@@ -43,5 +43,4 @@ public class MusicController {
         List<UploadedMusicResponseDto> musicResponseDtoList = musicService.getUploadedMusics(latitude, longitude, radius);
         return ApiResponse.ok(musicResponseDtoList);
     }
-
 }

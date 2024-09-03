@@ -8,6 +8,7 @@ public record GetTrackDetailsResponseDto(
         Integer likeCount,
         Integer commentCount
 ) {
+
     public static GetTrackDetailsResponseDto of (Boolean isLiked, Integer likeCount, Integer commentCount) {
         return GetTrackDetailsResponseDto.builder()
                 .isLiked(isLiked)

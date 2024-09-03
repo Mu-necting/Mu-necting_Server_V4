@@ -15,6 +15,7 @@ public record MusicResponseDto (
          List<ArtistResponseDto> artists,
          Image[] images
 ) {
+
     public static MusicResponseDto of(TrackSimplified trackSimplified, List<ArtistResponseDto> artistResponseDtos) {
         return MusicResponseDto.builder()
                 .trackUri(trackSimplified.getUri())

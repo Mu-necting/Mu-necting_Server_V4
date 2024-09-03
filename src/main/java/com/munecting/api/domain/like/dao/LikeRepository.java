@@ -24,5 +24,4 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     Slice<Like> findByUserId(@Param("userId") Long userId, @Param("id") Long cursor, Pageable pageable);
 
     void deleteByUserId(Long userId);
-
 }

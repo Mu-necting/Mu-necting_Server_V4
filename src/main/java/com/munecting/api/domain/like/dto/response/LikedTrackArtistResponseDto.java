@@ -6,6 +6,7 @@ import lombok.Builder;
 public record LikedTrackArtistResponseDto(
         String artistName
 ) {
+
     public static LikedTrackArtistResponseDto of(String artistName) {
         return LikedTrackArtistResponseDto.builder()
                 .artistName(artistName)

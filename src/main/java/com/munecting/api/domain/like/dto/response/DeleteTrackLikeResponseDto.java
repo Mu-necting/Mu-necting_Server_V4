@@ -8,6 +8,7 @@ public record DeleteTrackLikeResponseDto(
         Boolean isLiked,
         Integer likeCount
 ) {
+
     public static DeleteTrackLikeResponseDto of(String trackId, Boolean isLiked, Integer likeCount) {
         return DeleteTrackLikeResponseDto.builder()
                 .trackId(trackId)

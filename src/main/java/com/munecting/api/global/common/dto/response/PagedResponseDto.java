@@ -26,5 +26,4 @@ public class PagedResponseDto<T> {
         this.hasPrevious = page.hasPrevious();
         this.hasNext = page.hasNext();
     }
-
 }

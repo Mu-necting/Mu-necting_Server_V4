@@ -13,6 +13,7 @@ public record AlbumResponseDto (
         List<ArtistResponseDto> artists,
         Image[] images
 ) {
+
     public static AlbumResponseDto of (AlbumSimplified albumSimplified, List<ArtistResponseDto> artists) {
         return  AlbumResponseDto.builder()
                 .albumId(albumSimplified.getId())

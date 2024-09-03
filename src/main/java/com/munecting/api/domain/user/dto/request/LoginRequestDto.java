@@ -13,5 +13,4 @@ public record LoginRequestDto(
 
         @NotBlank
         String idToken
-
 ) {}

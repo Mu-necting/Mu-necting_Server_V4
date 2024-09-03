@@ -12,6 +12,7 @@ public record ArtistResponseDto(
         String artistUri,
         Image[] images
 ) {
+
     public static ArtistResponseDto of(ArtistSimplified artistSimplified) {
         return ArtistResponseDto.builder()
                 .artistId(artistSimplified.getId())

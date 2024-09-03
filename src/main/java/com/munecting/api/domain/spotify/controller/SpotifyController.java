@@ -86,5 +86,4 @@ public class SpotifyController {
         MusicResponseDto musicResponseDto = spotifyService.getTrack(trackId);
         return ApiResponse.ok(musicResponseDto);
     }
-
 }

@@ -22,7 +22,6 @@ public class SpotifyConfig {
     @Value("${spotify.client-secret}")
     private String clientSecret;
 
-
     @Bean
     public SpotifyApi spotifyApi() {
         SpotifyApi spotifyApi = new SpotifyApi.Builder()
@@ -44,5 +43,4 @@ public class SpotifyConfig {
             throw new RuntimeException("Error fetching Spotify access token", e);
         }
     }
-
 }

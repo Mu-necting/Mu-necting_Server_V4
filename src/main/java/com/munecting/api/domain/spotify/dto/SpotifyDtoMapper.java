@@ -62,5 +62,4 @@ public class SpotifyDtoMapper {
     public ArtistResponseDto convertToArtistResponseDto(Artist artist) {
         return ArtistResponseDto.of(artist);
     }
-
 }

@@ -20,11 +20,8 @@ import static com.munecting.api.global.common.dto.response.Status.USER_NOT_FOUND
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final CommentRepository commentRepository;
-
     private final LikeRepository likeRepository;
-
     private final UploadedMusicRepository uploadedMusicRepository;
 
     public void deleteUser(Long userId) {
@@ -45,5 +42,4 @@ public class UserService {
             throw new EntityNotFoundException(USER_NOT_FOUND);
         }
     }
-  
 }

@@ -29,5 +29,4 @@ public class AddressController {
         JsonNode address = addressService.getAddressByLocation(latitude, longitude);
         return ApiResponse.ok(address);
     }
-
 }

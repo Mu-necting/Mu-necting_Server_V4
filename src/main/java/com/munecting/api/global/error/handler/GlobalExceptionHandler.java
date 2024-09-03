@@ -25,7 +25,6 @@ import java.util.Optional;
 @Slf4j
 public class GlobalExceptionHandler {
 
-
     /**
      * Valid & Validated annotation의 binding error를 handling 합니다.
      */
@@ -103,7 +102,6 @@ public class GlobalExceptionHandler {
         ApiResponse<Object> response = ApiResponse.onFailure(body.getCode(), body.getMessage(), null);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }
 
 

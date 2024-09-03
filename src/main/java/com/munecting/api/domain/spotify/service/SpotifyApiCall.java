@@ -7,5 +7,6 @@ import java.io.IOException;
 
 @FunctionalInterface
 public interface SpotifyApiCall<T> {
+
     T execute() throws IOException, ParseException, SpotifyWebApiException;
 }

@@ -12,6 +12,7 @@ public record UploadedMusicResponseDto(
         Double longitude
         //인증 작업 완료 후 User 정보 dto로 반환하기
 ) {
+
     public static UploadedMusicResponseDto of(UploadedMusic uploadedMusic, MusicResponseDto musicResponseDto) {
         return UploadedMusicResponseDto.builder()
                 .id(uploadedMusic.getId())

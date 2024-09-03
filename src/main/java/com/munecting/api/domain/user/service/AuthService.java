@@ -29,11 +29,8 @@ import java.util.concurrent.TimeUnit;
 public class AuthService {
 
     private final JwtProvider jwtProvider;
-
     private final RedisTemplate<String, String> redisTemplate;
-
     private final OidcService oidcService;
-
     private final UserRepository userRepository;
 
     @Value("${jwt.refresh.expiration}")

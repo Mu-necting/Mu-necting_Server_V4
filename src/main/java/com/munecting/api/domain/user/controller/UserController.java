@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 @Tag(name = "user", description = "user 관련 api </br> <i> 담당자 : 김송은 </i>")
 public class UserController {
+
     private final UserService userService;
 
     @GetMapping("/test")

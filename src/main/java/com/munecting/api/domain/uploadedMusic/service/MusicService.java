@@ -46,5 +46,4 @@ public class MusicService {
     private List<UploadedMusic> getUploadedMusicByLocationAndRadius(Double latitude, Double longitude, Integer radius) {
         return uploadedMusicRepository.findUploadedMusicByLocationAndRadius(latitude, longitude, radius);
     }
-
 }

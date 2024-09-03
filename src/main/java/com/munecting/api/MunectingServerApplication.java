@@ -11,5 +11,4 @@ public class MunectingServerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MunectingServerApplication.class, args);
 	}
-
 }

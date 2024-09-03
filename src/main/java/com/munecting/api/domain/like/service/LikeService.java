@@ -83,5 +83,4 @@ public class LikeService {
         int likeCount = likeRepository.countByTrackId(trackId);
         return DeleteTrackLikeResponseDto.of(trackId, isLikedTrack, likeCount);
     }
-
 }

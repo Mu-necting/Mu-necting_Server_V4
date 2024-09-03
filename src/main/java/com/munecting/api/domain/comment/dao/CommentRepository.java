@@ -18,5 +18,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     int countByTrackId(String musicId);
 
     void deleteByUserId(Long userId);
-
 }

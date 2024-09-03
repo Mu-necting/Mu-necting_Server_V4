@@ -11,6 +11,7 @@ public record GetLikedTrackListResponseDto(
         Boolean hasNext,
         List<GetLikedTrackResponseDto> likedTracks
 ){
+    
     public static GetLikedTrackListResponseDto of(
             Boolean isEmpty,
             Boolean hasNext,
