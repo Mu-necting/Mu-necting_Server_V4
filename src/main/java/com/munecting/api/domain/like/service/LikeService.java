@@ -26,6 +26,7 @@ public class LikeService {
     private final SpotifyService spotifyService;
     private final UserService userService;
 
+    @Transactional(readOnly = true)
     public boolean isTrackLikedByUser(String trackId, Long userId) {
         return likeRepository.existsByUserIdAndTrackId(userId, trackId);
     }
@@ -61,7 +62,8 @@ public class LikeService {
         return GetLikedTrackListResponseDto.of(likes.isEmpty(), likes.hasNext(), likedTracks);
     }
 
-    private Slice<Like> getLikeSlice(Long userId, Long cursor, Pageable pageable) {
+    @Transactional(readOnly = true)
+    public Slice<Like> getLikeSlice(Long userId, Long cursor, Pageable pageable) {
         if (cursor == null) {
             return likeRepository.findByUserId(userId, pageable);
         } else {

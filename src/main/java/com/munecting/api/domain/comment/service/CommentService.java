@@ -27,6 +27,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final SpotifyService spotifyService;
 
+    @Transactional
     public Long createComment(CommentRequestDto commentRequestDto) {
         String trackId = commentRequestDto.trackId();
         spotifyService.validateTrackId(trackId);
@@ -35,10 +36,11 @@ public class CommentService {
         return id;
     }
 
-    public Long saveComment(Comment comment) {
+    private Long saveComment(Comment comment) {
         return commentRepository.save(comment).getId();
     }
 
+    @Transactional(readOnly = true)
     public PagedResponseDto<CommentResponseDto> getCommentsByTrackId(String trackId, LocalDateTime cursor, int limit) {
         Pageable pageable = PageRequest.of(0, limit);
         //Timestamp cursorTimestamp = LocalDateTimeUtil.toTimestamp(cursor);
@@ -47,6 +49,7 @@ public class CommentService {
         return new PagedResponseDto<>(pagedCommentResponseDto);
     }
 
+    @Transactional(readOnly = true)
     public Page<Comment> getCommentsByTrackIdWithCursor(String trackId, LocalDateTime cursor, Pageable pageable) {
         log.info(String.valueOf(cursor));
         return commentRepository.findCommentsByTrackIdWithCursor(trackId, cursor.toString(), pageable);
@@ -59,18 +62,20 @@ public class CommentService {
         return commentId;
     }
 
+    @Transactional(readOnly = true)
     public Comment getCommentById(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Status.COMMENT_NOT_FOUND));
     }
 
+    @Transactional
     public Long deleteCommentById(Long commentId) {
         Comment comment = getCommentById(commentId);
         deleteComment(comment);
         return commentId;
     }
 
-    public void deleteComment(Comment comment) {
+    private void deleteComment(Comment comment) {
         commentRepository.delete(comment);
     }
 }

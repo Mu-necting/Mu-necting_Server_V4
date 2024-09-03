@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,12 +22,14 @@ public class MusicService {
     private final UploadedMusicRepository uploadedMusicRepository;
     private final SpotifyService spotifyService;
 
+    @Transactional
     public Long uploadMusic(MusicRequestDto musicRequestDto) {
         spotifyService.getTrack(musicRequestDto.trackId());
         UploadedMusic uploadedMusic = UploadedMusic.toEntity(musicRequestDto);
         return saveUploadMusicEntity(uploadedMusic);
     }
 
+    @Transactional(readOnly = true)
     public List<UploadedMusicResponseDto> getUploadedMusics(Double latitude, Double longitude, Integer radius) {
         List<UploadedMusic> uploadedMusics = getUploadedMusicByLocationAndRadius(latitude, longitude, radius);
         List<UploadedMusicResponseDto> uploadedMusicResponseDtos
@@ -43,7 +46,8 @@ public class MusicService {
         return uploadedMusicRepository.save(uploadedMusic).getId();
     }
 
-    private List<UploadedMusic> getUploadedMusicByLocationAndRadius(Double latitude, Double longitude, Integer radius) {
+    @Transactional(readOnly = true)
+    public List<UploadedMusic> getUploadedMusicByLocationAndRadius(Double latitude, Double longitude, Integer radius) {
         return uploadedMusicRepository.findUploadedMusicByLocationAndRadius(latitude, longitude, radius);
     }
 }
