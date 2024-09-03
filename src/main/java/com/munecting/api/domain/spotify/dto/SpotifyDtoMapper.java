@@ -49,7 +49,6 @@ public class SpotifyDtoMapper {
     }
 
     public AlbumResponseDto convertToAlbumResponseDto(AlbumSimplified albumSimplified) {
-
         List<ArtistResponseDto> artistResponseDtos = Stream.of(albumSimplified.getArtists())
                 .map(ArtistResponseDto::of)
                 .collect(Collectors.toList());
