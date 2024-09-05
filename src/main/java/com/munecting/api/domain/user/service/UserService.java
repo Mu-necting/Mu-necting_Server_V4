@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.munecting.api.global.common.dto.response.Status.USER_NOT_FOUND;
 
 @Slf4j
-@Transactional
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -37,6 +36,7 @@ public class UserService {
         uploadedMusicRepository.deleteByUserId(userId);
     }
 
+    @Transactional(readOnly = true)
     public void validateUserExists(Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new EntityNotFoundException(USER_NOT_FOUND);

@@ -112,7 +112,6 @@ public class AuthService {
         return UserTokenResponseDto.of(accessToken, refreshToken);
     }
 
-    @Transactional(readOnly = true)
     public String getToken(Long userId) {
         String accessToken = issueNewAccessToken(userId);
         return accessToken;
