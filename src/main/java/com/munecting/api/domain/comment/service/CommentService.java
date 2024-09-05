@@ -30,7 +30,7 @@ public class CommentService {
     @Transactional
     public Long createComment(CommentRequestDto commentRequestDto) {
         String trackId = commentRequestDto.trackId();
-        spotifyService.validateTrackId(trackId);
+        spotifyService.validateTrackExists(trackId);
         Comment comment = Comment.toEntity(commentRequestDto);
         Long id = saveComment(comment);
         return id;

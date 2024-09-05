@@ -156,7 +156,7 @@ public class SpotifyService {
         return spotifyDtoMapper.convertToLikedTrackResponseDto(track, likeId);
     }
 
-    public void validateTrackId(String trackId) {
+    public void validateTrackExists(String trackId) {
         fetchTrackById(trackId);
     }
 

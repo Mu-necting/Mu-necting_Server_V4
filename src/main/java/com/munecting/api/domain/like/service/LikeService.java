@@ -33,7 +33,7 @@ public class LikeService {
 
     @Transactional
     public AddTrackLikeResponseDto addTrackLike(String trackId, Long userId) {
-        spotifyService.validateTrackId(trackId);
+        spotifyService.validateTrackExists(trackId);
         userService.validateUserExists(userId);
 
         boolean isLikedTrack = isTrackLikedByUser(trackId, userId);
@@ -73,7 +73,7 @@ public class LikeService {
 
     @Transactional
     public DeleteTrackLikeResponseDto deleteTrackLike(String trackId, Long userId) {
-        spotifyService.validateTrackId(trackId);
+        spotifyService.validateTrackExists(trackId);
         userService.validateUserExists(userId);
 
         boolean isLikedTrack = isTrackLikedByUser(trackId, userId);

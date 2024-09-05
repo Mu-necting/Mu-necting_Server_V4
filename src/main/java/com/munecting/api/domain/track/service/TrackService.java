@@ -22,7 +22,7 @@ public class TrackService {
 
     @Transactional(readOnly = true)
     public GetTrackDetailsResponseDto getTrackDetails(String trackId, Long userId) {
-        spotifyService.validateTrackId(trackId);
+        spotifyService.validateTrackExists(trackId);
         userService.validateUserExists(userId);
 
         boolean isLiked = likeService.isTrackLikedByUser(trackId, userId);
