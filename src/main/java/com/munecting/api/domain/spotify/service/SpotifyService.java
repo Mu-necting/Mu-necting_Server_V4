@@ -166,7 +166,8 @@ public class SpotifyService {
                 .build();
 
         return handleSpotifyApiCall(
-                getTrackRequest::execute, Status.TRACK_NOT_FOUND);
+                getTrackRequest::execute,
+                new EntityNotFoundException(TRACK_NOT_FOUND));
     }
 
     /**
