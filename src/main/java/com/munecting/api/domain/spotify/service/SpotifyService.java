@@ -169,11 +169,19 @@ public class SpotifyService {
                 getTrackRequest::execute, Status.TRACK_NOT_FOUND);
     }
 
-    private <T> T handleSpotifyApiCall(SpotifyApiCall<T> apiCall, Status status) {
+    /**
+     *
+     * @param apiCall 스포티파이 api 호출
+     * @param apiFailureException 스포티파이 api 요청 실패 시 throw 할 예외
+     * @return 스포티파이 api 호출 결과
+     */
+    private <T> T handleSpotifyApiCall(SpotifyApiCall<T> apiCall, GeneralException apiFailureException) {
         try {
             return apiCall.execute();
+
         } catch (IOException | ParseException | SpotifyWebApiException ex) {
-            throw new EntityNotFoundException(status);
+            log.warn("spotify api call error : {}", ex.getMessage());
+            throw apiFailureException;
         }
     }
 }
