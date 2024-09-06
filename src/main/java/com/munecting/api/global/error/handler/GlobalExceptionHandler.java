@@ -29,10 +29,11 @@ public class GlobalExceptionHandler {
      * Valid & Validated annotation의 binding error를 handling 합니다.
      */
     @ExceptionHandler({MethodArgumentNotValidException.class})
-    protected ResponseEntity<ApiResponse<?>> handleMethodArgumentNotValidException(
+    public ResponseEntity<ApiResponse<?>> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException e
     ) {
-        log.error(">>> handle: MethodArgumentNotValidException ", e);
+        log.error(">>> handle: MethodArgumentNotValidException", e);
+
         Map<String, String> errors = new LinkedHashMap<>();
         e.getBindingResult().getFieldErrors().stream()
                 .forEach(fieldError -> {
@@ -49,20 +50,24 @@ public class GlobalExceptionHandler {
      * 필수 쿼리 파라미터를 누락한 경우 발생하는 error를 handling 합니다.
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ApiResponse<Object>> handleMissingServletRequestParameterException(
+    public ResponseEntity<ApiResponse<?>> handleMissingServletRequestParameterException(
             MissingServletRequestParameterException e
     ) {
+        log.warn(">>> handle: MissingServletRequestParameterException", e);
+
         ApiResponse<Object> response = ApiResponse.onFailure(HttpStatus.BAD_REQUEST.toString(), e.getMessage(), null);
-        log.warn(response.getCode() + " " + response.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     /**
      * 지원하지 않는 HTTP method로 요청 시 발생하는 error를 handling합니다.
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    protected ResponseEntity<ApiResponse<Object>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        log.warn(">>> handle: HttpRequestMethodNotSupportedException");
+    public ResponseEntity<ApiResponse<?>> handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException e
+    ) {
+        log.warn(">>> handle: HttpRequestMethodNotSupportedException", e);
+
         ApiResponse<Object> response = ApiResponse.onFailure(HttpStatus.METHOD_NOT_ALLOWED.toString(), e.getMessage(), null);
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
     }
@@ -71,8 +76,11 @@ public class GlobalExceptionHandler {
      * 존재하지 않는 HTTP URI 요청 시 발생하는 error를 handling합니다.
      */
     @ExceptionHandler(NoResourceFoundException.class)
-    protected ResponseEntity<ApiResponse<Object>> handleNoResourceException(final NoResourceFoundException e) {
-        log.warn(">>> handle: NoResourceException ");
+    public ResponseEntity<ApiResponse<?>> handleNoResourceException(
+            NoResourceFoundException e
+    ) {
+        log.warn(">>> handle: NoResourceException", e);
+
         ApiResponse<Object> response = ApiResponse.onFailure(HttpStatus.NOT_FOUND.toString(), e.getMessage(), null);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
@@ -84,7 +92,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleGeneralException(
             GeneralException e
     ) {
-        log.warn(">>> handle: GeneralException | " + e.getStatus() + " :" + e.getMessage());
+        log.warn(">>> handle: GeneralException | " +e.getStatus() + e);
+
         ApiResponse<Object> response = ApiResponse.onFailure(e.getStatus().getCode(), e.getMessage(), null);
         return ResponseEntity.status(e.getStatus().getHttpStatus()).body(response);
     }
@@ -93,14 +102,15 @@ public class GlobalExceptionHandler {
      * 그 외의 모든 예외를 handling 합니다.
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Object>> unexpectedException(
-            Exception unexpectedException
+    public ResponseEntity<ApiResponse<?>> unexpectedException(
+            Exception e
     ) {
-        log.error("예상치 못한 오류 발생: {}", unexpectedException.getMessage(), unexpectedException);
-        log.error("발생 지점: {}", unexpectedException.getStackTrace()[0]);
+        log.error("예상치 못한 오류 발생: {}", e.getMessage(), e);
+        log.error("발생 지점: {}", e.getStackTrace()[0]);
+
         Body body = Status.INTERNAL_SERVER_ERROR.getBody();
         ApiResponse<Object> response = ApiResponse.onFailure(body.getCode(), body.getMessage(), null);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }
 
