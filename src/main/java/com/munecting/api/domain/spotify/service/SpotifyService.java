@@ -184,4 +184,10 @@ public class SpotifyService {
             throw apiFailureException;
         }
     }
+
+    @FunctionalInterface
+    private interface SpotifyApiCall<T> {
+
+        T execute() throws IOException, ParseException, SpotifyWebApiException;
+    }
 }
