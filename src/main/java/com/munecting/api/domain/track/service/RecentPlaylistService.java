@@ -30,7 +30,7 @@ public class RecentPlaylistService {
     private final RecentPlaylistRepository recentPlaylistRepository;
     private final SpotifyService spotifyService;
     private final UserService userService;
-    private final int maxRecentTracks = 200;
+    private static final int maxRecentTracks = 200;
 
     @Transactional
     public void saveRecentTracks(Long userId, SaveRecentTracksRequestDto requestDto) {
