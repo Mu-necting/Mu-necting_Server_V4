@@ -2,7 +2,7 @@ package com.munecting.api.domain.track.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 
-public record TrackInfo(
+public record RecentTrackInfo(
 
         @NotNull
         String trackId,

@@ -4,7 +4,7 @@ import com.munecting.api.domain.spotify.service.SpotifyService;
 import com.munecting.api.domain.track.dao.RecentPlaylistRepository;
 import com.munecting.api.domain.track.domain.RecentlyPlayedTrack;
 import com.munecting.api.domain.track.dto.request.SaveRecentTracksRequestDto;
-import com.munecting.api.domain.track.dto.request.TrackInfo;
+import com.munecting.api.domain.track.dto.request.RecentTrackInfo;
 import com.munecting.api.domain.track.dto.response.GetRecentPlaylistResponseDto;
 import com.munecting.api.domain.track.dto.response.RecentlyPlayedTrackResponseDto;
 import com.munecting.api.domain.user.service.UserService;
@@ -42,7 +42,7 @@ public class RecentPlaylistService {
         saveNewTracks(userId, sortedTrackIds);
     }
 
-    private void validateTracksExist(List<TrackInfo> tracks) {
+    private void validateTracksExist(List<RecentTrackInfo> tracks) {
         tracks.forEach(trackInfo -> spotifyService.validateTrackId(trackInfo.trackId()));
     }
 
@@ -51,10 +51,10 @@ public class RecentPlaylistService {
      * @param trackInfos 탐색 순서와 함께 제공된 track id 리스트
      * @return 탐색 순서대로 정렬되고 중복이 제거된 track id 리스트
      */
-    private List<String> extractSortedTrackIds(List<TrackInfo> trackInfos) {
+    private List<String> extractSortedTrackIds(List<RecentTrackInfo> trackInfos) {
         return trackInfos.stream()
-                .sorted(Comparator.comparingInt(TrackInfo::order))
-                .map(TrackInfo::trackId)
+                .sorted(Comparator.comparingInt(RecentTrackInfo::order))
+                .map(RecentTrackInfo::trackId)
                 .distinct()
                 .collect(Collectors.toList());
     }

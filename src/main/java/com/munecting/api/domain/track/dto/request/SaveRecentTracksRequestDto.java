@@ -6,6 +6,6 @@ import java.util.List;
 public record SaveRecentTracksRequestDto(
 
         @NotNull
-        List<TrackInfo> tracks
+        List<RecentTrackInfo> tracks
 
 ) {}
