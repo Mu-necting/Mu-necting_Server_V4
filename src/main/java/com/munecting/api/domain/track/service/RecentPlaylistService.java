@@ -1,9 +1,9 @@
 package com.munecting.api.domain.track.service;
 
 import com.munecting.api.domain.spotify.service.SpotifyService;
-import com.munecting.api.domain.track.dao.RecentlyPlaylistRepository;
+import com.munecting.api.domain.track.dao.RecentPlaylistRepository;
 import com.munecting.api.domain.track.domain.RecentlyPlayedTrack;
-import com.munecting.api.domain.track.dto.request.SaveRecentTrackRequestDto;
+import com.munecting.api.domain.track.dto.request.SaveRecentTracksRequestDto;
 import com.munecting.api.domain.track.dto.request.TrackInfo;
 import com.munecting.api.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +21,15 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class RecentlyPlaylistService {
+public class RecentPlaylistService {
 
-    private final RecentlyPlaylistRepository recentlyPlaylistRepository;
+    private final RecentPlaylistRepository recentPlaylistRepository;
     private final SpotifyService spotifyService;
     private final UserService userService;
     private final int maxRecentTracks = 200;
 
     @Transactional
-    public void saveRecentTracks(Long userId, SaveRecentTrackRequestDto requestDto) {
+    public void saveRecentTracks(Long userId, SaveRecentTracksRequestDto requestDto) {
         userService.validateUserExists(userId);
         validateTracksExist(requestDto.tracks());
 
@@ -66,14 +66,14 @@ public class RecentlyPlaylistService {
      * @param newTrackIds 새로 탐색한 트랙의 아이디 리스트
      */
     private void deleteOverlappedRecords(Long userId, List<String> newTrackIds) {
-        List<String> existingTrackIds = recentlyPlaylistRepository.findTrackIdsByUserId(userId);
+        List<String> existingTrackIds = recentPlaylistRepository.findTrackIdsByUserId(userId);
 
         List<String> trackIdsToDelete = existingTrackIds.stream()
                 .filter(newTrackIds::contains)
                 .collect(Collectors.toList());
 
         if (!trackIdsToDelete.isEmpty()) {
-            recentlyPlaylistRepository.deleteAllByUserIdAndTrackIds(userId, trackIdsToDelete);
+            recentPlaylistRepository.deleteAllByUserIdAndTrackIds(userId, trackIdsToDelete);
         }
     }
 
@@ -83,7 +83,7 @@ public class RecentlyPlaylistService {
      * @param newTracksCount 새로 탐색한 트랙의 개수
      */
     private void deleteOverflowRecords(Long userId, int newTracksCount) {
-        int currentTrackCount = recentlyPlaylistRepository.countByUserId(userId);
+        int currentTrackCount = recentPlaylistRepository.countByUserId(userId);
         int totalTracksAfterAddition = currentTrackCount + newTracksCount;
 
         if (totalTracksAfterAddition > maxRecentTracks) {
@@ -94,8 +94,8 @@ public class RecentlyPlaylistService {
 
     private void deleteOldestRecords(Long userId, int count) {
         PageRequest pageRequest = PageRequest.of(0, count);
-        List<String> trackIdsToDelete = recentlyPlaylistRepository.findOldestTracks(userId, pageRequest);
-        recentlyPlaylistRepository.deleteAllByUserIdAndTrackIds(userId, trackIdsToDelete);
+        List<String> trackIdsToDelete = recentPlaylistRepository.findOldestTracks(userId, pageRequest);
+        recentPlaylistRepository.deleteAllByUserIdAndTrackIds(userId, trackIdsToDelete);
     }
 
     private void saveNewTracks(Long userId, List<String> sortedTrackIdsByASC) {
@@ -111,6 +111,6 @@ public class RecentlyPlaylistService {
                 })
                 .collect(Collectors.toList());
 
-        recentlyPlaylistRepository.saveAll(newTracks);
+        recentPlaylistRepository.saveAll(newTracks);
     }
 }

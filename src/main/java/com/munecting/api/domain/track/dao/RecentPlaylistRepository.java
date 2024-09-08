@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RecentlyPlaylistRepository extends JpaRepository<RecentlyPlayedTrack, Long> {
+public interface RecentPlaylistRepository extends JpaRepository<RecentlyPlayedTrack, Long> {
 
     int countByUserId(Long userId);
 
