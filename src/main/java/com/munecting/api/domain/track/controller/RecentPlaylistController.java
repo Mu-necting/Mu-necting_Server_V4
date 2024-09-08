@@ -28,4 +28,15 @@ public class RecentPlaylistController {
         recentPlaylistService.saveRecentTracks(userId, requestDto);
         return ApiResponse.ok(null);
     }
+
+    @GetMapping
+    @Operation(summary = "최근 탐색한 음악 리스트 조회")
+    public ApiResponse<?> getRecentTracks(
+            @UserId Long userId,
+            @RequestParam(required = false) Long cursor,
+            @RequestParam(required = false, defaultValue = "100") int size
+    ) {
+        GetRecentPlaylistResponseDto dto = recentPlaylistService.getRecentTracks(userId, cursor, size);
+        return ApiResponse.ok(dto);
+    }
 }

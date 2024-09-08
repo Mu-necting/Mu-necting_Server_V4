@@ -2,6 +2,8 @@ package com.munecting.api.domain.spotify.dto;
 
 import com.munecting.api.domain.like.dto.response.GetLikedTrackResponseDto;
 import com.munecting.api.domain.like.dto.response.LikedTrackArtistResponseDto;
+import com.munecting.api.domain.track.dto.response.RecentlyPlayedTrackArtistInfo;
+import com.munecting.api.domain.track.dto.response.RecentlyPlayedTrackResponseDto;
 import com.wrapper.spotify.model_objects.specification.AlbumSimplified;
 import com.wrapper.spotify.model_objects.specification.Artist;
 import com.wrapper.spotify.model_objects.specification.Track;
@@ -105,4 +107,17 @@ public class SpotifyDtoMapper {
         return artistResponseDto;
     }
 
+    public RecentlyPlayedTrackResponseDto convertToRecentlyPlayedTrackResponseDto(Track track, Long recentlyPlayedId) {
+        return RecentlyPlayedTrackResponseDto.builder()
+                .trackPreview(track.getPreviewUrl())
+                .trackTitle(track.getName())
+                .trackId(track.getId())
+                .images(track.getAlbum().getImages())
+                .artists(Arrays.stream(track.getArtists())
+                        .map(artist ->
+                                RecentlyPlayedTrackArtistInfo.of(artist.getName()))
+                        .collect(Collectors.toList()))
+                .recentlyPlayedId(recentlyPlayedId)
+                .build();
+    }
 }

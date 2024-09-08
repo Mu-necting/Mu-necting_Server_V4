@@ -5,10 +5,14 @@ import com.munecting.api.domain.track.dao.RecentPlaylistRepository;
 import com.munecting.api.domain.track.domain.RecentlyPlayedTrack;
 import com.munecting.api.domain.track.dto.request.SaveRecentTracksRequestDto;
 import com.munecting.api.domain.track.dto.request.TrackInfo;
+import com.munecting.api.domain.track.dto.response.GetRecentPlaylistResponseDto;
+import com.munecting.api.domain.track.dto.response.RecentlyPlayedTrackResponseDto;
 import com.munecting.api.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -112,5 +116,28 @@ public class RecentPlaylistService {
                 .collect(Collectors.toList());
 
         recentPlaylistRepository.saveAll(newTracks);
+    }
+
+    @Transactional(readOnly = true)
+    public GetRecentPlaylistResponseDto getRecentTracks(Long userId, Long cursor, int size) {
+        userService.validateUserExists(userId);
+
+        PageRequest pageRequest = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "id"));
+        Slice<RecentlyPlayedTrack> playedTracks = getPlayedTrackSlice(userId, cursor, pageRequest);
+
+        List<RecentlyPlayedTrackResponseDto> trackInfos = playedTracks.stream()
+                .map(playedTrack ->
+                        spotifyService.getRecentlyPlayedTrack(playedTrack.getTrackId(), playedTrack.getId()))
+                .collect(Collectors.toList());
+
+        return GetRecentPlaylistResponseDto.of(playedTracks.isEmpty(), playedTracks.hasNext(), trackInfos);
+    }
+
+    private Slice<RecentlyPlayedTrack> getPlayedTrackSlice(Long userId, Long cursor, PageRequest pageRequest) {
+        if (cursor == null) {
+            return recentPlaylistRepository.findByUserId(userId, pageRequest);
+        } else {
+            return recentPlaylistRepository.findByUserId(userId, cursor, pageRequest);
+        }
     }
 }

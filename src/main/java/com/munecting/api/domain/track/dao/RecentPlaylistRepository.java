@@ -1,7 +1,9 @@
 package com.munecting.api.domain.track.dao;
 
 import com.munecting.api.domain.track.domain.RecentlyPlayedTrack;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +26,11 @@ public interface RecentPlaylistRepository extends JpaRepository<RecentlyPlayedTr
     @Modifying(clearAutomatically = true)
     @Query("DELETE FROM RecentlyPlayedTrack rt WHERE rt.userId = :userId AND rt.trackId IN (:trackIds)")
     void deleteAllByUserIdAndTrackIds(@Param("userId") Long userId, @Param("trackIds") List<String> trackIds);
+
+    @Query("select rt from RecentlyPlayedTrack rt where rt.userId = :userId ")
+    Slice<RecentlyPlayedTrack> findByUserId(@Param("userId") Long userId, PageRequest pageRequest);
+
+    @Query("select rt from RecentlyPlayedTrack rt where rt.userId = :userId AND rt.id < :id")
+    Slice<RecentlyPlayedTrack> findByUserId(@Param("userId") Long userId, @Param("id")Long cursor, PageRequest pageRequest);
+
 }
