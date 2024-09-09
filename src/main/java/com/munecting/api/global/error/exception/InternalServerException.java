@@ -13,5 +13,4 @@ public class InternalServerException extends GeneralException{
     public InternalServerException(String message) {
         super(message, INTERNAL_SERVER_ERROR);
     }
-
 }

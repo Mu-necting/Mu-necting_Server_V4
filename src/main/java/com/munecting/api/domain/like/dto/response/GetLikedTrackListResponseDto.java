@@ -7,13 +7,14 @@ import java.util.List;
 
 @Builder
 public record GetLikedTrackListResponseDto(
-        boolean isEmpty,
-        boolean hasNext,
+        Boolean isEmpty,
+        Boolean hasNext,
         List<GetLikedTrackResponseDto> likedTracks
 ){
+    
     public static GetLikedTrackListResponseDto of(
-            boolean isEmpty,
-            boolean hasNext,
+            Boolean isEmpty,
+            Boolean hasNext,
             List<GetLikedTrackResponseDto> tracks
     ) {
         return GetLikedTrackListResponseDto.builder()

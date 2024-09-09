@@ -27,6 +27,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class SecurityConfig {
+
     private final CorsConfig corsConfig;
     private final ResponseUtil responseUtil;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
@@ -102,5 +103,4 @@ public class SecurityConfig {
         log.warn("권한이 없는 사용자의 접근입니다.");
         responseUtil.sendException(response, new ForbiddenException());
     }
-
 }

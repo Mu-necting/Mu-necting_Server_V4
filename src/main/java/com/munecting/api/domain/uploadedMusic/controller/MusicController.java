@@ -1,12 +1,10 @@
 package com.munecting.api.domain.uploadedMusic.controller;
 
-import com.munecting.api.domain.spotify.dto.MusicResponseDto;
-import com.munecting.api.domain.uploadedMusic.dto.MusicRequestDto;
-import com.munecting.api.domain.uploadedMusic.dto.UploadedMusicResponseDto;
-import com.munecting.api.domain.uploadedMusic.entity.UploadedMusic;
+import com.munecting.api.domain.uploadedMusic.dto.request.MusicRequestDto;
+import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicIdResponseDto;
+import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicResponseDto;
 import com.munecting.api.domain.uploadedMusic.service.MusicService;
 import com.munecting.api.global.common.dto.response.ApiResponse;
-import com.munecting.api.global.common.dto.response.Status;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -32,9 +30,10 @@ public class MusicController {
     @PostMapping("")
     @Operation(summary = "음악 업로드 하기")
     public ApiResponse<?> uploadMusic(
-           @Valid @RequestBody MusicRequestDto musicRequestDto) {
-        Long id = musicService.uploadMusic(musicRequestDto);
-        return ApiResponse.created(id);
+           @Valid @RequestBody MusicRequestDto musicRequestDto
+    ) {
+        UploadedMusicIdResponseDto uploadedMusicIdResponseDto = musicService.uploadMusic(musicRequestDto);
+        return ApiResponse.created(uploadedMusicIdResponseDto);
     }
 
     @GetMapping("")
@@ -42,9 +41,9 @@ public class MusicController {
     public ApiResponse<?> getUploadedMusic(
             @RequestParam Double latitude,
             @RequestParam Double longitude,
-            @RequestParam Integer radius) {
+            @RequestParam Integer radius
+    ) {
         List<UploadedMusicResponseDto> musicResponseDtoList = musicService.getUploadedMusics(latitude, longitude, radius);
         return ApiResponse.ok(musicResponseDtoList);
     }
-
 }

@@ -5,10 +5,11 @@ import lombok.Builder;
 @Builder
 public record AddTrackLikeResponseDto(
         String trackId,
-        boolean isLiked,
-        int likeCount
+        Boolean isLiked,
+        Integer likeCount
 ) {
-    public static AddTrackLikeResponseDto of(String trackId, int likeCount, boolean isLiked) {
+
+    public static AddTrackLikeResponseDto of(String trackId, Integer likeCount, Boolean isLiked) {
         return AddTrackLikeResponseDto.builder()
                 .trackId(trackId)
                 .likeCount(likeCount)

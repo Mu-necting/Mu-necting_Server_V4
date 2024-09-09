@@ -23,6 +23,7 @@ public class AddressService {
 
     @Value("${KAKAO_MAP_API_KEY}")
     private String apiKey;
+
     private final String BASE_URL = "https://dapi.kakao.com/v2/local/geo/coord2address";
     private final RestClient restClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -52,5 +53,4 @@ public class AddressService {
         return jsonNode;
 
     }
-
 }

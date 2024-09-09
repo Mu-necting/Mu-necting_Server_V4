@@ -14,19 +14,16 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.munecting.api.global.common.dto.response.Status.USER_NOT_FOUND;
 
 @Slf4j
-@Transactional
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final CommentRepository commentRepository;
-
     private final LikeRepository likeRepository;
-
     private final UploadedMusicRepository uploadedMusicRepository;
 
+    @Transactional
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
         deleteUserRelatedEntities(userId);
@@ -38,12 +35,11 @@ public class UserService {
         likeRepository.deleteByUserId(userId);
         uploadedMusicRepository.deleteByUserId(userId);
     }
-  
-  
+
+    @Transactional(readOnly = true)
     public void validateUserExists(Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new EntityNotFoundException(USER_NOT_FOUND);
         }
     }
-  
 }

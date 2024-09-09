@@ -43,5 +43,4 @@ public class SwaggerConfig {
                         List.of(new SecurityRequirement().addList("accessToken"))
                 );
     }
-
 }

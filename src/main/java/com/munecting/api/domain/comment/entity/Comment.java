@@ -1,6 +1,6 @@
 package com.munecting.api.domain.comment.entity;
 
-import com.munecting.api.domain.comment.dto.CommentRequestDto;
+import com.munecting.api.domain.comment.dto.request.CommentRequestDto;
 import com.munecting.api.global.common.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,11 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -41,10 +39,9 @@ public class Comment extends BaseEntity {
 
     public static Comment toEntity(CommentRequestDto commentRequestDto) {
         return Comment.builder()
-                .userId(commentRequestDto.getUserId())
-                .trackId(commentRequestDto.getTrackId())
-                .content(commentRequestDto.getContent())
+                .userId(commentRequestDto.userId())
+                .trackId(commentRequestDto.trackId())
+                .content(commentRequestDto.content())
                 .build();
     }
-
 }

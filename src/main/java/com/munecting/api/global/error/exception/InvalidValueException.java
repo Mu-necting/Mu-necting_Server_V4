@@ -11,5 +11,4 @@ public class InvalidValueException extends GeneralException {
     public InvalidValueException(Status errorStatus) {
         super(errorStatus);
     }
-
 }

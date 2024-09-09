@@ -1,11 +1,11 @@
 package com.munecting.api.domain.comment.controller;
 
-import com.munecting.api.domain.comment.dto.CommentRequestDto;
-import com.munecting.api.domain.comment.dto.CommentResponseDto;
+import com.munecting.api.domain.comment.dto.request.CommentRequestDto;
+import com.munecting.api.domain.comment.dto.response.CommentIdResponseDto;
+import com.munecting.api.domain.comment.dto.response.CommentResponseDto;
 import com.munecting.api.domain.comment.service.CommentService;
 import com.munecting.api.global.common.dto.response.ApiResponse;
 import com.munecting.api.global.common.dto.response.PagedResponseDto;
-import com.munecting.api.global.common.dto.response.Status;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDateTime;
@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/tracks")
-@Tag(name = "comments", description = "댓글 관련 api")
+@RequestMapping("/api/tracks")
+@Tag(name = "comments", description = "댓글 관련 api </br> <i> 담당자 : 전민주 </i>")
 public class CommentController {
 
     private final CommentService commentService;
@@ -33,26 +33,29 @@ public class CommentController {
     @PostMapping("/comments")
     @Operation(summary = "댓글 등록하기")
     public ApiResponse<?> createComment(
-            @RequestBody CommentRequestDto commentRequestDto) {
-        Long id = commentService.createComment(commentRequestDto);
-        return ApiResponse.created(id);
+            @RequestBody CommentRequestDto commentRequestDto
+    ) {
+        CommentIdResponseDto commentIdResponseDto = commentService.createComment(commentRequestDto);
+        return ApiResponse.created(commentIdResponseDto);
     }
 
     @DeleteMapping("/{commentId}")
     @Operation(summary = "댓글 삭제하기")
     public ApiResponse<?> deleteComment(
-            @PathVariable Long commentId) {
-        Long id = commentService.deleteCommentById(commentId);
-        return ApiResponse.ok(id);
+            @PathVariable Long commentId
+    ) {
+        CommentIdResponseDto commentIdResponseDto = commentService.deleteCommentById(commentId);
+        return ApiResponse.ok(commentIdResponseDto);
     }
 
     @PatchMapping("/comments/{commentId}")
     @Operation(summary = "댓글 수정하기")
     public ApiResponse<?> updateComment(
             @PathVariable (name = "commentId") Long commentId,
-            @RequestBody CommentRequestDto commentRequestDto) {
-        Long id = commentService.updateComment(commentId, commentRequestDto);
-        return ApiResponse.ok(id);
+            @RequestBody CommentRequestDto commentRequestDto
+    ) {
+        CommentIdResponseDto commentIdResponseDto = commentService.updateComment(commentId, commentRequestDto);
+        return ApiResponse.ok(commentIdResponseDto);
     }
 
     @GetMapping("/{trackId}/comments")
@@ -60,9 +63,9 @@ public class CommentController {
     public ApiResponse<?> getCommentsByTrackId(
             @PathVariable (name = "trackId") String trackId,
             @RequestParam (name = "cursor") LocalDateTime cursor,
-            @RequestParam (name = "limit") int limit) {
+            @RequestParam (name = "limit") int limit
+    ) {
         PagedResponseDto<CommentResponseDto> commentResponseDtoList = commentService.getCommentsByTrackId(trackId, cursor, limit);
         return ApiResponse.ok(commentResponseDtoList);
     }
-
 }

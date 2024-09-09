@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/tracks")
-@Tag(name = "track", description = "track 관련 기타 api")
+@Tag(name = "track", description = "track 관련 기타 api </br> <i> 담당자 : 김송은 </i>")
 public class TrackController {
 
     private final TrackService trackService;
 
-    @GetMapping("/{trackId}/details")
-    @Operation(summary = "좋아요와 댓글 정보 조회")
+    @GetMapping("/{trackId}/stats")
+    @Operation(summary = "좋아요와 댓글 개수 조회")
     public ApiResponse<?> getTrackDetails(
             @PathVariable(name = "trackId") String trackId,
             @UserId Long userId

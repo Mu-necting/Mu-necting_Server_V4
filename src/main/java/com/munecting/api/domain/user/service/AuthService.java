@@ -29,16 +29,14 @@ import java.util.concurrent.TimeUnit;
 public class AuthService {
 
     private final JwtProvider jwtProvider;
-
     private final RedisTemplate<String, String> redisTemplate;
-
     private final OidcService oidcService;
-
     private final UserRepository userRepository;
 
     @Value("${jwt.refresh.expiration}")
     private long refreshTokenExpiration;
 
+    @Transactional
     public UserTokenResponseDto refreshToken(RefreshTokenRequestDto requestDto) {
         String providedToken = requestDto.refreshToken();
         Long userId = getUserIdFromRefreshToken(providedToken);
@@ -127,6 +125,7 @@ public class AuthService {
         return jwtProvider.getIssueToken(userId, false);
     }
 
+    @Transactional
     public void logout(LogoutRequestDto dto) {
         Long userId = getUserIdFromAccessToken(dto.accessToken());
         processLogout(userId);

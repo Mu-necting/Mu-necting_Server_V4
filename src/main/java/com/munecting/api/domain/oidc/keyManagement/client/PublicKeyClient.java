@@ -16,5 +16,4 @@ public abstract class PublicKeyClient {
                 .retrieve()
                 .body(OidcPublicKeyList.class);
     }
-
 }

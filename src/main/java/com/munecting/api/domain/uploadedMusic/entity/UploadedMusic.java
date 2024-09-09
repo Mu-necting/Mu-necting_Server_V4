@@ -1,6 +1,6 @@
 package com.munecting.api.domain.uploadedMusic.entity;
 
-import com.munecting.api.domain.uploadedMusic.dto.MusicRequestDto;
+import com.munecting.api.domain.uploadedMusic.dto.request.MusicRequestDto;
 import com.munecting.api.global.common.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,11 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -43,11 +41,11 @@ public class UploadedMusic extends BaseEntity {
 
     public static UploadedMusic toEntity (MusicRequestDto musicRequestDto) {
         return UploadedMusic.builder().
-                userId(musicRequestDto.getUserId())
-                .trackId(musicRequestDto.getTrackId())
-                .latitude(musicRequestDto.getLatitude())
-                .longitude(musicRequestDto.getLongitude())
-                .uploadDuration(musicRequestDto.getUploadDuration())
+                userId(musicRequestDto.userId())
+                .trackId(musicRequestDto.trackId())
+                .latitude(musicRequestDto.latitude())
+                .longitude(musicRequestDto.longitude())
+                .uploadDuration(musicRequestDto.uploadDuration())
                 .build();
     }
 }

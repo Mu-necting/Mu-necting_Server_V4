@@ -1,11 +1,10 @@
 package com.munecting.api.domain.spotify.controller;
 
-import com.munecting.api.domain.spotify.dto.AlbumResponseDto;
-import com.munecting.api.domain.spotify.dto.ArtistResponseDto;
-import com.munecting.api.domain.spotify.dto.MusicResponseDto;
+import com.munecting.api.domain.spotify.dto.response.AlbumResponseDto;
+import com.munecting.api.domain.spotify.dto.response.ArtistResponseDto;
+import com.munecting.api.domain.spotify.dto.response.MusicResponseDto;
 import com.munecting.api.domain.spotify.service.SpotifyService;
 import com.munecting.api.global.common.dto.response.ApiResponse;
-import com.munecting.api.global.common.dto.response.Status;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -18,27 +17,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/spotify")
-@Tag(name = "spotify", description = "spotify 관련 api")
+@RequestMapping("/api/spotify")
+@Tag(name = "spotify", description = "spotify 관련 api </br> <i> 담당자 : 전민주 </i>")
 public class SpotifyController {
 
     private final SpotifyService spotifyService;
 
-    @GetMapping("/search/tracks/{keyword}")
+    @GetMapping("/search/tracks")
     @Operation(summary = "키워드로 트랙 검색하기")
     public ApiResponse<?> searchTracks(
-            @PathVariable("keyword") String keyword,
+            @RequestParam("keyword") String keyword,
             @RequestParam Integer limit,
             @RequestParam Integer offset
-            ) {
+    ) {
         List<MusicResponseDto> musicResponseDtoList = spotifyService.searchTracks(keyword, limit, offset);
         return ApiResponse.ok(musicResponseDtoList);
     }
 
-    @GetMapping("/search/albums/{keyword}")
+    @GetMapping("/search/albums")
     @Operation(summary = "키워드로 앨범 검색하기")
     public ApiResponse<?> searchAlbums(
-            @PathVariable("keyword") String keyword,
+            @RequestParam("keyword") String keyword,
             @RequestParam Integer limit,
             @RequestParam Integer offset
     ) {
@@ -46,10 +45,10 @@ public class SpotifyController {
         return ApiResponse.ok(albumResponseDtoList);
     }
 
-    @GetMapping("/search/artists/{keyword}")
+    @GetMapping("/search/artists")
     @Operation(summary = "키워드로 아티스트 검색하기")
     public ApiResponse<?> searchArtists(
-            @PathVariable("keyword") String keyword,
+            @RequestParam("keyword") String keyword,
             @RequestParam Integer limit,
             @RequestParam Integer offset
     ) {
@@ -87,5 +86,4 @@ public class SpotifyController {
         MusicResponseDto musicResponseDto = spotifyService.getTrack(trackId);
         return ApiResponse.ok(musicResponseDto);
     }
-
 }
