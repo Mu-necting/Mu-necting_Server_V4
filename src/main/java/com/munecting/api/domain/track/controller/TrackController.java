@@ -28,6 +28,6 @@ public class TrackController {
             @UserId Long userId
     ) {
         GetTrackDetailsResponseDto dto = trackService.getTrackDetails(trackId, userId);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), dto);
+        return ApiResponse.ok(dto);
     }
 }

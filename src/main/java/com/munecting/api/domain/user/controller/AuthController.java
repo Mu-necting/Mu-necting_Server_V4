@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Validated
-@Tag(name = "auth", description = "유저 인증/인가 관련 API")
+@Tag(name = "auth", description = "유저 인증/인가 관련 API </br> <i> 담당자 : 김송은 </i>")
 public class AuthController {
 
     private final AuthService authService;
@@ -33,7 +33,7 @@ public class AuthController {
             @PathVariable @Parameter(description = "user DB에 임의로 유저를 생성한 후, 생성되는 user id 값을 사용해주세요. ") Long userId
     ) {
         String accessToken = authService.getToken(userId);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), accessToken);
+        return ApiResponse.created(accessToken);
     }
 
     @PostMapping("/login")
@@ -44,16 +44,16 @@ public class AuthController {
             @RequestBody @Valid LoginRequestDto loginRequestDto
     ) {
         UserTokenResponseDto dto = authService.getOrCreateUser(loginRequestDto);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), dto);
+        return ApiResponse.ok(dto);
     }
 
     @PostMapping("/logout")
     @Operation(summary = "로그아웃")
     public ApiResponse<?> logout(
             @RequestBody @Valid LogoutRequestDto logoutRequestDto
-            ) {
+    ) {
         authService.logout(logoutRequestDto);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
+        return ApiResponse.ok(null);
     }
 
 
@@ -63,6 +63,6 @@ public class AuthController {
             @Valid RefreshTokenRequestDto refreshTokenRequestDto
     ) {
         UserTokenResponseDto dto = authService.refreshToken(refreshTokenRequestDto);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), dto);
+        return ApiResponse.created(dto);
     }
 }

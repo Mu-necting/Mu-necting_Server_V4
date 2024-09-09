@@ -35,7 +35,7 @@ public class CommentController {
     public ApiResponse<?> createComment(
             @RequestBody CommentRequestDto commentRequestDto) {
         Long id = commentService.createComment(commentRequestDto);
-        return ApiResponse.onSuccess(Status.CREATED.getCode(), Status.CREATED.getMessage(), id);
+        return ApiResponse.created(id);
     }
 
     @DeleteMapping("/{commentId}")
@@ -43,7 +43,7 @@ public class CommentController {
     public ApiResponse<?> deleteComment(
             @PathVariable Long commentId) {
         Long id = commentService.deleteCommentById(commentId);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), id);
+        return ApiResponse.ok(id);
     }
 
     @PatchMapping("/comments/{commentId}")
@@ -52,7 +52,7 @@ public class CommentController {
             @PathVariable (name = "commentId") Long commentId,
             @RequestBody CommentRequestDto commentRequestDto) {
         Long id = commentService.updateComment(commentId, commentRequestDto);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), id);
+        return ApiResponse.ok(id);
     }
 
     @GetMapping("/{trackId}/comments")
@@ -62,7 +62,7 @@ public class CommentController {
             @RequestParam (name = "cursor") LocalDateTime cursor,
             @RequestParam (name = "limit") int limit) {
         PagedResponseDto<CommentResponseDto> commentResponseDtoList = commentService.getCommentsByTrackId(trackId, cursor, limit);
-        return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), commentResponseDtoList);
+        return ApiResponse.ok(commentResponseDtoList);
     }
 
 }

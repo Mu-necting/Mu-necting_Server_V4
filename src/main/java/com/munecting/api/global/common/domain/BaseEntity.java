@@ -20,4 +20,8 @@ public class BaseEntity {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    protected void overrideCreatedAt(LocalDateTime localDateTime) {
+        this.createdAt = localDateTime;
+    }
 }
