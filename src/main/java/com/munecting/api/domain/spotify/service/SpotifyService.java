@@ -6,6 +6,7 @@ import com.munecting.api.domain.spotify.dto.response.AlbumResponseDto;
 import com.munecting.api.domain.spotify.dto.response.ArtistResponseDto;
 import com.munecting.api.domain.spotify.dto.response.MusicResponseDto;
 import com.munecting.api.domain.spotify.dto.SpotifyDtoMapper;
+import com.munecting.api.domain.track.dto.response.RecentlyPlayedTrackResponseDto;
 import com.munecting.api.global.error.exception.EntityNotFoundException;
 import com.munecting.api.global.error.exception.GeneralException;
 import com.munecting.api.global.error.exception.InternalServerException;
@@ -139,6 +140,11 @@ public class SpotifyService {
     public GetLikedTrackResponseDto getLikedTrack(String trackId, Long likeId) {
         Track track = fetchTrackById(trackId);
         return spotifyDtoMapper.convertToLikedTrackResponseDto(track, likeId);
+    }
+
+    public RecentlyPlayedTrackResponseDto getRecentlyPlayedTrack(String trackId, Long recentlyPlayedId) {
+        Track track = fetchTrackById(trackId);
+        return spotifyDtoMapper.convertToRecentlyPlayedTrackResponseDto(track, recentlyPlayedId);
     }
 
     public void validateTrackExists(String trackId) {
