@@ -4,6 +4,7 @@ import com.munecting.api.domain.spotify.dto.response.MusicResponseDto;
 import com.munecting.api.domain.spotify.service.SpotifyService;
 import com.munecting.api.domain.uploadedMusic.dao.UploadedMusicRepository;
 import com.munecting.api.domain.uploadedMusic.dto.request.MusicRequestDto;
+import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicIdResponseDto;
 import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicResponseDto;
 import com.munecting.api.domain.uploadedMusic.entity.UploadedMusic;
 import com.munecting.api.domain.user.entity.User;
@@ -23,7 +24,7 @@ public class MusicService {
     private final SpotifyService spotifyService;
 
     @Transactional
-    public Long uploadMusic(MusicRequestDto musicRequestDto) {
+    public UploadedMusicIdResponseDto uploadMusic(MusicRequestDto musicRequestDto) {
         spotifyService.getTrack(musicRequestDto.trackId());
         UploadedMusic uploadedMusic = UploadedMusic.toEntity(musicRequestDto);
         return saveUploadMusicEntity(uploadedMusic);
@@ -42,8 +43,9 @@ public class MusicService {
         return uploadedMusicResponseDtos;
     }
 
-    private Long saveUploadMusicEntity(UploadedMusic uploadedMusic) {
-        return uploadedMusicRepository.save(uploadedMusic).getId();
+    private UploadedMusicIdResponseDto saveUploadMusicEntity(UploadedMusic uploadedMusic) {
+        Long id = uploadedMusicRepository.save(uploadedMusic).getId();
+        return UploadedMusicIdResponseDto.of(id);
     }
 
     @Transactional(readOnly = true)

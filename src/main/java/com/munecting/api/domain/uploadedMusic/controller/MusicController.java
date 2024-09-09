@@ -1,6 +1,7 @@
 package com.munecting.api.domain.uploadedMusic.controller;
 
 import com.munecting.api.domain.uploadedMusic.dto.request.MusicRequestDto;
+import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicIdResponseDto;
 import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicResponseDto;
 import com.munecting.api.domain.uploadedMusic.service.MusicService;
 import com.munecting.api.global.common.dto.response.ApiResponse;
@@ -31,8 +32,8 @@ public class MusicController {
     public ApiResponse<?> uploadMusic(
            @Valid @RequestBody MusicRequestDto musicRequestDto
     ) {
-        Long id = musicService.uploadMusic(musicRequestDto);
-        return ApiResponse.created(id);
+        UploadedMusicIdResponseDto uploadedMusicIdResponseDto = musicService.uploadMusic(musicRequestDto);
+        return ApiResponse.created(uploadedMusicIdResponseDto);
     }
 
     @GetMapping("")

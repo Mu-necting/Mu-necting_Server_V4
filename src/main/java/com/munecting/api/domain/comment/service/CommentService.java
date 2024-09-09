@@ -2,6 +2,7 @@ package com.munecting.api.domain.comment.service;
 
 import com.munecting.api.domain.comment.dao.CommentRepository;
 import com.munecting.api.domain.comment.dto.request.CommentRequestDto;
+import com.munecting.api.domain.comment.dto.response.CommentIdResponseDto;
 import com.munecting.api.domain.comment.dto.response.CommentResponseDto;
 import com.munecting.api.domain.comment.entity.Comment;
 import com.munecting.api.domain.spotify.service.SpotifyService;
@@ -28,12 +29,12 @@ public class CommentService {
     private final SpotifyService spotifyService;
 
     @Transactional
-    public Long createComment(CommentRequestDto commentRequestDto) {
+    public CommentIdResponseDto createComment(CommentRequestDto commentRequestDto) {
         String trackId = commentRequestDto.trackId();
         spotifyService.validateTrackExists(trackId);
         Comment comment = Comment.toEntity(commentRequestDto);
         Long id = saveComment(comment);
-        return id;
+        return CommentIdResponseDto.of(id);
     }
 
     private Long saveComment(Comment comment) {
@@ -56,10 +57,10 @@ public class CommentService {
     }
 
     @Transactional
-    public Long updateComment(Long commentId, CommentRequestDto commentRequestDto) {
+    public CommentIdResponseDto updateComment(Long commentId, CommentRequestDto commentRequestDto) {
         Comment comment = getCommentById(commentId);
         comment.updateContent(commentRequestDto.content());
-        return commentId;
+        return CommentIdResponseDto.of(commentId);
     }
 
     @Transactional(readOnly = true)
@@ -69,10 +70,10 @@ public class CommentService {
     }
 
     @Transactional
-    public Long deleteCommentById(Long commentId) {
+    public CommentIdResponseDto deleteCommentById(Long commentId) {
         Comment comment = getCommentById(commentId);
         deleteComment(comment);
-        return commentId;
+        return CommentIdResponseDto.of(commentId);
     }
 
     private void deleteComment(Comment comment) {

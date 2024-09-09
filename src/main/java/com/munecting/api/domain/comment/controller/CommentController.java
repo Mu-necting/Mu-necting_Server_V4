@@ -1,6 +1,7 @@
 package com.munecting.api.domain.comment.controller;
 
 import com.munecting.api.domain.comment.dto.request.CommentRequestDto;
+import com.munecting.api.domain.comment.dto.response.CommentIdResponseDto;
 import com.munecting.api.domain.comment.dto.response.CommentResponseDto;
 import com.munecting.api.domain.comment.service.CommentService;
 import com.munecting.api.global.common.dto.response.ApiResponse;
@@ -34,8 +35,8 @@ public class CommentController {
     public ApiResponse<?> createComment(
             @RequestBody CommentRequestDto commentRequestDto
     ) {
-        Long id = commentService.createComment(commentRequestDto);
-        return ApiResponse.created(id);
+        CommentIdResponseDto commentIdResponseDto = commentService.createComment(commentRequestDto);
+        return ApiResponse.created(commentIdResponseDto);
     }
 
     @DeleteMapping("/{commentId}")
@@ -43,8 +44,8 @@ public class CommentController {
     public ApiResponse<?> deleteComment(
             @PathVariable Long commentId
     ) {
-        Long id = commentService.deleteCommentById(commentId);
-        return ApiResponse.ok(id);
+        CommentIdResponseDto commentIdResponseDto = commentService.deleteCommentById(commentId);
+        return ApiResponse.ok(commentIdResponseDto);
     }
 
     @PatchMapping("/comments/{commentId}")
@@ -53,8 +54,8 @@ public class CommentController {
             @PathVariable (name = "commentId") Long commentId,
             @RequestBody CommentRequestDto commentRequestDto
     ) {
-        Long id = commentService.updateComment(commentId, commentRequestDto);
-        return ApiResponse.ok(id);
+        CommentIdResponseDto commentIdResponseDto = commentService.updateComment(commentId, commentRequestDto);
+        return ApiResponse.ok(commentIdResponseDto);
     }
 
     @GetMapping("/{trackId}/comments")
