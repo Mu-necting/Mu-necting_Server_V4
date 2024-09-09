@@ -32,7 +32,8 @@ public class CommentController {
     @PostMapping("/comments")
     @Operation(summary = "댓글 등록하기")
     public ApiResponse<?> createComment(
-            @RequestBody CommentRequestDto commentRequestDto) {
+            @RequestBody CommentRequestDto commentRequestDto
+    ) {
         Long id = commentService.createComment(commentRequestDto);
         return ApiResponse.created(id);
     }
@@ -40,7 +41,8 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     @Operation(summary = "댓글 삭제하기")
     public ApiResponse<?> deleteComment(
-            @PathVariable Long commentId) {
+            @PathVariable Long commentId
+    ) {
         Long id = commentService.deleteCommentById(commentId);
         return ApiResponse.ok(id);
     }
@@ -49,7 +51,8 @@ public class CommentController {
     @Operation(summary = "댓글 수정하기")
     public ApiResponse<?> updateComment(
             @PathVariable (name = "commentId") Long commentId,
-            @RequestBody CommentRequestDto commentRequestDto) {
+            @RequestBody CommentRequestDto commentRequestDto
+    ) {
         Long id = commentService.updateComment(commentId, commentRequestDto);
         return ApiResponse.ok(id);
     }
@@ -59,7 +62,8 @@ public class CommentController {
     public ApiResponse<?> getCommentsByTrackId(
             @PathVariable (name = "trackId") String trackId,
             @RequestParam (name = "cursor") LocalDateTime cursor,
-            @RequestParam (name = "limit") int limit) {
+            @RequestParam (name = "limit") int limit
+    ) {
         PagedResponseDto<CommentResponseDto> commentResponseDtoList = commentService.getCommentsByTrackId(trackId, cursor, limit);
         return ApiResponse.ok(commentResponseDtoList);
     }

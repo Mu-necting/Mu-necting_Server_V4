@@ -29,7 +29,8 @@ public class MusicController {
     @PostMapping("")
     @Operation(summary = "음악 업로드 하기")
     public ApiResponse<?> uploadMusic(
-           @Valid @RequestBody MusicRequestDto musicRequestDto) {
+           @Valid @RequestBody MusicRequestDto musicRequestDto
+    ) {
         Long id = musicService.uploadMusic(musicRequestDto);
         return ApiResponse.created(id);
     }
@@ -39,7 +40,8 @@ public class MusicController {
     public ApiResponse<?> getUploadedMusic(
             @RequestParam Double latitude,
             @RequestParam Double longitude,
-            @RequestParam Integer radius) {
+            @RequestParam Integer radius
+    ) {
         List<UploadedMusicResponseDto> musicResponseDtoList = musicService.getUploadedMusics(latitude, longitude, radius);
         return ApiResponse.ok(musicResponseDtoList);
     }

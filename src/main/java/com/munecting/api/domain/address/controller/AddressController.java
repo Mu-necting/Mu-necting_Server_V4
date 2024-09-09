@@ -25,7 +25,8 @@ public class AddressController {
     @Operation(summary = "위도/경도로 주소 조회하기")
     public ApiResponse<?> getAddressByLocation(
             @RequestParam(name = "latitude") Double latitude,
-            @RequestParam(name = "longitude") Double longitude) {
+            @RequestParam(name = "longitude") Double longitude
+    ) {
         JsonNode address = addressService.getAddressByLocation(latitude, longitude);
         return ApiResponse.ok(address);
     }

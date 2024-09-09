@@ -29,7 +29,7 @@ public class SpotifyController {
             @PathVariable("keyword") String keyword,
             @RequestParam Integer limit,
             @RequestParam Integer offset
-            ) {
+    ) {
         List<MusicResponseDto> musicResponseDtoList = spotifyService.searchTracks(keyword, limit, offset);
         return ApiResponse.ok(musicResponseDtoList);
     }
