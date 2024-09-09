@@ -23,10 +23,10 @@ public class SpotifyController {
 
     private final SpotifyService spotifyService;
 
-    @GetMapping("/search/tracks/{keyword}")
+    @GetMapping("/search/tracks")
     @Operation(summary = "키워드로 트랙 검색하기")
     public ApiResponse<?> searchTracks(
-            @PathVariable("keyword") String keyword,
+            @RequestParam("keyword") String keyword,
             @RequestParam Integer limit,
             @RequestParam Integer offset
     ) {
@@ -34,10 +34,10 @@ public class SpotifyController {
         return ApiResponse.ok(musicResponseDtoList);
     }
 
-    @GetMapping("/search/albums/{keyword}")
+    @GetMapping("/search/albums")
     @Operation(summary = "키워드로 앨범 검색하기")
     public ApiResponse<?> searchAlbums(
-            @PathVariable("keyword") String keyword,
+            @RequestParam("keyword") String keyword,
             @RequestParam Integer limit,
             @RequestParam Integer offset
     ) {
@@ -45,10 +45,10 @@ public class SpotifyController {
         return ApiResponse.ok(albumResponseDtoList);
     }
 
-    @GetMapping("/search/artists/{keyword}")
+    @GetMapping("/search/artists")
     @Operation(summary = "키워드로 아티스트 검색하기")
     public ApiResponse<?> searchArtists(
-            @PathVariable("keyword") String keyword,
+            @RequestParam("keyword") String keyword,
             @RequestParam Integer limit,
             @RequestParam Integer offset
     ) {
