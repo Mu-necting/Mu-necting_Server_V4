@@ -1,0 +1,89 @@
+server:
+  port: ${SERVER_PORT}
+
+spring :
+  application:
+    name: munectingV4
+  mvc:
+    path match:
+      matching-strategy: ant_path_matcher
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgresSQLDialect
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        jdbc:
+          timezone: Asia/Seoul
+
+  datasource:
+    url: jdbc:${DATASOURCE}://${HOST}:${PORT}/${TABLE}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      initialization-fail-timeout: 3600
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
+#      password: 1234
+  mail:
+    debug: true
+    host: smtp.naver.com
+    port: 465
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
+
+  security:
+    cors:
+      allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
+      allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,PATCH,DELETE}
+      allowed-headers: ${CORS_ALLOWED_HEADERS:*}
+      allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
+      path-pattern: "/**"
+
+    auth:
+      header: ${AUTH_HEADER:Authorization}
+      prefix: ${AUTH_PREFIX:Bearer }
+
+    oauth:
+      kakao:
+        public-key-info: https://kauth.kakao.com/.well-known/jwks.json
+        issuer: https://kauth.kakao.com
+        audience: ${KAKAO_APP_ID}}
+      apple:
+        public-key-url: https://appleid.apple.com/auth/keys
+        issuer: https://appleid.apple.com
+        audience: ${APPLE_APP_ID}
+      google:
+        client-id: ${GOOGLE_CLIENT_ID}
+
+naver:
+  id: ${MAIL_USERNAME}
+  password: ${MAIL_PASSWORD}
+
+spotify:
+  client-id: ${CLIENT_ID}
+  client-secret: ${CLIENT_SECRET}
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  access:
+    expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refresh:
+    expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
+
+kakao-map:
+  api-key: ${KAKAO_MAP_API_KEY}

@@ -43,7 +43,7 @@ public class RecentPlaylistService {
     }
 
     private void validateTracksExist(List<RecentTrackInfo> tracks) {
-        tracks.forEach(trackInfo -> spotifyService.validateTrackExists(trackInfo.trackId()));
+        tracks.forEach(trackInfo -> spotifyService.validateTrackId(trackInfo.trackId()));
     }
 
     /**
