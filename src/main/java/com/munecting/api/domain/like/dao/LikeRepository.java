@@ -1,6 +1,5 @@
 package com.munecting.api.domain.like.dao;
 
-import com.munecting.api.domain.like.dto.response.GetLikedTrackResponseDto;
 import com.munecting.api.domain.like.entity.Like;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -8,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 

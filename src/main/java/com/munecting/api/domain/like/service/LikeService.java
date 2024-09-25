@@ -1,5 +1,6 @@
 package com.munecting.api.domain.like.service;
 
+import com.munecting.api.global.aop.annotation.DistributedLock;
 import com.munecting.api.domain.like.dao.LikeRepository;
 import com.munecting.api.domain.like.dto.response.AddTrackLikeResponseDto;
 import com.munecting.api.domain.like.dto.response.DeleteTrackLikeResponseDto;
@@ -9,6 +10,7 @@ import com.munecting.api.domain.like.entity.Like;
 import com.munecting.api.domain.spotify.service.SpotifyService;
 import com.munecting.api.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class LikeService {
 
@@ -31,7 +34,7 @@ public class LikeService {
         return likeRepository.existsByUserIdAndTrackId(userId, trackId);
     }
 
-    @Transactional
+    @DistributedLock(key = "#trackId + ':' + #userId" )
     public AddTrackLikeResponseDto addTrackLike(String trackId, Long userId) {
         spotifyService.validateTrackExists(trackId);
         userService.validateUserExists(userId);

@@ -1,0 +1,100 @@
+server:
+  port: ${SERVER_PORT}
+
+spring :
+  config:
+    activate:
+      on-profile: "test"
+
+  application:
+    name: munectingV4
+  mvc:
+    path match:
+      matching-strategy: ant_path_matcher
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        show_sql: true
+        format_sql: true
+
+  # H2 Database 설정
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=PostgreSQL # H2 DB 연결 주소 (In-Memory Mode)
+    #url: 'jdbc:h2:~/test'    # H2 DB 연결 주소 (Embedded Mode)
+    username: ${DATASOURCE_USERNAME:sa}
+    password: ${DATASOURCE_PASSWORD}
+
+  # H2 Console 설정
+  h2:
+    console: # H2 DB를 웹에서 관리할 수 있는 기능
+      enabled: true           # H2 Console 사용 여부
+      path: /h2-console       # H2 Console 접속 주소
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
+  #      password: 1234
+  mail:
+    debug: true
+    host: smtp.naver.com
+    port: 465
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
+
+  security:
+    cors:
+      allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
+      allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,PATCH,DELETE}
+      allowed-headers: ${CORS_ALLOWED_HEADERS:*}
+      allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
+      path-pattern: "/**"
+
+    auth:
+      header: ${AUTH_HEADER:Authorization}
+      prefix: ${AUTH_PREFIX:Bearer }
+
+    oauth:
+      kakao:
+        public-key-info: https://kauth.kakao.com/.well-known/jwks.json
+        issuer: https://kauth.kakao.com
+        audience: ${KAKAO_APP_ID}}
+      apple:
+        public-key-url: https://appleid.apple.com/auth/keys
+        issuer: https://appleid.apple.com
+        audience: ${APPLE_APP_ID}
+      google:
+        client-id: ${GOOGLE_CLIENT_ID}
+
+naver:
+  id: ${MAIL_USERNAME}
+  password: ${MAIL_PASSWORD}
+
+spotify:
+  client-id: ${CLIENT_ID}
+  client-secret: ${CLIENT_SECRET}
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  access:
+    expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refresh:
+    expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
+
+kakao-map:
+  api-key: ${KAKAO_MAP_API_KEY}
