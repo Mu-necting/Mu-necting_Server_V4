@@ -7,9 +7,10 @@ import com.munecting.api.domain.uploadedMusic.dto.request.MusicRequestDto;
 import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicIdResponseDto;
 import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicResponseDto;
 import com.munecting.api.domain.uploadedMusic.entity.UploadedMusic;
-import com.munecting.api.domain.user.entity.User;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import com.munecting.api.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,26 +31,42 @@ public class MusicService {
         return saveUploadMusicEntity(uploadedMusic);
     }
 
-    @Transactional(readOnly = true)
-    public List<UploadedMusicResponseDto> getUploadedMusics(Double latitude, Double longitude, Integer radius) {
-        List<UploadedMusic> uploadedMusics = getUploadedMusicByLocationAndRadius(latitude, longitude, radius);
-        List<UploadedMusicResponseDto> uploadedMusicResponseDtos
-                = uploadedMusics.stream()
-                .map(uploadedMusic -> {
-                    MusicResponseDto musicResponseDto = spotifyService.getTrack(uploadedMusic.getTrackId());
-                    User user = null; // 인증 부분 완료되면 수정 예정
-                    return UploadedMusicResponseDto.of(uploadedMusic, musicResponseDto);
-                }).collect(Collectors.toList());
-        return uploadedMusicResponseDtos;
-    }
-
     private UploadedMusicIdResponseDto saveUploadMusicEntity(UploadedMusic uploadedMusic) {
         Long id = uploadedMusicRepository.save(uploadedMusic).getId();
         return UploadedMusicIdResponseDto.of(id);
     }
 
     @Transactional(readOnly = true)
+    public List<UploadedMusicResponseDto> getUploadedMusics(Double latitude, Double longitude, Integer radius) {
+        List<UploadedMusic> uploadedMusics = getUploadedMusicByLocationAndRadius(latitude, longitude, radius);
+
+        String[] trackIds = extractTrackIdsFrom(uploadedMusics);
+        Map<String, MusicResponseDto> musicInfoByTrackId = getMusicInfos(trackIds);
+
+        List<UploadedMusicResponseDto> uploadedMusicResponseDtos
+                = uploadedMusics.stream()
+                .map(uploadedMusic -> {
+                    MusicResponseDto musicInfo = musicInfoByTrackId.get(uploadedMusic.getTrackId());
+                    User user = null; // 인증 부분 완료되면 수정 예정
+                    return UploadedMusicResponseDto.of(uploadedMusic, musicInfo);
+                })
+                .collect(Collectors.toList());
+
+        return uploadedMusicResponseDtos;
+    }
+
+    @Transactional(readOnly = true)
     public List<UploadedMusic> getUploadedMusicByLocationAndRadius(Double latitude, Double longitude, Integer radius) {
         return uploadedMusicRepository.findUploadedMusicByLocationAndRadius(latitude, longitude, radius);
+    }
+
+    private String[] extractTrackIdsFrom(List<UploadedMusic> uploadedMusics) {
+        return uploadedMusics.stream()
+                .map(UploadedMusic::getTrackId)
+                .toArray(String[]::new);
+    }
+
+    private Map<String, MusicResponseDto> getMusicInfos(String[] trackIds) {
+        return spotifyService.getTrackInfoMapByIds(trackIds);
     }
 }
