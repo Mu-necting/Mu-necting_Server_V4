@@ -14,6 +14,7 @@ import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
@@ -76,5 +77,13 @@ public class SpotifyDtoMapper {
                         .collect(Collectors.toList()))
                 .recentlyPlayedId(recentlyPlayedId)
                 .build();
+    }
+
+    public Map<String, MusicResponseDto> convertToMusicResponseDtoMap(List<Track> tracks) {
+        return tracks.stream()
+                .collect(Collectors.toMap(
+                        Track::getId,
+                        this::convertToTrackResponseDto
+                ));
     }
 }
