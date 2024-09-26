@@ -34,6 +34,7 @@ import org.apache.hc.core5.http.ParseException;
 import org.springframework.stereotype.Service;
 
 import static com.munecting.api.global.common.dto.response.Status.*;
+import static com.neovisionaries.i18n.CountryCode.KR;
 import static com.wrapper.spotify.enums.ModelObjectType.*;
 
 @Service
@@ -88,7 +89,7 @@ public class SpotifyService {
         SearchItemRequest searchItemRequest = spotifyApi.searchItem(keyword, modelType.getType())
                 .limit(limit)
                 .offset(offset)
-                .market(CountryCode.KR)
+                .market(KR)
                 .build();
 
         final SearchResult searchResult = handleSpotifyApiCall(
@@ -106,7 +107,7 @@ public class SpotifyService {
         GetAlbumsTracksRequest getAlbumsTracksRequest = spotifyApi.getAlbumsTracks(albumId)
                 .limit(limit)
                 .offset(offset)
-                .market(CountryCode.KR)
+                .market(KR)
                 .build();
 
         final Paging<TrackSimplified> trackSimplifiedPaging = handleSpotifyApiCall(
@@ -122,7 +123,7 @@ public class SpotifyService {
         GetArtistsAlbumsRequest getArtistsAlbumsRequest = spotifyApi.getArtistsAlbums(artistId)
                 .limit(limit)
                 .offset(offset)
-                .market(CountryCode.KR)
+                .market(KR)
                 .build();
 
         final Paging<AlbumSimplified> albumPaging = handleSpotifyApiCall(
@@ -132,6 +133,10 @@ public class SpotifyService {
         return Stream.of(albumPaging.getItems())
                 .map(spotifyDtoMapper::convertToAlbumResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    public void validateTrackExists(String trackId) {
+        fetchTrackById(trackId);
     }
 
     public MusicResponseDto getTrack(String trackId) {
@@ -149,13 +154,9 @@ public class SpotifyService {
         return spotifyDtoMapper.convertToRecentlyPlayedTrackResponseDto(track, recentlyPlayedId);
     }
 
-    public void validateTrackExists(String trackId) {
-        fetchTrackById(trackId);
-    }
-
     private Track fetchTrackById(String trackId) {
         GetTrackRequest getTrackRequest = spotifyApi.getTrack(trackId)
-                .market(CountryCode.KR)
+                .market(KR)
                 .build();
 
         return handleSpotifyApiCall(
