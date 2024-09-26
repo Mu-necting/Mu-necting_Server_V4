@@ -40,7 +40,7 @@ public class MusicService {
     public List<UploadedMusicResponseDto> getUploadedMusics(Double latitude, Double longitude, Integer radius) {
         List<UploadedMusic> uploadedMusics = getUploadedMusicByLocationAndRadius(latitude, longitude, radius);
 
-        String[] trackIds = extractTrackIdsFrom(uploadedMusics);
+        List<String> trackIds = extractTrackIdsFrom(uploadedMusics);
         Map<String, MusicResponseDto> musicInfoByTrackId = getMusicInfos(trackIds);
 
         List<UploadedMusicResponseDto> uploadedMusicResponseDtos
@@ -60,13 +60,13 @@ public class MusicService {
         return uploadedMusicRepository.findUploadedMusicByLocationAndRadius(latitude, longitude, radius);
     }
 
-    private String[] extractTrackIdsFrom(List<UploadedMusic> uploadedMusics) {
+    private List<String> extractTrackIdsFrom(List<UploadedMusic> uploadedMusics) {
         return uploadedMusics.stream()
                 .map(UploadedMusic::getTrackId)
-                .toArray(String[]::new);
+                .collect(Collectors.toList());
     }
 
-    private Map<String, MusicResponseDto> getMusicInfos(String[] trackIds) {
+    private Map<String, MusicResponseDto> getMusicInfos(List<String> trackIds) {
         return spotifyService.getTrackInfoMapByIds(trackIds);
     }
 }

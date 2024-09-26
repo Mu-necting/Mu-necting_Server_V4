@@ -169,18 +169,18 @@ public class SpotifyService {
      * @param trackIds The IDs of the tracks to fetch
      * @return A map of track IDs to MusicResponseDto
      */
-    public Map<String, MusicResponseDto> getTrackInfoMapByIds(String... trackIds) {
+    public Map<String, MusicResponseDto> getTrackInfoMapByIds(List<String> trackIds) {
         List<Track> tracks = fetchDistinctTracksByIds(trackIds);
         return spotifyDtoMapper.convertToMusicResponseDtoMap(tracks);
     }
 
-    private List<Track> fetchDistinctTracksByIds(String... trackIds) {
+    private List<Track> fetchDistinctTracksByIds(List<String> trackIds) {
         List<String> distinctTrackIds = removeDuplicates(trackIds);
         return fetchTracksInChunks(distinctTrackIds);
     }
 
-    private List<String> removeDuplicates(String... trackIds) {
-        return Arrays.stream(trackIds)
+    private List<String> removeDuplicates(List<String> trackIds) {
+        return trackIds.stream()
                 .distinct()
                 .collect(Collectors.toList());
     }
