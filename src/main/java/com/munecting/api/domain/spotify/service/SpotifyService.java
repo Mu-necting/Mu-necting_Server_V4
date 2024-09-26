@@ -10,7 +10,6 @@ import com.munecting.api.domain.track.dto.response.RecentlyPlayedTrackResponseDt
 import com.munecting.api.global.error.exception.EntityNotFoundException;
 import com.munecting.api.global.error.exception.GeneralException;
 import com.munecting.api.global.error.exception.InternalServerException;
-import com.neovisionaries.i18n.CountryCode;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.enums.ModelObjectType;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
@@ -22,9 +21,10 @@ import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 import com.wrapper.spotify.requests.data.albums.GetAlbumsTracksRequest;
 import com.wrapper.spotify.requests.data.artists.GetArtistsAlbumsRequest;
 import com.wrapper.spotify.requests.data.search.SearchItemRequest;
+import com.wrapper.spotify.requests.data.tracks.GetSeveralTracksRequest;
 import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,6 +43,8 @@ public class SpotifyService {
 
     private final SpotifyApi spotifyApi;
     private final SpotifyDtoMapper spotifyDtoMapper;
+
+    private static final int MAX_TRACK_IDS_PER_REQUEST = 50;
 
     public List<MusicResponseDto> searchTracks(String keyword, Integer limit, Integer offset) {
         return searchSpotify(
@@ -158,6 +160,54 @@ public class SpotifyService {
 
         return handleSpotifyApiCall(
                 getTrackRequest::execute,
+                new EntityNotFoundException(TRACK_NOT_FOUND));
+    }
+
+    /**
+     * 여러 트랙의 정보를 가져옵니다.
+     * @param trackIds The IDs of the tracks to fetch
+     * @return A map of track IDs to MusicResponseDto
+     */
+    public Map<String, MusicResponseDto> getTrackInfoMapByIds(String... trackIds) {
+        List<Track> tracks = fetchDistinctTracksByIds(trackIds);
+        return spotifyDtoMapper.convertToMusicResponseDtoMap(tracks);
+    }
+
+    private List<Track> fetchDistinctTracksByIds(String... trackIds) {
+        List<String> distinctTrackIds = removeDuplicates(trackIds);
+        return fetchTracksInChunks(distinctTrackIds);
+    }
+
+    private List<String> removeDuplicates(String... trackIds) {
+        return Arrays.stream(trackIds)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    private List<Track> fetchTracksInChunks(List<String> trackIds) {
+        List<Track> allTracks = new ArrayList<>();
+        for (int i = 0; i < trackIds.size(); i += MAX_TRACK_IDS_PER_REQUEST) {
+            String[] idChunk = getIdChunk(i, trackIds);
+            Track[] fetchedTracks = fetchTrackChunkByIds(idChunk);
+            allTracks.addAll(Arrays.asList(fetchedTracks));
+        }
+
+        return allTracks;
+    }
+
+    private String[] getIdChunk(int startIndex, List<String> trackIds) {
+        List<String> chunk = trackIds.subList(startIndex, Math.min(startIndex + MAX_TRACK_IDS_PER_REQUEST, trackIds.size()));
+
+        return chunk.toArray(String[]::new);
+    }
+
+    private Track[] fetchTrackChunkByIds(String[] trackIds) {
+        GetSeveralTracksRequest request = spotifyApi.getSeveralTracks(trackIds)
+                .market(KR)
+                .build();
+
+        return handleSpotifyApiCall(
+                request::execute,
                 new EntityNotFoundException(TRACK_NOT_FOUND));
     }
 
