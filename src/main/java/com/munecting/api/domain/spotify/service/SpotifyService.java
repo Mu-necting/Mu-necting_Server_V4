@@ -1,7 +1,7 @@
 package com.munecting.api.domain.spotify.service;
 
 
-import com.munecting.api.domain.like.dto.response.GetLikedTrackResponseDto;
+import com.munecting.api.domain.like.dto.response.TrackResponseDto;
 import com.munecting.api.domain.spotify.dto.response.AlbumResponseDto;
 import com.munecting.api.domain.spotify.dto.response.ArtistResponseDto;
 import com.munecting.api.domain.spotify.dto.response.MusicResponseDto;
@@ -144,12 +144,6 @@ public class SpotifyService {
         return spotifyDtoMapper.convertToTrackResponseDto(track);
     }
 
-    public GetLikedTrackResponseDto getLikedTrack(String trackId, Long likeId) {
-        Track track = fetchTrackById(trackId);
-        return spotifyDtoMapper.convertToLikedTrackResponseDto(track, likeId);
-    }
-
-
     private Track fetchTrackById(String trackId) {
         GetTrackRequest getTrackRequest = spotifyApi.getTrack(trackId)
                 .market(KR)
@@ -160,11 +154,6 @@ public class SpotifyService {
                 new EntityNotFoundException(TRACK_NOT_FOUND));
     }
 
-    public Map<String, playedTrackResponseDto> getRecentlyPlayedTrackInfoMap(List<String> trackIds) {
-        List<Track> tracks = fetchDistinctTracksByIds(trackIds);
-        return spotifyDtoMapper.convertToRecentlyPlayedTrackResponseDtoMap(tracks);
-    }
-
     /**
      * 여러 트랙의 정보를 가져옵니다.
      * @param trackIds The IDs of the tracks to fetch
@@ -173,6 +162,16 @@ public class SpotifyService {
     public Map<String, MusicResponseDto> getTrackInfoMapByIds(List<String> trackIds) {
         List<Track> tracks = fetchDistinctTracksByIds(trackIds);
         return spotifyDtoMapper.convertToMusicResponseDtoMap(tracks);
+    }
+
+    public Map<String, TrackResponseDto> getLikeTrackInfoMap(List<String> trackIds) {
+        List<Track> tracks = fetchDistinctTracksByIds(trackIds);
+        return spotifyDtoMapper.convertToLikeTrackResponseDtoMap(tracks);
+    }
+
+    public Map<String, playedTrackResponseDto> getRecentlyPlayedTrackInfoMap(List<String> trackIds) {
+        List<Track> tracks = fetchDistinctTracksByIds(trackIds);
+        return spotifyDtoMapper.convertToRecentlyPlayedTrackResponseDtoMap(tracks);
     }
 
     private List<Track> fetchDistinctTracksByIds(List<String> trackIds) {

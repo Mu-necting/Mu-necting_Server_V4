@@ -1,18 +1,14 @@
 package com.munecting.api.domain.spotify.dto;
 
-import com.munecting.api.domain.like.dto.response.GetLikedTrackResponseDto;
-import com.munecting.api.domain.like.dto.response.LikedTrackArtistResponseDto;
+import com.munecting.api.domain.like.dto.response.LikeArtistResponseDto;
+import com.munecting.api.domain.like.dto.response.TrackResponseDto;
 import com.munecting.api.domain.spotify.dto.response.AlbumResponseDto;
 import com.munecting.api.domain.spotify.dto.response.ArtistResponseDto;
 import com.munecting.api.domain.spotify.dto.response.MusicResponseDto;
 import com.munecting.api.domain.track.dto.response.playedTrackArtistResponseDto;
 import com.munecting.api.domain.track.dto.response.playedTrackResponseDto;
-import com.wrapper.spotify.model_objects.specification.AlbumSimplified;
-import com.wrapper.spotify.model_objects.specification.Artist;
-import com.wrapper.spotify.model_objects.specification.Track;
-import com.wrapper.spotify.model_objects.specification.TrackSimplified;
+import com.wrapper.spotify.model_objects.specification.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,18 +26,20 @@ public class SpotifyDtoMapper {
         return MusicResponseDto.of(track, artistResponseDtos);
     }
 
-    public GetLikedTrackResponseDto convertToLikedTrackResponseDto(Track track, Long likeId) {
-        return GetLikedTrackResponseDto.builder()
-                .trackPreview(track.getPreviewUrl())
-                .trackTitle(track.getName())
-                .trackId(track.getId())
-                .images(track.getAlbum().getImages())
-                .artists(Arrays.stream(track.getArtists())
-                        .map(artist ->
-                                LikedTrackArtistResponseDto.of(artist.getName()))
-                        .collect(Collectors.toList()))
-                .likeId(likeId)
-                .build();
+    public Map<String, TrackResponseDto> convertToLikeTrackResponseDtoMap(List<Track> tracks) {
+        return tracks.stream()
+                .collect(Collectors.toMap(
+                        Track::getId,
+                        this::converToLikeTrackResponseDto
+                ));
+    }
+
+    private TrackResponseDto converToLikeTrackResponseDto(Track track) {
+        List<LikeArtistResponseDto> artistDtos = Stream.of(track.getArtists())
+                .map(LikeArtistResponseDto::of)
+                .toList();
+
+        return TrackResponseDto.of(track, artistDtos);
     }
 
     public MusicResponseDto convertToTrackResponseDto(TrackSimplified trackSimplified) {

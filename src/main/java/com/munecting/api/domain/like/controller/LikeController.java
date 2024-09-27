@@ -2,11 +2,10 @@ package com.munecting.api.domain.like.controller;
 
 import com.munecting.api.domain.like.dto.response.AddTrackLikeResponseDto;
 import com.munecting.api.domain.like.dto.response.DeleteTrackLikeResponseDto;
-import com.munecting.api.domain.like.dto.response.GetLikedTrackListResponseDto;
+import com.munecting.api.domain.like.dto.response.GetLikePlaylistResponseDto;
 import com.munecting.api.domain.like.service.LikeService;
 import com.munecting.api.global.auth.user.UserId;
 import com.munecting.api.global.common.dto.response.ApiResponse;
-import com.munecting.api.global.common.dto.response.Status;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,7 @@ public class LikeController {
             @RequestParam(required = false) Long cursor,
             @RequestParam(required = false, defaultValue = "20") int size
     ) {
-        GetLikedTrackListResponseDto dto = likeService.getLikedTracks(userId, cursor, size);
+        GetLikePlaylistResponseDto dto = likeService.getLikedTracks(userId, cursor, size);
         return ApiResponse.ok(dto);
     }
 

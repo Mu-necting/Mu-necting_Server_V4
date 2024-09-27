@@ -1,26 +1,25 @@
 package com.munecting.api.domain.like.dto.response;
 
 import lombok.Builder;
-import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
 @Builder
-public record GetLikedTrackListResponseDto(
+public record GetLikePlaylistResponseDto(
         Boolean isEmpty,
         Boolean hasNext,
-        List<GetLikedTrackResponseDto> likedTracks
+        List<LikeTrackResponseDto> likePlaylist
 ){
     
-    public static GetLikedTrackListResponseDto of(
+    public static GetLikePlaylistResponseDto of(
             Boolean isEmpty,
             Boolean hasNext,
-            List<GetLikedTrackResponseDto> tracks
+            List<LikeTrackResponseDto> tracks
     ) {
-        return GetLikedTrackListResponseDto.builder()
+        return GetLikePlaylistResponseDto.builder()
                 .isEmpty(isEmpty)
                 .hasNext(hasNext)
-                .likedTracks(tracks)
+                .likePlaylist(tracks)
                 .build();
     }
 }
