@@ -6,7 +6,7 @@ import com.munecting.api.domain.spotify.dto.response.AlbumResponseDto;
 import com.munecting.api.domain.spotify.dto.response.ArtistResponseDto;
 import com.munecting.api.domain.spotify.dto.response.MusicResponseDto;
 import com.munecting.api.domain.spotify.dto.SpotifyDtoMapper;
-import com.munecting.api.domain.track.dto.response.RecentlyPlayedTrackResponseDto;
+import com.munecting.api.domain.track.dto.response.playedTrackResponseDto;
 import com.munecting.api.global.error.exception.EntityNotFoundException;
 import com.munecting.api.global.error.exception.GeneralException;
 import com.munecting.api.global.error.exception.InternalServerException;
@@ -149,10 +149,6 @@ public class SpotifyService {
         return spotifyDtoMapper.convertToLikedTrackResponseDto(track, likeId);
     }
 
-    public RecentlyPlayedTrackResponseDto getRecentlyPlayedTrack(String trackId, Long recentlyPlayedId) {
-        Track track = fetchTrackById(trackId);
-        return spotifyDtoMapper.convertToRecentlyPlayedTrackResponseDto(track, recentlyPlayedId);
-    }
 
     private Track fetchTrackById(String trackId) {
         GetTrackRequest getTrackRequest = spotifyApi.getTrack(trackId)
@@ -162,6 +158,11 @@ public class SpotifyService {
         return handleSpotifyApiCall(
                 getTrackRequest::execute,
                 new EntityNotFoundException(TRACK_NOT_FOUND));
+    }
+
+    public Map<String, playedTrackResponseDto> getRecentlyPlayedTrackInfoMap(List<String> trackIds) {
+        List<Track> tracks = fetchDistinctTracksByIds(trackIds);
+        return spotifyDtoMapper.convertToRecentlyPlayedTrackResponseDtoMap(tracks);
     }
 
     /**

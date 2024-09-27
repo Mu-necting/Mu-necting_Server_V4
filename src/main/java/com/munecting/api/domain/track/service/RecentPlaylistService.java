@@ -7,6 +7,7 @@ import com.munecting.api.domain.track.dto.request.SaveRecentTracksRequestDto;
 import com.munecting.api.domain.track.dto.request.RecentTrackInfo;
 import com.munecting.api.domain.track.dto.response.GetRecentPlaylistResponseDto;
 import com.munecting.api.domain.track.dto.response.RecentlyPlayedTrackResponseDto;
+import com.munecting.api.domain.track.dto.response.playedTrackResponseDto;
 import com.munecting.api.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -122,15 +124,21 @@ public class RecentPlaylistService {
     public GetRecentPlaylistResponseDto getRecentTracks(Long userId, Long cursor, int size) {
         userService.validateUserExists(userId);
 
+        Slice<RecentlyPlayedTrack> recentTracks =
+                getRecentlyPlayedTrackRecords(userId, cursor, size);
+
+        List<String> trackIds = extractTrackIdsFrom(recentTracks);
+        Map<String, playedTrackResponseDto> trackInfoByTrackId = getTrackInfos(trackIds);
+
+        List<RecentlyPlayedTrackResponseDto> responseDtos = mapToRecentlyPlayedTrackResponseDtos(recentTracks, trackInfoByTrackId);
+
+        return GetRecentPlaylistResponseDto.of(recentTracks.isEmpty(), recentTracks.hasNext(), responseDtos);
+    }
+
+    private Slice<RecentlyPlayedTrack> getRecentlyPlayedTrackRecords(Long userId, Long cursor, int size) {
         PageRequest pageRequest = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "id"));
-        Slice<RecentlyPlayedTrack> playedTracks = getPlayedTrackSlice(userId, cursor, pageRequest);
 
-        List<RecentlyPlayedTrackResponseDto> trackInfos = playedTracks.stream()
-                .map(playedTrack ->
-                        spotifyService.getRecentlyPlayedTrack(playedTrack.getTrackId(), playedTrack.getId()))
-                .collect(Collectors.toList());
-
-        return GetRecentPlaylistResponseDto.of(playedTracks.isEmpty(), playedTracks.hasNext(), trackInfos);
+        return getPlayedTrackSlice(userId, cursor, pageRequest);
     }
 
     private Slice<RecentlyPlayedTrack> getPlayedTrackSlice(Long userId, Long cursor, PageRequest pageRequest) {
@@ -139,5 +147,23 @@ public class RecentPlaylistService {
         } else {
             return recentPlaylistRepository.findByUserId(userId, cursor, pageRequest);
         }
+    }
+
+    private List<String> extractTrackIdsFrom(Slice<RecentlyPlayedTrack> tracks) {
+        return tracks.stream()
+                .map(RecentlyPlayedTrack::getTrackId)
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, playedTrackResponseDto> getTrackInfos(List<String> trackIds) {
+        return spotifyService.getRecentlyPlayedTrackInfoMap(trackIds);
+    }
+
+    private List<RecentlyPlayedTrackResponseDto> mapToRecentlyPlayedTrackResponseDtos(Slice<RecentlyPlayedTrack> recentTracks, Map<String, playedTrackResponseDto> trackInfoByTrackId) {
+        return recentTracks.stream()
+                        .map(playedTrack -> RecentlyPlayedTrackResponseDto.of(
+                                playedTrack.getId(),
+                                trackInfoByTrackId.get(playedTrack.getTrackId())))
+                        .collect(Collectors.toList());
     }
 }
