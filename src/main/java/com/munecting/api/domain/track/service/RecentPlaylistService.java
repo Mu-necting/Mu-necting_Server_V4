@@ -149,8 +149,8 @@ public class RecentPlaylistService {
         }
     }
 
-    private List<String> extractTrackIdsFrom(Slice<RecentlyPlayedTrack> tracks) {
-        return tracks.stream()
+    private List<String> extractTrackIdsFrom(Slice<RecentlyPlayedTrack> recentTracks) {
+        return recentTracks.stream()
                 .map(RecentlyPlayedTrack::getTrackId)
                 .collect(Collectors.toList());
     }
