@@ -34,7 +34,7 @@ public class SpotifyDtoMapper {
                 ));
     }
 
-    private TrackResponseDto converToLikeTrackResponseDto(Track track) {
+    private TrackResponseDto convertToLikeTrackResponseDto(Track track) {
         List<LikeArtistResponseDto> artistDtos = Stream.of(track.getArtists())
                 .map(LikeArtistResponseDto::of)
                 .toList();
