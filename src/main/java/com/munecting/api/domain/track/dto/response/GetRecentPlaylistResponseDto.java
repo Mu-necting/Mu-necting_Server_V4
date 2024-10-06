@@ -8,17 +8,18 @@ import java.util.List;
 public record GetRecentPlaylistResponseDto(
         Boolean isEmpty,
         Boolean hasNext,
-        List<RecentlyPlayedTrackResponseDto> tracks
+        List<RecentlyPlayedTrackResponseDto> recentlyPlaylist
 ) {
+
     public static GetRecentPlaylistResponseDto of(
             Boolean isEmpty,
             Boolean hasNext,
-            List<RecentlyPlayedTrackResponseDto> recentlyPlayedTrackInfos
+            List<RecentlyPlayedTrackResponseDto> recentlyPlayedTracks
     ) {
         return GetRecentPlaylistResponseDto.builder()
                 .isEmpty(isEmpty)
                 .hasNext(hasNext)
-                .tracks(recentlyPlayedTrackInfos)
+                .recentlyPlaylist(recentlyPlayedTracks)
                 .build();
     }
 }

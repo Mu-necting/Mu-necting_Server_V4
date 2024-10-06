@@ -1,11 +1,8 @@
 package com.munecting.api.domain.like.service;
 
+import com.munecting.api.domain.like.dto.response.*;
 import com.munecting.api.global.aop.annotation.DistributedLock;
 import com.munecting.api.domain.like.dao.LikeRepository;
-import com.munecting.api.domain.like.dto.response.AddTrackLikeResponseDto;
-import com.munecting.api.domain.like.dto.response.DeleteTrackLikeResponseDto;
-import com.munecting.api.domain.like.dto.response.GetLikedTrackListResponseDto;
-import com.munecting.api.domain.like.dto.response.GetLikedTrackResponseDto;
 import com.munecting.api.domain.like.entity.Like;
 import com.munecting.api.domain.spotify.service.SpotifyService;
 import com.munecting.api.domain.user.service.UserService;
@@ -18,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,7 +37,7 @@ public class LikeService {
         spotifyService.validateTrackExists(trackId);
         userService.validateUserExists(userId);
 
-        boolean isLikedTrack = isTrackLikedByUser(trackId, userId);
+        boolean isLikedTrack = likeRepository.existsByUserIdAndTrackId(userId, trackId);
         if (!isLikedTrack) {
             Like like = Like.toEntity(userId, trackId);
             likeRepository.save(like);
@@ -51,18 +49,23 @@ public class LikeService {
     }
 
     @Transactional(readOnly = true)
-    public GetLikedTrackListResponseDto getLikedTracks(Long userId, Long cursor, int size) {
+    public GetLikePlaylistResponseDto getLikedTracks(Long userId, Long cursor, int size) {
+        userService.validateUserExists(userId);
+        
+        Slice<Like> likes = getLikeRecords(userId, cursor, size);
+
+        List<String> trackIds = extractTrackIdsFrom(likes);
+        Map<String, TrackResponseDto> trackInfoByTrackId = getTrackInfos(trackIds);
+
+        List<LikeTrackResponseDto> likedTracks = mapToLikeTrackResponseDto(likes, trackInfoByTrackId);
+
+        return GetLikePlaylistResponseDto.of(likes.isEmpty(), likes.hasNext(), likedTracks);
+    }
+
+    private Slice<Like> getLikeRecords(Long userId, Long cursor, int size) {
         Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "id"));
-        Slice<Like> likes = getLikeSlice(userId, cursor, pageable);
 
-        List<GetLikedTrackResponseDto> likedTracks = likes.stream()
-                .map(like -> {
-                    String trackId = like.getTrackId();
-                    return spotifyService.getLikedTrack(trackId, like.getId());
-                })
-                .collect(Collectors.toList());
-
-        return GetLikedTrackListResponseDto.of(likes.isEmpty(), likes.hasNext(), likedTracks);
+        return getLikeSlice(userId, cursor, pageable);
     }
 
     @Transactional(readOnly = true)
@@ -72,6 +75,24 @@ public class LikeService {
         } else {
             return likeRepository.findByUserId(userId, cursor, pageable);
         }
+    }
+
+    private List<String> extractTrackIdsFrom(Slice<Like> likes) {
+        return likes.stream()
+                .map(Like::getTrackId)
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, TrackResponseDto> getTrackInfos(List<String> trackIds) {
+        return spotifyService.getLikeTrackInfoMap(trackIds);
+    }
+
+    private List<LikeTrackResponseDto> mapToLikeTrackResponseDto(Slice<Like> likes, Map<String, TrackResponseDto> trackInfoByTrackId) {
+        return likes.stream()
+                .map(like -> LikeTrackResponseDto.of(
+                        like.getId(),
+                        trackInfoByTrackId.get(like.getTrackId())))
+                .collect(Collectors.toList());
     }
 
     @Transactional
