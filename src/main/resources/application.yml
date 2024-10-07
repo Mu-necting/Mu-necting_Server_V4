@@ -19,9 +19,9 @@ spring :
           timezone: Asia/Seoul
 
   datasource:
-    url: jdbc:${DATASOURCE}://${HOST}:${PORT}/${TABLE}
-    username: ${DATASOURCE_USERNAME}
-    password: ${DATASOURCE_PASSWORD}
+    url: jdbc:${DATASOURCE}://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       initialization-fail-timeout: 3600
@@ -31,20 +31,7 @@ spring :
       host: ${REDIS_HOST}
       port: 6379
 #      password: 1234
-  mail:
-    debug: true
-    host: smtp.naver.com
-    port: 465
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-          ssl:
-            enable: true
+
 
   security:
     cors:
@@ -70,9 +57,7 @@ spring :
       google:
         client-id: ${GOOGLE_CLIENT_ID}
 
-naver:
-  id: ${MAIL_USERNAME}
-  password: ${MAIL_PASSWORD}
+
 
 spotify:
   client-id: ${CLIENT_ID}
