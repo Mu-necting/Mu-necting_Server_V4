@@ -49,14 +49,14 @@ jobs:
       - name: Make zip file
         run: |
           mkdir develop-deploy
-          cp ./src/main/resources/env.properties ./deploy/.env
-          cp ./docker-compose.blue.yml ./deploy/
-          cp ./docker-compose.green.yml ./deploy/
-          cp ./appspec.yml ./deploy/
-          cp ./Dockerfile ./deploy/
-          cp ./scripts/*.sh ./deploy/
-          cp ./build/libs/*.jar ./deploy/
-          zip -r -qq -j ./munecting.zip ./deploy
+          cp ./src/main/resources/env.properties ./develop-deploy/.env
+          cp ./docker-compose.blue.yml ./develop-deploy/
+          cp ./docker-compose.green.yml ./develop-deploy/
+          cp ./appspec.yml ./develop-deploy/
+          cp ./Dockerfile ./develop-deploy/
+          cp ./scripts/*.sh ./develop-deploy/
+          cp ./build/libs/*.jar ./develop-deploy/
+          zip -r -qq -j ./munecting.zip ./develop-deploy
 
       # AWS 접속
       - name: Configure AWS credentials
