@@ -30,6 +30,9 @@ dependencies {
 	implementation 'org.json:json:20240303'
 	implementation 'org.springframework.boot:spring-boot-starter-validation:2.5.2'
 
+	// Actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 

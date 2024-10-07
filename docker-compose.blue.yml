@@ -1,0 +1,10 @@
+#blue
+version: '3'
+services:
+  mohazi-api:
+    build: .
+    ports:
+      - "8081:8080"
+    container_name: spring-blue
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
