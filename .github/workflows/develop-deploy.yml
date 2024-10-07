@@ -69,3 +69,10 @@ jobs:
       # S3에 저장
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./munecting.zip s3://develop-code-deploy-munecting
+
+      # Code Deploy 실행
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name munecting-develop-deploy-origin
+          --deployment-config-name CodeDeployDefault.OneAtATime
+          --deployment-group-name munecting-develop-deploy-origin-group
+          --s3-location bucket=develop-code-deploy-munecting,bundleType=zip,key=munecting.zip
