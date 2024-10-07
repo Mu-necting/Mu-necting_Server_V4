@@ -30,7 +30,7 @@ public class SpotifyDtoMapper {
         return tracks.stream()
                 .collect(Collectors.toMap(
                         Track::getId,
-                        this::converToLikeTrackResponseDto
+                        this::convertToLikeTrackResponseDto
                 ));
     }
 
