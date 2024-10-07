@@ -19,11 +19,18 @@ jobs:
           distribution: 'temurin'
 
       # 환경 변수 파일 생성
-      - name: Set environment values
+      - name: Set environment values for main application
         run: |
-          cd ./src/main/resources # resources 폴더로 이동
-          touch ./env.properties # env.properties 파일 생성
-          echo "${{ secrets.ENV }}" > ./env.properties # github actions secret에서 가져온 값을 application.yml 파일에 씁니다
+          cd ./src/main/resources
+          touch ./env.properties
+          echo "${{ secrets.ENV }}" > ./env.properties
+        shell: bash
+
+      - name: Set environment values for test
+        run: |
+          cd ./src/test/resources
+          touch ./env.properties
+          echo "${{ secrets.TEST_ENV }}" > ./env.properties
         shell: bash
 
       # Gradle에 권한 부여
