@@ -6,3 +6,9 @@ services:
     ports:
       - "8081:8080"
     container_name: spring-blue
+    networks:
+      - munecting-network
+
+networks:
+  munecting-network:
+    driver: bridge
