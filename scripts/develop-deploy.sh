@@ -4,11 +4,11 @@ cd /home/ubuntu/app
 
 DOCKER_APP_NAME=spring
 
-# 실행중인 blue가 있는지
-EXIST_BLUE=$(docker-compose -p ${DOCKER_APP_NAME}-blue -f docker-compose.blue.yml ps | grep running)
+# blue가 실행 중인지 확인
+EXIST_BLUE=$(docker-compose -p ${DOCKER_APP_NAME}-blue -f docker-compose.blue.yml ps -q | xargs docker inspect -f '{{.State.Running}}')
 
-# green이 실행중이면 blue up
-if [ -z "$EXIST_BLUE" ]; then
+# green이 실행 중이면 blue를 띄움
+if [ "$EXIST_BLUE" != "true" ]; then
 	echo "blue up"
 	docker-compose -p ${DOCKER_APP_NAME}-blue -f docker-compose.blue.yml up -d --build
 
@@ -17,7 +17,7 @@ if [ -z "$EXIST_BLUE" ]; then
 	docker-compose -p ${DOCKER_APP_NAME}-green -f docker-compose.green.yml down
 	docker image prune -af # 사용하지 않는 이미지 삭제
 
-# blue가 실행중이면 green up
+# blue가 실행 중이면 green을 띄움
 else
 	echo "green up"
 	docker-compose -p ${DOCKER_APP_NAME}-green -f docker-compose.green.yml up -d --build
