@@ -49,8 +49,8 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/css/**","/images/**","/js/**","/favicon.ico",
             "/musics/**",
-            "/address/**"
-
+            "/address/**",
+            "/actuator/health"
     };
 
     @Bean
