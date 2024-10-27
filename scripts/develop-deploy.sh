@@ -2,6 +2,19 @@
 
 cd /home/ubuntu/app
 
+# Redis 컨테이너 실행 여부 확인
+REDIS_CONTAINER_STATUS=$(docker ps | grep redis)
+if [ -z "$REDIS_CONTAINER_STATUS" ]; then
+  echo "Redis 컨테이너가 실행 중이지 않습니다"
+  echo ">>> Pulling Redis image"
+  docker compose -f docker-compose.redis.yml pull redis
+  echo ">>> Starting Redis container"
+  docker compose -f docker-compose.redis.yml up -d redis
+else
+  echo "Redis 컨테이너가 이미 실행 중입니다."
+fi
+
+
 DOCKER_APP_NAME=spring
 
 # blue가 실행 중인지 확인
