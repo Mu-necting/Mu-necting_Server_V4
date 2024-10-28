@@ -37,7 +37,6 @@ public class SecurityConfig {
     private static final String[] ALLOWED_URL = {
             "/api/auth/**",
             "/error/**",
-            "/reissue",
             "/v2/api-docs",
             "/swagger-resources",
             "/swagger-resources/**",
@@ -48,9 +47,9 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/css/**","/images/**","/js/**","/favicon.ico",
-            "/musics/**",
-            "/address/**"
-
+            "/api/musics/**",
+            "/api/address/**",
+            "/actuator/health"
     };
 
     @Bean

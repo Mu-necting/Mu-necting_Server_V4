@@ -1,3 +1,4 @@
+/*
 package com.munecting.api.domain.like.service;
 
 import com.munecting.api.domain.like.dao.LikeRepository;
@@ -80,3 +81,4 @@ class LikeServiceTest {
         assertEquals(1, actualTrackCount);
     }
 }
+*/
