@@ -13,11 +13,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 
 @RestControllerAdvice
@@ -43,7 +46,7 @@ public class GlobalExceptionHandler {
                 });
 
         ApiResponse<Map<String, String>> response = ApiResponse.onFailure(Status.BAD_REQUEST.getCode(), Status.BAD_REQUEST.getMessage(), errors);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        return ResponseEntity.status(BAD_REQUEST).body(response);
     }
 
     /**
@@ -55,8 +58,8 @@ public class GlobalExceptionHandler {
     ) {
         log.warn(">>> handle: MissingServletRequestParameterException", e);
 
-        ApiResponse<Object> response = ApiResponse.onFailure(HttpStatus.BAD_REQUEST.toString(), e.getMessage(), null);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        ApiResponse<Object> response = ApiResponse.onFailure(BAD_REQUEST.toString(), e.getMessage(), null);
+        return ResponseEntity.status(BAD_REQUEST).body(response);
     }
 
     /**
@@ -83,6 +86,17 @@ public class GlobalExceptionHandler {
 
         ApiResponse<Object> response = ApiResponse.onFailure(HttpStatus.NOT_FOUND.toString(), e.getMessage(), null);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    /**
+     * 업로드 최대 용량을 초과했을 경우
+     */
+    @ExceptionHandler({MaxUploadSizeExceededException.class})
+    protected ResponseEntity<ApiResponse<?>> handleMultipartException(MaxUploadSizeExceededException e) {
+        log.error(">> handle: MaxUploadSizeExceededException {}", e.getMessage());
+
+        ApiResponse<Object> response = ApiResponse.onFailure(BAD_REQUEST.toString(), e.getMessage(), null);
+        return ResponseEntity.status(BAD_REQUEST).body(response);
     }
 
     /**
