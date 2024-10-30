@@ -4,6 +4,7 @@ import com.munecting.api.global.common.dto.response.ApiResponse;
 import com.munecting.api.global.common.dto.response.Body;
 import com.munecting.api.global.common.dto.response.Status;
 import com.munecting.api.global.error.exception.GeneralException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,28 @@ public class GlobalExceptionHandler {
 
         ApiResponse<Map<String, String>> response = ApiResponse.onFailure(Status.BAD_REQUEST.getCode(), Status.BAD_REQUEST.getMessage(), errors);
         return ResponseEntity.status(BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<ApiResponse<?>> handleConstraintViolationException(ConstraintViolationException e) {
+        log.error(">>> handle: ConstraintViolationException | {}", e.getMessage());
+
+        Map<String, String> errors = new LinkedHashMap<>();
+
+        e.getConstraintViolations().forEach(violation -> {
+            // PropertyPath를 문자열로 변환
+            String fieldName = violation.getPropertyPath().toString();
+            // 마지막 점 이후의 문자열을 추출, 점이 없으면 전체 문자열을 반환
+            String lastFieldName = fieldName.contains(".") ?
+                    fieldName.substring(fieldName.lastIndexOf('.') + 1) : fieldName;
+
+            String errorMessage = Optional.ofNullable(violation.getMessage()).orElse("");
+            errors.merge(lastFieldName, errorMessage,
+                    (existingErrorMessage, newErrorMessage) -> existingErrorMessage + ", " + newErrorMessage);
+        });
+
+        ApiResponse<Map<String, String>> response = ApiResponse.onFailure(Status.BAD_REQUEST.getCode(), Status.BAD_REQUEST.getMessage(), errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     /**
