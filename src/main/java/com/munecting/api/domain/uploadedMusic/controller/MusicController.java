@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MusicController {
 
     private final MusicService musicService;
-
+    // 인증 리팩토링 필요
     @PostMapping("")
     @Operation(summary = "음악 업로드 하기")
     public ApiResponse<?> uploadMusic(
