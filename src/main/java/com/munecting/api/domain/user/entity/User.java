@@ -36,4 +36,16 @@ public class User extends BaseEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
+
+    public String updateNickname(String nickname) {
+        this.nickname = nickname;
+
+        return this.nickname;
+    }
+
+    public String updateProfileImageUrl(String imgUrl) {
+        this.profileImageUrl = imgUrl;
+
+        return this.profileImageUrl;
+    }
 }
