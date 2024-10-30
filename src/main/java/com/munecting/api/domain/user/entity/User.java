@@ -4,6 +4,7 @@ import com.munecting.api.domain.user.constant.Role;
 import com.munecting.api.domain.user.constant.SocialType;
 import com.munecting.api.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import lombok.*;
@@ -23,7 +24,7 @@ public class User extends BaseEntity {
     @NotNull
     private String socialId;
 
-    @Column(nullable = true)
+    @NotBlank
     private String nickname;
 
     @Column(nullable = true)
