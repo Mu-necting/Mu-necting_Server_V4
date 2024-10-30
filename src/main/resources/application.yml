@@ -56,6 +56,12 @@ spring :
       google:
         client-id: ${GOOGLE_CLIENT_ID}
 
+  servlet:
+    multipart:
+      maxFileSize: 3MB # 파일 하나의 최대 크기
+      maxRequestSize: 10MB  # 한 번에 최대 업로드 가능 용량
+      resolve-lazily: true
+
 
 cloud:
   aws:
