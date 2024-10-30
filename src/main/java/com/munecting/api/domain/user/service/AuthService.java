@@ -88,6 +88,7 @@ public class AuthService {
         return issueTokensForUser(user);
     }
 
+    //TODO: 이메일 제거, 닉네임 자체 생성
     private User createUser(String socialId, String email, SocialType socialType) {
         User newUser = User.builder()
                 .socialId(socialId)
