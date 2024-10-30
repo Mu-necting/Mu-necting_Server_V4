@@ -74,11 +74,11 @@ public class UserService {
             return user.getNickname();
         }
 
-        validateNickname(nickname);
+        validateNickname(user, nickname);
         return user.updateNickname(nickname);
     }
 
-    private void validateNickname(String nickname) {
+    private void validateNickname(User existingUser, String nickname) {
         if (nickname.length() < MIN_LENGTH || nickname.length() > MAX_LENGTH) {
             throw new InvalidValueException(Status.BAD_REQUEST, NICKNAME_LENGTH_ERROR_MESSAGE);
         }
@@ -88,7 +88,8 @@ public class UserService {
         }
 
         // 중복 검사
-        if (userRepository.existsByNickname(nickname)) {
+        if (!existingUser.getNickname().equals(nickname)
+                && userRepository.existsByNickname(nickname)) {
             throw new InvalidValueException(Status.CONFLICT, NICKNAME_DUPLICATED_ERROR_MESSAGE);
         }
     }
