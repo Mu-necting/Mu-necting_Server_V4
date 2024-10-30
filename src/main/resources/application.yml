@@ -57,6 +57,20 @@ spring :
         client-id: ${GOOGLE_CLIENT_ID}
 
 
+cloud:
+  aws:
+    s3:
+      bucket: munecting
+      path:
+        profile-image: profileImage
+
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${AWS_S3_ACCESS_KEY_ID}
+      secretKey: ${AWS_S3_SECRET_ACCESS_KEY}
 
 spotify:
   client-id: ${CLIENT_ID}
