@@ -72,6 +72,9 @@ dependencies {
 	// Actuator
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+	//aws
+	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
+
 	// Etc
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'

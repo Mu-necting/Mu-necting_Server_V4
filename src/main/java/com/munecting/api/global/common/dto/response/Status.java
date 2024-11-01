@@ -47,6 +47,9 @@ public enum Status {
     // 분산락 오류 응답
     DISTRIBUTED_LOCK_ACQUISITION_FAILURE(HttpStatus.CONFLICT, "LOCK409", "잠시 후에 시도해주세요."),
     DISTRIBUTED_LOCK_TEMP_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "LOCK500", "일시적인 오류가 발생하였습니다. 잠시 후에 시도해주세요"),
+
+    // AWS 오류 응답
+    AWS_S3_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AWS500", "이미지 업로드에 실패하였습니다."),
     ;
 
     private final HttpStatus httpStatus;
