@@ -38,7 +38,6 @@ spring :
       allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
       allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,PATCH,DELETE}
       allowed-headers: ${CORS_ALLOWED_HEADERS:*}
-      allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
       path-pattern: "/**"
 
     auth:
@@ -57,7 +56,27 @@ spring :
       google:
         client-id: ${GOOGLE_CLIENT_ID}
 
+  servlet:
+    multipart:
+      maxFileSize: 3MB # 파일 하나의 최대 크기
+      maxRequestSize: 10MB  # 한 번에 최대 업로드 가능 용량
+      resolve-lazily: true
 
+
+cloud:
+  aws:
+    s3:
+      bucket: munecting
+      path:
+        profile-image: profileImage
+
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${AWS_S3_ACCESS_KEY_ID}
+      secretKey: ${AWS_S3_SECRET_ACCESS_KEY}
 
 spotify:
   client-id: ${CLIENT_ID}

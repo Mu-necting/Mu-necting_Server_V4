@@ -31,7 +31,7 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
 
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(corsAllowedOrigins));
+        config.setAllowedOriginPatterns(List.of(corsAllowedOrigins));
         config.setAllowedMethods(List.of(corsAllowedMethods));
         config.setAllowedHeaders(List.of(corsAllowedHeaders));
         config.setExposedHeaders(List.of(authHeader));
@@ -41,6 +41,5 @@ public class CorsConfig {
         source.registerCorsConfiguration(corsPathPattern, config);
 
         return new CorsFilter(source);
-
     }
 }
