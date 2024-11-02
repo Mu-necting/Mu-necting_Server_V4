@@ -6,6 +6,7 @@ import com.munecting.api.domain.uploadedMusic.dao.UploadedMusicRepository;
 import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.domain.user.dto.request.UpdateProfileRequestDto;
 import com.munecting.api.domain.user.dto.response.UpdateProfileResponseDto;
+import com.munecting.api.domain.user.dto.response.UserResponseDto;
 import com.munecting.api.domain.user.entity.User;
 import com.munecting.api.global.common.dto.response.Status;
 import com.munecting.api.global.error.exception.EntityNotFoundException;

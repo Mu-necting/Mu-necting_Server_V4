@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CommentService commentService;
-    // 인증 리팩토링 필요
     @PostMapping("/comments")
     @Operation(summary = "댓글 등록하기")
     public ApiResponse<?> createComment(

@@ -39,9 +39,9 @@ public class UploadedMusic extends BaseEntity {
     @NotNull
     private Integer uploadDuration;
 
-    public static UploadedMusic toEntity (MusicRequestDto musicRequestDto) {
+    public static UploadedMusic toEntity (Long userId, MusicRequestDto musicRequestDto) {
         return UploadedMusic.builder().
-                userId(musicRequestDto.userId())
+                userId(userId)
                 .trackId(musicRequestDto.trackId())
                 .latitude(musicRequestDto.latitude())
                 .longitude(musicRequestDto.longitude())
