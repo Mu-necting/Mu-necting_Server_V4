@@ -6,6 +6,8 @@ import com.munecting.api.domain.comment.dto.response.CommentIdResponseDto;
 import com.munecting.api.domain.comment.dto.response.CommentResponseDto;
 import com.munecting.api.domain.comment.entity.Comment;
 import com.munecting.api.domain.spotify.service.SpotifyService;
+import com.munecting.api.domain.user.entity.User;
+import com.munecting.api.domain.user.service.UserService;
 import com.munecting.api.global.error.exception.EntityNotFoundException;
 import com.munecting.api.global.common.dto.response.PagedResponseDto;
 import com.munecting.api.global.common.dto.response.Status;
@@ -27,12 +29,14 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final SpotifyService spotifyService;
+    private final UserService userService;
 
     @Transactional
-    public CommentIdResponseDto createComment(CommentRequestDto commentRequestDto) {
+    public CommentIdResponseDto createComment(Long userId, CommentRequestDto commentRequestDto) {
+        User user = userService.findUserByIdOrThrow(userId);
         String trackId = commentRequestDto.trackId();
         spotifyService.validateTrackExists(trackId);
-        Comment comment = Comment.toEntity(commentRequestDto);
+        Comment comment = Comment.toEntity(userId, commentRequestDto);
         Long id = saveComment(comment);
         return CommentIdResponseDto.of(id);
     }

@@ -4,9 +4,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record CommentRequestDto(
 
-        @NotNull(message = "사용자 id는 필수값입니다.")
-        Long userId,
-
         @NotNull(message = "trackId는 필수값입니다.")
         String trackId,
 

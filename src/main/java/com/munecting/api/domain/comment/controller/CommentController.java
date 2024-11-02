@@ -4,6 +4,7 @@ import com.munecting.api.domain.comment.dto.request.CommentRequestDto;
 import com.munecting.api.domain.comment.dto.response.CommentIdResponseDto;
 import com.munecting.api.domain.comment.dto.response.CommentResponseDto;
 import com.munecting.api.domain.comment.service.CommentService;
+import com.munecting.api.global.auth.user.UserId;
 import com.munecting.api.global.common.dto.response.ApiResponse;
 import com.munecting.api.global.common.dto.response.PagedResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,9 +34,10 @@ public class CommentController {
     @PostMapping("/comments")
     @Operation(summary = "댓글 등록하기")
     public ApiResponse<?> createComment(
+            @UserId Long userId,
             @RequestBody CommentRequestDto commentRequestDto
     ) {
-        CommentIdResponseDto commentIdResponseDto = commentService.createComment(commentRequestDto);
+        CommentIdResponseDto commentIdResponseDto = commentService.createComment(userId, commentRequestDto);
         return ApiResponse.created(commentIdResponseDto);
     }
 
@@ -62,7 +64,7 @@ public class CommentController {
     @Operation(summary = "댓글 조회하기")
     public ApiResponse<?> getCommentsByTrackId(
             @PathVariable (name = "trackId") String trackId,
-            @RequestParam (name = "cursor") LocalDateTime cursor,
+            @RequestParam (name = "cursor", required = false) LocalDateTime cursor,
             @RequestParam (name = "limit") int limit
     ) {
         PagedResponseDto<CommentResponseDto> commentResponseDtoList = commentService.getCommentsByTrackId(trackId, cursor, limit);
