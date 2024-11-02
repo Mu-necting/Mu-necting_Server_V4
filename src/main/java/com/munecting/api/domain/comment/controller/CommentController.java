@@ -43,19 +43,21 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     @Operation(summary = "댓글 삭제하기")
     public ApiResponse<?> deleteComment(
+            @UserId Long userId,
             @PathVariable Long commentId
     ) {
-        CommentIdResponseDto commentIdResponseDto = commentService.deleteCommentById(commentId);
+        CommentIdResponseDto commentIdResponseDto = commentService.deleteCommentById(userId, commentId);
         return ApiResponse.ok(commentIdResponseDto);
     }
 
     @PatchMapping("/comments/{commentId}")
     @Operation(summary = "댓글 수정하기")
     public ApiResponse<?> updateComment(
+            @UserId Long userId,
             @PathVariable (name = "commentId") Long commentId,
             @RequestBody CommentRequestDto commentRequestDto
     ) {
-        CommentIdResponseDto commentIdResponseDto = commentService.updateComment(commentId, commentRequestDto);
+        CommentIdResponseDto commentIdResponseDto = commentService.updateComment(userId, commentId, commentRequestDto);
         return ApiResponse.ok(commentIdResponseDto);
     }
 

@@ -13,6 +13,7 @@ import com.munecting.api.global.error.exception.EntityNotFoundException;
 import com.munecting.api.global.common.dto.response.PagedResponseDto;
 import com.munecting.api.global.common.dto.response.Status;
 
+import com.munecting.api.global.error.exception.UnauthorizedException;
 import java.time.LocalDateTime;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class CommentService {
 
     @Transactional
     public CommentIdResponseDto createComment(Long userId, CommentRequestDto commentRequestDto) {
-        User user = userService.findUserByIdOrThrow(userId);
+        userService.validateUserExists(userId);
         String trackId = commentRequestDto.trackId();
         spotifyService.validateTrackExists(trackId);
         Comment comment = Comment.toEntity(userId, commentRequestDto);
@@ -73,8 +74,9 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentIdResponseDto updateComment(Long commentId, CommentRequestDto commentRequestDto) {
+    public CommentIdResponseDto updateComment(Long userId, Long commentId, CommentRequestDto commentRequestDto) {
         Comment comment = getCommentById(commentId);
+        validateCommentWriter(userId, comment);
         comment.updateContent(commentRequestDto.content());
         return CommentIdResponseDto.of(commentId);
     }
@@ -86,13 +88,20 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentIdResponseDto deleteCommentById(Long commentId) {
+    public CommentIdResponseDto deleteCommentById(Long userId, Long commentId) {
         Comment comment = getCommentById(commentId);
+        validateCommentWriter(userId, comment);
         deleteComment(comment);
         return CommentIdResponseDto.of(commentId);
     }
 
     private void deleteComment(Comment comment) {
         commentRepository.delete(comment);
+    }
+
+    private void validateCommentWriter(Long userId, Comment comment) {
+        if (!userId.equals(comment.getUserId())) {
+            throw new UnauthorizedException(Status.NOT_COMMENT_WRITER);
+        }
     }
 }
