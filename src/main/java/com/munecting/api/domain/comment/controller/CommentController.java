@@ -62,11 +62,12 @@ public class CommentController {
     @GetMapping("/{trackId}/comments")
     @Operation(summary = "댓글 조회하기")
     public ApiResponse<?> getCommentsByTrackId(
+            @UserId Long userId,
             @PathVariable (name = "trackId") String trackId,
             @RequestParam (name = "cursor", required = false) LocalDateTime cursor,
             @RequestParam (name = "limit") int limit
     ) {
-        PagedResponseDto<CommentResponseDto> commentResponseDtoList = commentService.getCommentsByTrackId(trackId, cursor, limit);
+        PagedResponseDto<CommentResponseDto> commentResponseDtoList = commentService.getCommentsByTrackId(userId, trackId, cursor, limit);
         return ApiResponse.ok(commentResponseDtoList);
     }
 }

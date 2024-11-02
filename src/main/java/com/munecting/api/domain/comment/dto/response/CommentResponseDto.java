@@ -1,26 +1,28 @@
 package com.munecting.api.domain.comment.dto.response;
 
 import com.munecting.api.domain.comment.entity.Comment;
+import com.munecting.api.domain.user.dto.response.UserResponseDto;
 import java.time.LocalDateTime;
 import lombok.Builder;
 
 @Builder
 public record CommentResponseDto (
-         Long userId,
+         UserResponseDto userResponseDto,
          String trackId,
          String content,
          LocalDateTime createdAt,
-         LocalDateTime updatedAt
-         // 내가 쓴 댓글인지 판별하는 필드 필요 -> 인증 부분 완성되면 추가 예정
+         LocalDateTime updatedAt,
+         Boolean isOwner
 ) {
 
-    public static CommentResponseDto of(Comment comment) {
+    public static CommentResponseDto of(UserResponseDto userResponseDto, Comment comment, Boolean isOwner) {
         return CommentResponseDto.builder()
-                .userId(comment.getUserId())
+                .userResponseDto(userResponseDto)
                 .trackId(comment.getTrackId())
                 .content(comment.getContent())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
+                .isOwner(isOwner)
                 .build();
     }
 }

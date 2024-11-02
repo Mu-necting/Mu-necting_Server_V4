@@ -6,6 +6,7 @@ import com.munecting.api.domain.comment.dto.response.CommentIdResponseDto;
 import com.munecting.api.domain.comment.dto.response.CommentResponseDto;
 import com.munecting.api.domain.comment.entity.Comment;
 import com.munecting.api.domain.spotify.service.SpotifyService;
+import com.munecting.api.domain.user.dto.response.UserResponseDto;
 import com.munecting.api.domain.user.entity.User;
 import com.munecting.api.domain.user.service.UserService;
 import com.munecting.api.global.error.exception.EntityNotFoundException;
@@ -14,9 +15,12 @@ import com.munecting.api.global.common.dto.response.Status;
 
 import java.time.LocalDateTime;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,11 +50,19 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public PagedResponseDto<CommentResponseDto> getCommentsByTrackId(String trackId, LocalDateTime cursor, int limit) {
+    public PagedResponseDto<CommentResponseDto> getCommentsByTrackId(Long userId, String trackId, LocalDateTime cursor, int limit) {
         Pageable pageable = PageRequest.of(0, limit);
-        //Timestamp cursorTimestamp = LocalDateTimeUtil.toTimestamp(cursor);
         Page<Comment> pagedComment = getCommentsByTrackIdWithCursor(trackId, cursor, pageable);
-        Page<CommentResponseDto> pagedCommentResponseDto = pagedComment.map(CommentResponseDto::of);
+        List<CommentResponseDto> commentResponseDtos = pagedComment.stream()
+                .map(comment -> {
+                    User commentWriter = userService.findUserByIdOrThrow(comment.getUserId());
+                    UserResponseDto userResponseDto = UserResponseDto.of(commentWriter.getId(), commentWriter.getNickname(), commentWriter.getProfileImageUrl());
+                    Boolean isOwner = userId.equals(commentWriter.getId());
+                    return CommentResponseDto.of(userResponseDto, comment, isOwner);
+                })
+                .collect(Collectors.toList());
+
+        Page<CommentResponseDto> pagedCommentResponseDto = new PageImpl<>(commentResponseDtos, pageable, pagedComment.getTotalElements());
         return new PagedResponseDto<>(pagedCommentResponseDto);
     }
 
