@@ -37,9 +37,9 @@ public class Comment extends BaseEntity {
         this.content = content;
     }
 
-    public static Comment toEntity(CommentRequestDto commentRequestDto) {
+    public static Comment toEntity(Long userId, CommentRequestDto commentRequestDto) {
         return Comment.builder()
-                .userId(commentRequestDto.userId())
+                .userId(userId)
                 .trackId(commentRequestDto.trackId())
                 .content(commentRequestDto.content())
                 .build();

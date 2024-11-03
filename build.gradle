@@ -75,6 +75,9 @@ dependencies {
 	//aws
 	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
 
+	//json
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
 	// Etc
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'

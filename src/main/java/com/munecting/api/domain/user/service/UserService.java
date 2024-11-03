@@ -6,6 +6,7 @@ import com.munecting.api.domain.uploadedMusic.dao.UploadedMusicRepository;
 import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.domain.user.dto.request.UpdateProfileRequestDto;
 import com.munecting.api.domain.user.dto.response.UpdateProfileResponseDto;
+import com.munecting.api.domain.user.dto.response.UserResponseDto;
 import com.munecting.api.domain.user.entity.User;
 import com.munecting.api.global.common.dto.response.Status;
 import com.munecting.api.global.error.exception.EntityNotFoundException;
@@ -42,7 +43,7 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
+        User user = findUserByIdOrThrow(userId);
         deleteUserRelatedEntities(userId);
         userRepository.delete(user);
     }
@@ -62,11 +63,15 @@ public class UserService {
 
     @Transactional
     public UpdateProfileResponseDto updateProfile(Long userId, UpdateProfileRequestDto requestDto) {
-        User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        User user = findUserByIdOrThrow(userId);
         String nickname = updateNickname(user, requestDto.nickname());
         String profileImageUrl = updateProfileImage(user, requestDto.profileImage());
 
         return UpdateProfileResponseDto.of(nickname, profileImageUrl);
+    }
+
+    public User findUserByIdOrThrow (Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
     }
 
     private String updateNickname(User user, String nickname) {

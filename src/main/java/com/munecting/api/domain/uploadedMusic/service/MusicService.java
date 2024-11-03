@@ -7,6 +7,8 @@ import com.munecting.api.domain.uploadedMusic.dto.request.MusicRequestDto;
 import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicIdResponseDto;
 import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicResponseDto;
 import com.munecting.api.domain.uploadedMusic.entity.UploadedMusic;
+import com.munecting.api.domain.user.dto.response.UserResponseDto;
+import com.munecting.api.domain.user.service.UserService;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,11 +25,12 @@ public class MusicService {
 
     private final UploadedMusicRepository uploadedMusicRepository;
     private final SpotifyService spotifyService;
+    private final UserService userService;
 
     @Transactional
-    public UploadedMusicIdResponseDto uploadMusic(MusicRequestDto musicRequestDto) {
+    public UploadedMusicIdResponseDto uploadMusic(Long userId, MusicRequestDto musicRequestDto) {
         spotifyService.getTrack(musicRequestDto.trackId());
-        UploadedMusic uploadedMusic = UploadedMusic.toEntity(musicRequestDto);
+        UploadedMusic uploadedMusic = UploadedMusic.toEntity(userId, musicRequestDto);
         return saveUploadMusicEntity(uploadedMusic);
     }
 
@@ -47,8 +50,8 @@ public class MusicService {
                 = uploadedMusics.stream()
                 .map(uploadedMusic -> {
                     MusicResponseDto musicInfo = musicInfoByTrackId.get(uploadedMusic.getTrackId());
-                    User user = null; // 인증 부분 완료되면 수정 예정
-                    return UploadedMusicResponseDto.of(uploadedMusic, musicInfo);
+                    User user = userService.findUserByIdOrThrow(uploadedMusic.getUserId());
+                    return UploadedMusicResponseDto.of(uploadedMusic, musicInfo, user);
                 })
                 .collect(Collectors.toList());
 

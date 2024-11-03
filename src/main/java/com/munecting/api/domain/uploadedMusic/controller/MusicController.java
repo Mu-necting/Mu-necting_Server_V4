@@ -4,6 +4,7 @@ import com.munecting.api.domain.uploadedMusic.dto.request.MusicRequestDto;
 import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicIdResponseDto;
 import com.munecting.api.domain.uploadedMusic.dto.response.UploadedMusicResponseDto;
 import com.munecting.api.domain.uploadedMusic.service.MusicService;
+import com.munecting.api.global.auth.user.UserId;
 import com.munecting.api.global.common.dto.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,13 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class MusicController {
 
     private final MusicService musicService;
-
     @PostMapping("")
     @Operation(summary = "음악 업로드 하기")
     public ApiResponse<?> uploadMusic(
-           @Valid @RequestBody MusicRequestDto musicRequestDto
+            @UserId Long userId,
+            @Valid @RequestBody MusicRequestDto musicRequestDto
     ) {
-        UploadedMusicIdResponseDto uploadedMusicIdResponseDto = musicService.uploadMusic(musicRequestDto);
+        UploadedMusicIdResponseDto uploadedMusicIdResponseDto = musicService.uploadMusic(userId, musicRequestDto);
         return ApiResponse.created(uploadedMusicIdResponseDto);
     }
 

@@ -4,6 +4,7 @@ import com.munecting.api.domain.comment.dto.request.CommentRequestDto;
 import com.munecting.api.domain.comment.dto.response.CommentIdResponseDto;
 import com.munecting.api.domain.comment.dto.response.CommentResponseDto;
 import com.munecting.api.domain.comment.service.CommentService;
+import com.munecting.api.global.auth.user.UserId;
 import com.munecting.api.global.common.dto.response.ApiResponse;
 import com.munecting.api.global.common.dto.response.PagedResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,43 +30,46 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CommentService commentService;
-
     @PostMapping("/comments")
     @Operation(summary = "댓글 등록하기")
     public ApiResponse<?> createComment(
+            @UserId Long userId,
             @RequestBody CommentRequestDto commentRequestDto
     ) {
-        CommentIdResponseDto commentIdResponseDto = commentService.createComment(commentRequestDto);
+        CommentIdResponseDto commentIdResponseDto = commentService.createComment(userId, commentRequestDto);
         return ApiResponse.created(commentIdResponseDto);
     }
 
     @DeleteMapping("/{commentId}")
     @Operation(summary = "댓글 삭제하기")
     public ApiResponse<?> deleteComment(
+            @UserId Long userId,
             @PathVariable Long commentId
     ) {
-        CommentIdResponseDto commentIdResponseDto = commentService.deleteCommentById(commentId);
+        CommentIdResponseDto commentIdResponseDto = commentService.deleteCommentById(userId, commentId);
         return ApiResponse.ok(commentIdResponseDto);
     }
 
     @PatchMapping("/comments/{commentId}")
     @Operation(summary = "댓글 수정하기")
     public ApiResponse<?> updateComment(
+            @UserId Long userId,
             @PathVariable (name = "commentId") Long commentId,
             @RequestBody CommentRequestDto commentRequestDto
     ) {
-        CommentIdResponseDto commentIdResponseDto = commentService.updateComment(commentId, commentRequestDto);
+        CommentIdResponseDto commentIdResponseDto = commentService.updateComment(userId, commentId, commentRequestDto);
         return ApiResponse.ok(commentIdResponseDto);
     }
 
     @GetMapping("/{trackId}/comments")
     @Operation(summary = "댓글 조회하기")
     public ApiResponse<?> getCommentsByTrackId(
+            @UserId Long userId,
             @PathVariable (name = "trackId") String trackId,
             @RequestParam (name = "cursor") LocalDateTime cursor,
             @RequestParam (name = "limit") int limit
     ) {
-        PagedResponseDto<CommentResponseDto> commentResponseDtoList = commentService.getCommentsByTrackId(trackId, cursor, limit);
+        PagedResponseDto<CommentResponseDto> commentResponseDtoList = commentService.getCommentsByTrackId(userId, trackId, cursor, limit);
         return ApiResponse.ok(commentResponseDtoList);
     }
 }

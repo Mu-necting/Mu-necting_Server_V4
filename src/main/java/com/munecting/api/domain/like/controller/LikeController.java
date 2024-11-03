@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class LikeController {
 
     private final LikeService likeService;
-
     @PostMapping("/{trackId}/likes")
     @Operation(summary = "좋아요 누르기")
     public ApiResponse<?> addTrackLike(
