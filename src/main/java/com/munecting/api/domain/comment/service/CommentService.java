@@ -57,9 +57,8 @@ public class CommentService {
         List<CommentResponseDto> commentResponseDtos = pagedComment.stream()
                 .map(comment -> {
                     User commentWriter = userService.findUserByIdOrThrow(comment.getUserId());
-                    UserResponseDto userResponseDto = UserResponseDto.of(commentWriter.getId(), commentWriter.getNickname(), commentWriter.getProfileImageUrl());
                     Boolean isOwner = userId.equals(commentWriter.getId());
-                    return CommentResponseDto.of(userResponseDto, comment, isOwner);
+                    return CommentResponseDto.of(commentWriter, comment, isOwner);
                 })
                 .collect(Collectors.toList());
 
@@ -67,8 +66,7 @@ public class CommentService {
         return new PagedResponseDto<>(pagedCommentResponseDto);
     }
 
-    @Transactional(readOnly = true)
-    public Page<Comment> getCommentsByTrackIdWithCursor(String trackId, LocalDateTime cursor, Pageable pageable) {
+    private Page<Comment> getCommentsByTrackIdWithCursor(String trackId, LocalDateTime cursor, Pageable pageable) {
         log.info(String.valueOf(cursor));
         return commentRepository.findCommentsByTrackIdWithCursor(trackId, cursor.toString(), pageable);
     }

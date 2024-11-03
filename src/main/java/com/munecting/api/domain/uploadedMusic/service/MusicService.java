@@ -51,8 +51,7 @@ public class MusicService {
                 .map(uploadedMusic -> {
                     MusicResponseDto musicInfo = musicInfoByTrackId.get(uploadedMusic.getTrackId());
                     User user = userService.findUserByIdOrThrow(uploadedMusic.getUserId());
-                    UserResponseDto userResponseDto = UserResponseDto.of(user.getId(), user.getNickname(), user.getProfileImageUrl());
-                    return UploadedMusicResponseDto.of(uploadedMusic, musicInfo, userResponseDto);
+                    return UploadedMusicResponseDto.of(uploadedMusic, musicInfo, user);
                 })
                 .collect(Collectors.toList());
 

@@ -66,7 +66,7 @@ public class CommentController {
     public ApiResponse<?> getCommentsByTrackId(
             @UserId Long userId,
             @PathVariable (name = "trackId") String trackId,
-            @RequestParam (name = "cursor", required = false) LocalDateTime cursor,
+            @RequestParam (name = "cursor") LocalDateTime cursor,
             @RequestParam (name = "limit") int limit
     ) {
         PagedResponseDto<CommentResponseDto> commentResponseDtoList = commentService.getCommentsByTrackId(userId, trackId, cursor, limit);
