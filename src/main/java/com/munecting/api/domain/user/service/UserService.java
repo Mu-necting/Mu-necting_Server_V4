@@ -5,8 +5,8 @@ import com.munecting.api.domain.like.dao.LikeRepository;
 import com.munecting.api.domain.uploadedMusic.dao.UploadedMusicRepository;
 import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.domain.user.dto.request.UpdateProfileRequestDto;
+import com.munecting.api.domain.user.dto.response.GetProfileResponseDto;
 import com.munecting.api.domain.user.dto.response.UpdateProfileResponseDto;
-import com.munecting.api.domain.user.dto.response.UserResponseDto;
 import com.munecting.api.domain.user.entity.User;
 import com.munecting.api.global.common.dto.response.Status;
 import com.munecting.api.global.error.exception.EntityNotFoundException;
@@ -101,5 +101,11 @@ public class UserService {
 
     private String updateProfileImage(User user, MultipartFile imgFile) {
         return userProfileImageService.updateImage(user, imgFile);
+    }
+
+    @Transactional(readOnly = true)
+    public GetProfileResponseDto getProfile(Long userId) {
+        User user = findUserByIdOrThrow(userId);
+        return GetProfileResponseDto.of(user.getProfileImageUrl(), user.getNickname());
     }
 }
