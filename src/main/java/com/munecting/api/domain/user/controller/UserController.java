@@ -2,6 +2,7 @@ package com.munecting.api.domain.user.controller;
 
 
 import com.munecting.api.domain.user.dto.request.UpdateProfileRequestDto;
+import com.munecting.api.domain.user.dto.response.GetProfileResponseDto;
 import com.munecting.api.domain.user.dto.response.UpdateProfileResponseDto;
 import com.munecting.api.domain.user.service.UserService;
 import com.munecting.api.global.auth.user.UserId;
@@ -57,9 +58,18 @@ public class UserController {
             @Schema(description = "새로운 닉네임", nullable = true)
             @RequestPart(value = "nickname", required = false)
             String nickname
-    ){
+    ) {
         UpdateProfileRequestDto requestDto = new UpdateProfileRequestDto(nickname, profileImage);
         UpdateProfileResponseDto responseDto = userService.updateProfile(userId, requestDto);
+        return ApiResponse.ok(responseDto);
+    }
+
+    @GetMapping("/profile")
+    @Operation(summary = "프로필 조회")
+    public ApiResponse<?> getProfile(
+            @UserId Long userId
+    ) {
+        GetProfileResponseDto responseDto = userService.getProfile(userId);
         return ApiResponse.ok(responseDto);
     }
 }
