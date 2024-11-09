@@ -27,6 +27,13 @@ public class UserNicknameService {
     private static final String NICKNAME_WRONG_VALUE_ERROR_MESSAGE = "닉네임은 한글, 영문, 숫자, 언더바(_)만 사용 가능하며, 첫 글자는 언더바 또는 숫자일 수 없습니다.";
     private static final String NICKNAME_DUPLICATED_ERROR_MESSAGE = "이미 사용 중인 닉네임입니다.";
 
+    private static final String DEFAULT_NICKNAME = "뮤넥터";
+    private static final String DELIMITER = "_";
+    private static final int MAX_UNIQUE_STRING_LENGTH = 10;
+    private static final int MAX_NICKNAME_RETRY_COUNT = 100;
+    private static final String CHARACTERS_POOL = "0123456789abcdefghijklmnopqrstuvwxyz";
+    private final Random random = new Random();
+
     public String updateNickname(User user, String nickname) {
         if (!StringUtils.hasText(nickname)) {
             return user.getNickname();
@@ -65,5 +72,33 @@ public class UserNicknameService {
         }
 
         return userRepository.existsByNickname(nickname);
+    }
+
+    public String generateUniqueNickname() {
+        String nickname;
+        int attemptCount = 0;
+
+        do {
+            if (attemptCount >= MAX_NICKNAME_RETRY_COUNT) {
+                throw new InternalServerException("닉네임 생성에 실패하였습니다.");
+            }
+            nickname = DEFAULT_NICKNAME + DELIMITER + generateUniqueString();
+            attemptCount++;
+
+        } while (userRepository.existsByNickname(nickname));
+
+        return nickname;
+    }
+
+    private String generateUniqueString() {
+        int uniqueStringLength = random.nextInt(MAX_UNIQUE_STRING_LENGTH);
+        log.info("uniqueStringLength : {}", uniqueStringLength);
+
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < uniqueStringLength; i++) {
+            result.append(CHARACTERS_POOL.charAt(random.nextInt(CHARACTERS_POOL.length())));
+        }
+
+        return result.toString();
     }
 }
