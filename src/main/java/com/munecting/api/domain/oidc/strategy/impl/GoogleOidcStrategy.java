@@ -26,8 +26,7 @@ public class GoogleOidcStrategy implements OidcStrategy {
         GoogleIdToken googleIdToken = verifyIdToken(idToken);
 
         String subject = googleIdToken.getPayload().getSubject();
-        String email = googleIdToken.getPayload().getEmail();
-        return OidcUserInfo.of(subject, email);
+        return OidcUserInfo.of(subject);
     }
 
     private GoogleIdToken verifyIdToken(final String idToken) {
