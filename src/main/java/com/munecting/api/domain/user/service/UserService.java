@@ -6,16 +6,12 @@ import com.munecting.api.domain.uploadedMusic.dao.UploadedMusicRepository;
 import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.domain.user.dto.request.UpdateProfileRequestDto;
 import com.munecting.api.domain.user.dto.response.UpdateProfileResponseDto;
-import com.munecting.api.domain.user.dto.response.UserResponseDto;
 import com.munecting.api.domain.user.entity.User;
-import com.munecting.api.global.common.dto.response.Status;
 import com.munecting.api.global.error.exception.EntityNotFoundException;
-import com.munecting.api.global.error.exception.InvalidValueException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.munecting.api.global.common.dto.response.Status.USER_NOT_FOUND;
