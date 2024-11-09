@@ -29,17 +29,8 @@ public class UserService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final UploadedMusicRepository uploadedMusicRepository;
-    private final UserProfileImageService userProfileImageService;
-
-    private static final int MIN_LENGTH = 2;
-    private static final int MAX_LENGTH = 15;
-
-    private static final String NAME_VALUE_RULES = "^[a-zA-Z0-9가-힣]+$";
-
-    private static final String NICKNAME_LENGTH_ERROR_MESSAGE = "닉네임은 2-15자 사이여야 합니다.";
-    private static final String NICKNAME_WRONG_VALUE_ERROR_MESSAGE = "닉네임은 한글, 영문, 숫자만 포함할 수 있습니다.";
-    private static final String NICKNAME_DUPLICATED_ERROR_MESSAGE = "이미 사용 중인 닉네임입니다.";
-
+    private final UserProfileImageService profileImageService;
+    private final UserNicknameService nicknameService;
 
     @Transactional
     public void deleteUser(Long userId) {
@@ -75,31 +66,10 @@ public class UserService {
     }
 
     private String updateNickname(User user, String nickname) {
-        if (!StringUtils.hasText(nickname)) {
-            return user.getNickname();
-        }
-
-        validateNickname(user, nickname);
-        return user.updateNickname(nickname);
-    }
-
-    private void validateNickname(User existingUser, String nickname) {
-        if (nickname.length() < MIN_LENGTH || nickname.length() > MAX_LENGTH) {
-            throw new InvalidValueException(Status.BAD_REQUEST, NICKNAME_LENGTH_ERROR_MESSAGE);
-        }
-
-        if (!nickname.matches(NAME_VALUE_RULES)) {
-            throw new InvalidValueException(Status.BAD_REQUEST, NICKNAME_WRONG_VALUE_ERROR_MESSAGE);
-        }
-
-        // 중복 검사
-        if (!existingUser.getNickname().equals(nickname)
-                && userRepository.existsByNickname(nickname)) {
-            throw new InvalidValueException(Status.CONFLICT, NICKNAME_DUPLICATED_ERROR_MESSAGE);
-        }
+        return nicknameService.updateNickname(user, nickname);
     }
 
     private String updateProfileImage(User user, MultipartFile imgFile) {
-        return userProfileImageService.updateImage(user, imgFile);
+        return profileImageService.updateImage(user, imgFile);
     }
 }
