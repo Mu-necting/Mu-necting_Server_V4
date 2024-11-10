@@ -44,6 +44,9 @@ public enum Status {
 
     // User 오류 응답
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER404", "존재하지 않는 회원입니다."),
+    INVALID_NICKNAME_LENGTH(HttpStatus.BAD_REQUEST, "USER_NICKNAME400", "닉네임은 2-15자 사이여야 합니다."),
+    INVALID_NICKNAME_VALUE(HttpStatus.BAD_REQUEST, "USER_NICKNAME400", "닉네임은 한글, 영문, 숫자, 언더바(_)만 사용 가능하며, 첫 글자는 언더바 또는 숫자일 수 없습니다."),
+    DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "USER_NICKNAME409","이미 사용 중인 닉네임입니다."),
 
     // 분산락 오류 응답
     DISTRIBUTED_LOCK_ACQUISITION_FAILURE(HttpStatus.CONFLICT, "LOCK409", "잠시 후에 시도해주세요."),

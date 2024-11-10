@@ -2,7 +2,6 @@ package com.munecting.api.domain.user.service;
 
 import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.domain.user.entity.User;
-import com.munecting.api.global.common.dto.response.Status;
 import com.munecting.api.global.error.exception.InternalServerException;
 import com.munecting.api.global.error.exception.InvalidValueException;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Random;
+
+import static com.munecting.api.global.common.dto.response.Status.*;
 
 @Service
 @Slf4j
@@ -23,9 +24,6 @@ public class UserNicknameService {
     private static final int MAX_LENGTH = 15;
 
     private static final String NAME_VALUE_RULES = "^(?=.*[a-zA-Z0-9가-힣])[a-zA-Z가-힣][a-zA-Z0-9가-힣_]*$";
-    private static final String NICKNAME_LENGTH_ERROR_MESSAGE = "닉네임은 2-15자 사이여야 합니다.";
-    private static final String NICKNAME_WRONG_VALUE_ERROR_MESSAGE = "닉네임은 한글, 영문, 숫자, 언더바(_)만 사용 가능하며, 첫 글자는 언더바 또는 숫자일 수 없습니다.";
-    private static final String NICKNAME_DUPLICATED_ERROR_MESSAGE = "이미 사용 중인 닉네임입니다.";
 
     private static final String DEFAULT_NICKNAME = "뮤넥터";
     private static final String DELIMITER = "_";
@@ -45,15 +43,15 @@ public class UserNicknameService {
 
     private void validateNickname(User existingUser, String nickname) {
         if (isInvalidNicknameLength(nickname)) {
-            throw new InvalidValueException(Status.BAD_REQUEST, NICKNAME_LENGTH_ERROR_MESSAGE);
+            throw new InvalidValueException(INVALID_NICKNAME_LENGTH);
         }
 
         if (isInvalidNamingRule(nickname)) {
-            throw new InvalidValueException(Status.BAD_REQUEST, NICKNAME_WRONG_VALUE_ERROR_MESSAGE);
+            throw new InvalidValueException(INVALID_NICKNAME_VALUE);
         }
 
         if (isDuplicatedNickname(existingUser, nickname)) {
-            throw new InvalidValueException(Status.CONFLICT, NICKNAME_DUPLICATED_ERROR_MESSAGE);
+            throw new InvalidValueException(DUPLICATED_NICKNAME);
         }
     }
 
