@@ -32,6 +32,7 @@ public class AuthService {
     private final RedisTemplate<String, String> redisTemplate;
     private final OidcService oidcService;
     private final UserRepository userRepository;
+    private final UserNicknameService nicknameService;
 
     @Value("${jwt.refresh.expiration}")
     private long refreshTokenExpiration;
@@ -77,25 +78,23 @@ public class AuthService {
 
     @Transactional
     public UserTokenResponseDto getOrCreateUser(LoginRequestDto dto) {
-        OidcUserInfo oidcUserInfo = oidcService.getOidcUserInfo(dto.socialType(), dto.idToken());
-        String socialId = dto.socialType().toString() + "_" + oidcUserInfo.sub();
+        String socialId = generateSocialId(dto);
 
         User user = userRepository.findBySocialId(socialId)
-                .orElseGet(() ->
-                        createUser(socialId, oidcUserInfo.email(), dto.socialType())
-                );
+                .orElseGet(() -> createUser(socialId, dto.socialType()));
 
         return issueTokensForUser(user);
     }
 
-    //TODO: 이메일 제거, 닉네임 자체 생성
-    private User createUser(String socialId, String email, SocialType socialType) {
-        User newUser = User.builder()
-                .socialId(socialId)
-                .nickname(email.split("@")[0])
-                .role(Role.USER)
-                .socialType(socialType)
-                .build();
+    private String generateSocialId(LoginRequestDto dto) {
+        OidcUserInfo oidcUserInfo = oidcService.getOidcUserInfo(dto.socialType(), dto.idToken());
+
+        return dto.socialType().toString() + "_" + oidcUserInfo.sub();
+    }
+
+    private User createUser(String socialId, SocialType socialType) {
+        User newUser = User.toEntity(
+                socialId, nicknameService.generateUniqueNickname(), Role.USER, socialType);
 
         return userRepository.save(newUser);
     }

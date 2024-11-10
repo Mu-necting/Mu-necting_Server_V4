@@ -25,6 +25,7 @@ public class User extends BaseEntity {
     private String socialId;
 
     @NotBlank
+    @Column(unique = true)
     private String nickname;
 
     @Column(nullable = true)
@@ -37,6 +38,20 @@ public class User extends BaseEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
+
+    public static User toEntity(String socialId, String nickname, Role role, SocialType socialType) {
+        return toEntity(socialId, nickname, null, role, socialType);
+    }
+
+    public static User toEntity(String socialId, String nickname, String profileImageUrl, Role role, SocialType socialType) {
+        return User.builder()
+                .socialId(socialId)
+                .nickname(nickname)
+                .profileImageUrl(profileImageUrl)
+                .role(role)
+                .socialType(socialType)
+                .build();
+    }
 
     public String updateNickname(String nickname) {
         this.nickname = nickname;

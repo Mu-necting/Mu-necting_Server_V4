@@ -30,6 +30,6 @@ public class AppleOidcStrategy extends AbstractOidcStrategy {
         Map<String, String> header = getHeader(idToken);
         Claims claims = getClaimsWithVerifySign(idToken, header);
 
-        return OidcUserInfo.of(claims.getSubject(), claims.get("email").toString());
+        return OidcUserInfo.of(claims.getSubject());
     }
 }
