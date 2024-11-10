@@ -36,11 +36,10 @@ public class UserController {
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), userId);
     }
 
-    //TODO: 엔드포인트에 userId 노출 제거
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/me")
     @Operation(summary = "회원 탈퇴")
     public ApiResponse<?> deleteUser(
-            @PathVariable(name = "userId") Long userId
+            @UserId Long userId
     ) {
         userService.deleteUser(userId);
         return ApiResponse.onSuccess(Status.OK.getCode(), Status.OK.getMessage(), null);
