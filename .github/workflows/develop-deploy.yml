@@ -35,7 +35,7 @@ jobs:
 
       - name: Set environment values for test
         run: |
-          cd ./src/test/resources
+          cd ./src/main/resources
           touch ./env-test.properties
           echo "${{ secrets.TEST_ENV }}" > ./env-test.properties
         shell: bash
