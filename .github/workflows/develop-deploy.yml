@@ -19,18 +19,25 @@ jobs:
           distribution: 'temurin'
 
       # 환경 변수 파일 생성
-      - name: Set environment values for main application
+      - name: Set environment values for common
         run: |
           cd ./src/main/resources
-          touch ./env.properties
-          echo "${{ secrets.ENV }}" > ./env.properties
+          touch ./env-common.properties
+          echo "${{ secrets.ENV_COMMON }}" > ./env-common.properties
+        shell: bash
+
+      - name: Set environment values for prod
+        run: |
+          cd ./src/main/resources
+          touch ./env-prod.properties
+          echo "${{ secrets.ENV_PROD }}" > ./env-prod.properties
         shell: bash
 
       - name: Set environment values for test
         run: |
           cd ./src/test/resources
-          touch ./env.properties
-          echo "${{ secrets.TEST_ENV }}" > ./env.properties
+          touch ./env-test.properties
+          echo "${{ secrets.TEST_ENV }}" > ./env-test.properties
         shell: bash
 
       # Gradle에 권한 부여
@@ -49,7 +56,8 @@ jobs:
       - name: Make zip file
         run: |
           mkdir develop-deploy
-          cp ./src/main/resources/env.properties ./develop-deploy/.env
+          cp ./src/main/resources/env-common.properties ./develop-deploy/.env.common
+          cp ./src/main/resources/env-prod.properties ./develop-deploy/.env.prod
           cp ./docker-compose.blue.yml ./develop-deploy/
           cp ./docker-compose.green.yml ./develop-deploy/
           cp ./appspec.yml ./develop-deploy/
