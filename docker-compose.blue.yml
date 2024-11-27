@@ -6,6 +6,8 @@ services:
     ports:
       - "8081:8080"
     container_name: spring-blue
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
     networks:
       - munecting-network
 
