@@ -8,6 +8,9 @@ services:
     container_name: spring-green
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+    env_file:
+      - .env.common
+      - .env.prod
     networks:
       - munecting-network
 
