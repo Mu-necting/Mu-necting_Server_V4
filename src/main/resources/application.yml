@@ -4,6 +4,8 @@ server:
 spring :
   application:
     name: munectingV4
+  profiles:
+    active: dev
   mvc:
     path match:
       matching-strategy: ant_path_matcher
@@ -17,32 +19,16 @@ spring :
         format_sql: true
         jdbc:
           timezone: Asia/Seoul
-
-  datasource:
-    url: jdbc:${DATASOURCE}://${DB_HOST}:${DB_PORT}/${DB_NAME}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      initialization-fail-timeout: 3600
-
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: 6379
-#      password: 1234
-
-
   security:
     cors:
-      allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
-      allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,PATCH,DELETE}
-      allowed-headers: ${CORS_ALLOWED_HEADERS:*}
+      allowed-origins: "*"
+      allowed-methods: GET,POST,PUT,PATCH,DELETE
+      allowed-headers: "*"
       path-pattern: "/**"
 
     auth:
-      header: ${AUTH_HEADER:Authorization}
-      prefix: ${AUTH_PREFIX:Bearer }
+      header: Authorization
+      prefix: Bearer
 
     oauth:
       kakao:
@@ -62,14 +48,12 @@ spring :
       maxRequestSize: 10MB  # 한 번에 최대 업로드 가능 용량
       resolve-lazily: true
 
-
 cloud:
   aws:
     s3:
       bucket: munecting
       path:
         profile-image: profileImage
-
     region:
       static: ap-northeast-2
     stack:
@@ -91,3 +75,83 @@ jwt:
 
 kakao-map:
   api-key: ${KAKAO_MAP_API_KEY}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:${DATASOURCE}://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      initialization-fail-timeout: 3600
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/munecting
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      initialization-fail-timeout: 3600
+  jpa:
+    hibernate:
+      ddl-auto: update
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+cloud:
+  aws:
+    s3:
+      bucket: munecting-dev
+      path:
+        profile-image: profileImage
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:~/munecting
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        show_sql: true
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+cloud:
+  aws:
+    s3:
+      bucket: munecting-test
+      path:
+        profile-image: profileImage
