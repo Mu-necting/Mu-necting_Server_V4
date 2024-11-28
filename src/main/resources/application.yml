@@ -147,8 +147,8 @@ spring:
       path: /h2-console
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
+      host: localhost
+      port: 6378
 cloud:
   aws:
     s3:
