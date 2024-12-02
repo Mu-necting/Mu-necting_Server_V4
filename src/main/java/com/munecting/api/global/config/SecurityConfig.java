@@ -5,6 +5,7 @@ import com.munecting.api.global.auth.filter.JwtAuthenticationFilter;
 import com.munecting.api.global.auth.jwt.JwtProvider;
 import com.munecting.api.global.error.exception.ForbiddenException;
 import com.munecting.api.global.error.exception.UnauthorizedException;
+import com.munecting.api.global.util.AllowedPathPatternProvider;
 import com.munecting.api.global.util.ResponseUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,25 +33,8 @@ public class SecurityConfig {
     private final ResponseUtil responseUtil;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AllowedPathPatternProvider allowedPathPatternProvider;
 
-
-    private static final String[] ALLOWED_URL = {
-            "/api/auth/**",
-            "/error/**",
-            "/v2/api-docs",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**",
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
-            "/css/**","/images/**","/js/**","/favicon.ico",
-            "/api/musics/**",
-            "/api/address/**",
-            "/actuator/health"
-    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -71,7 +55,7 @@ public class SecurityConfig {
 
                 // URL 권한 설정
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(ALLOWED_URL).permitAll()
+                        .requestMatchers(allowedPathPatternProvider.getWhitelistPatterns()).permitAll()
                         .anyRequest().authenticated())
 
                 // filter
@@ -102,4 +86,5 @@ public class SecurityConfig {
         log.warn("권한이 없는 사용자의 접근입니다.");
         responseUtil.sendException(response, new ForbiddenException());
     }
+
 }

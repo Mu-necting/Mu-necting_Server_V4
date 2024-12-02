@@ -26,6 +26,9 @@ spring :
       allowed-headers: "*"
       path-pattern: "/**"
 
+    whitelist:
+      patterns: ${WHITELIST_PATTERNS}
+
     auth:
       header: Authorization
       prefix: Bearer
