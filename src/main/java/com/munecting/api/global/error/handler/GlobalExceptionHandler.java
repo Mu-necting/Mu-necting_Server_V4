@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -73,15 +75,15 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 필수 쿼리 파라미터를 누락한 경우 발생하는 error를 handling 합니다.
+     * 필수 쿼리 파라미터 & 헤더를 누락한 경우 발생하는 error를 handling 합니다.
      */
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ApiResponse<?>> handleMissingServletRequestParameterException(
-            MissingServletRequestParameterException e
+    @ExceptionHandler({MissingServletRequestParameterException.class, MissingRequestHeaderException.class})
+    public ResponseEntity<ApiResponse<?>> handleMissingRequestAttributes(
+            MissingRequestValueException e
     ) {
-        log.warn(">>> handle: MissingServletRequestParameterException", e);
+        log.warn(">>> handle: Missing required parameter or header Exception | [{}] - {}", e.getClass().getSimpleName(), e.getMessage());
 
-        ApiResponse<Object> response = ApiResponse.onFailure(BAD_REQUEST.toString(), e.getMessage(), null);
+        ApiResponse<Object> response = ApiResponse.onFailure(Status.BAD_REQUEST.getCode(), e.getMessage(), null);
         return ResponseEntity.status(BAD_REQUEST).body(response);
     }
 
