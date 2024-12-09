@@ -7,6 +7,7 @@ import com.munecting.api.domain.user.dto.request.LogoutRequestDto;
 import com.munecting.api.domain.user.dto.request.RefreshTokenRequestDto;
 import com.munecting.api.domain.user.dto.request.LoginRequestDto;
 import com.munecting.api.domain.user.dto.response.UserTokenResponseDto;
+import com.munecting.api.domain.user.dto.response.ValidateTokenResponseDto;
 import com.munecting.api.domain.user.entity.User;
 import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.global.auth.jwt.JwtProvider;
@@ -132,7 +133,7 @@ public class AuthService {
     }
 
     private Long getUserIdFromAccessToken(String requestToken) {
-        String token = jwtProvider.extractAccessToken(requestToken);
+        String token = extractAccessToken(requestToken);
 
         try {
             jwtProvider.validateTokenAtLogout(token);
@@ -154,4 +155,21 @@ public class AuthService {
             log.info("User {} logged out, no refresh token found", userId);
         }
     }
+
+    @Transactional(readOnly = true)
+    public ValidateTokenResponseDto validateAccessToken(String authorizationHeaderValue) {
+        try {
+            String accessToken = extractAccessToken(authorizationHeaderValue);
+            jwtProvider.validateAccessToken(accessToken);
+            return ValidateTokenResponseDto.of(true);
+        } catch (Exception e) {
+            log.info("Access token validation failed: {}", e.getMessage());
+            return ValidateTokenResponseDto.of(false);
+        }
+    }
+
+    private String extractAccessToken(String bearerToken) {
+        return jwtProvider.extractAccessToken(bearerToken);
+    }
+
 }

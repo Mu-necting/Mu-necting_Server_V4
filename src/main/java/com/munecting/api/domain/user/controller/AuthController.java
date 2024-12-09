@@ -5,10 +5,9 @@ import com.munecting.api.domain.user.dto.request.LogoutRequestDto;
 import com.munecting.api.domain.user.dto.request.RefreshTokenRequestDto;
 import com.munecting.api.domain.user.dto.request.LoginRequestDto;
 import com.munecting.api.domain.user.dto.response.UserTokenResponseDto;
+import com.munecting.api.domain.user.dto.response.ValidateTokenResponseDto;
 import com.munecting.api.domain.user.service.AuthService;
-import com.munecting.api.global.auth.user.UserId;
 import com.munecting.api.global.common.dto.response.ApiResponse;
-import com.munecting.api.global.common.dto.response.Status;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -56,7 +55,6 @@ public class AuthController {
         return ApiResponse.ok(null);
     }
 
-
     @PostMapping("/refresh")
     @Operation(summary = "토큰 재발급하기")
     public ApiResponse<?> refreshToken(
@@ -65,4 +63,15 @@ public class AuthController {
         UserTokenResponseDto dto = authService.refreshToken(refreshTokenRequestDto);
         return ApiResponse.created(dto);
     }
+
+    @GetMapping("/validate")
+    @Operation(summary = "액세스 토큰 유효성 검증")
+    public ApiResponse<?> validateAccessToken(
+            @Parameter(hidden = true)
+            @RequestHeader("Authorization") String authorizationHeaderValue
+    ){
+        ValidateTokenResponseDto dto = authService.validateAccessToken(authorizationHeaderValue);
+        return ApiResponse.ok(dto);
+    }
+
 }
