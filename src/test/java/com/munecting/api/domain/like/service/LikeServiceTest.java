@@ -1,7 +1,11 @@
 /*
 package com.munecting.api.domain.like.service;
 
-import com.munecting.api.domain.like.dao.LikeRepository;
+import com.munecting.api.domain.like.dao.TrackLikeRepository;
+import com.munecting.api.domain.like.dto.response.LikeResponseDto;
+import com.munecting.api.domain.uploadedMusic.dao.UploadedMusicRepository;
+import com.munecting.api.domain.uploadedMusic.dto.request.MusicRequestDto;
+import com.munecting.api.domain.uploadedMusic.entity.UploadedMusic;
 import com.munecting.api.domain.user.constant.Role;
 import com.munecting.api.domain.user.constant.SocialType;
 import com.munecting.api.domain.user.dao.UserRepository;
@@ -24,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class LikeServiceTest {
 
     @Autowired
-    private LikeRepository likeRepository;
+    private TrackLikeRepository likeRepository;
 
     @Autowired
     private LikeService likeService;

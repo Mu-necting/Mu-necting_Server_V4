@@ -14,8 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Table(name = "\"Like\"")
-public class Like extends BaseEntity {
+public class TrackLike extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +29,8 @@ public class Like extends BaseEntity {
     @Version
     private Integer version;
 
-    public static Like toEntity(Integer likeCount, String trackId) {
-        return Like.builder()
+    public static TrackLike toEntity(Integer likeCount, String trackId) {
+        return TrackLike.builder()
                 .trackId(trackId)
                 .likeCount(likeCount)
                 .build();

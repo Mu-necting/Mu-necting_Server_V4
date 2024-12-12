@@ -1,7 +1,7 @@
 package com.munecting.api.domain.user.service;
 
 import com.munecting.api.domain.comment.dao.CommentRepository;
-import com.munecting.api.domain.like.dao.LikeRepository;
+import com.munecting.api.domain.like.dao.TrackLikeRepository;
 import com.munecting.api.domain.uploadedMusic.dao.UploadedMusicRepository;
 import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.domain.user.dto.request.UpdateProfileRequestDto;
@@ -24,7 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
-    private final LikeRepository likeRepository;
+    private final TrackLikeRepository likeRepository;
     private final UploadedMusicRepository uploadedMusicRepository;
     private final UserProfileImageService profileImageService;
     private final UserNicknameService nicknameService;
