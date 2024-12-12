@@ -1,7 +1,6 @@
 package com.munecting.api.domain.like.service;
 
 import com.munecting.api.domain.like.dto.response.*;
-import com.munecting.api.global.aop.annotation.DistributedLock;
 import com.munecting.api.domain.like.dao.LikeRepository;
 import com.munecting.api.domain.like.entity.Like;
 import com.munecting.api.domain.spotify.service.SpotifyService;
@@ -32,7 +31,6 @@ public class LikeService {
         return likeRepository.existsByUserIdAndTrackId(userId, trackId);
     }
 
-    @DistributedLock(key = "#trackId + ':' + #userId" )
     public AddTrackLikeResponseDto addTrackLike(String trackId, Long userId) {
         spotifyService.validateTrackExists(trackId);
         userService.validateUserExists(userId);
