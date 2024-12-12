@@ -22,15 +22,19 @@ public class Like extends BaseEntity {
     private Long id;
 
     @NotNull
-    private Long userId;
-
-    @NotNull
     private String trackId;
 
-    public static Like toEntity(Long userId, String trackId) {
+    @NotNull
+    private Integer likeCount;
+
+    @Version
+    private Integer version;
+
+    public static Like toEntity(Integer likeCount, String trackId) {
         return Like.builder()
-                .userId(userId)
                 .trackId(trackId)
+                .likeCount(likeCount)
                 .build();
     }
+
 }
