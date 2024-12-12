@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/musics")
+@RequestMapping("/api/tracks")
 @Tag(name = "like", description = "Like 관련 api </br> <i> 담당자 : 김송은 </i>")
 public class LikeController {
 
@@ -32,13 +32,13 @@ public class LikeController {
         return ApiResponse.ok(dto);
     }
 
-    @PostMapping("/{musicId}/likes/toggle")
+    @PostMapping("/{trackId}/likes/toggle")
     @Operation(summary = "좋아요 토글")
     public ApiResponse<?> toggleTrackLike (
-            @PathVariable(name = "musicId") String musicId,
+            @PathVariable(name = "trackId") String trackId,
             @UserId Long userId
     ){
-        LikeResponseDto dto = likeService.toggleTrackLike(musicId, userId);
+        LikeResponseDto dto = likeService.toggleTrackLike(trackId, userId);
         return ApiResponse.ok(dto);
     }
 
