@@ -3,6 +3,7 @@ package com.munecting.api.domain.like.controller;
 import com.munecting.api.domain.like.dto.response.AddTrackLikeResponseDto;
 import com.munecting.api.domain.like.dto.response.DeleteTrackLikeResponseDto;
 import com.munecting.api.domain.like.dto.response.GetLikePlaylistResponseDto;
+import com.munecting.api.domain.like.dto.response.LikeResponseDto;
 import com.munecting.api.domain.like.service.LikeService;
 import com.munecting.api.global.auth.user.UserId;
 import com.munecting.api.global.common.dto.response.ApiResponse;
@@ -13,20 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/tracks")
+@RequestMapping("/api/musics")
 @Tag(name = "like", description = "Like 관련 api </br> <i> 담당자 : 김송은 </i>")
 public class LikeController {
 
     private final LikeService likeService;
-    @PostMapping("/{trackId}/likes")
-    @Operation(summary = "좋아요 누르기")
-    public ApiResponse<?> addTrackLike(
-            @PathVariable(name = "trackId") String trackId,
-            @UserId Long userId
-    ) {
-        AddTrackLikeResponseDto dto = likeService.addTrackLike(trackId, userId);
-        return ApiResponse.created(dto);
-    }
 
     @GetMapping("/liked")
     @Operation(summary = "좋아요한 음악 조회")
@@ -35,17 +27,19 @@ public class LikeController {
             @RequestParam(required = false) Long cursor,
             @RequestParam(required = false, defaultValue = "20") int size
     ) {
+        // TODO: Like entity 변경으로 인한 로직 수정 필요
         GetLikePlaylistResponseDto dto = likeService.getLikedTracks(userId, cursor, size);
         return ApiResponse.ok(dto);
     }
 
-    @DeleteMapping("/{trackId}/likes")
-    @Operation(summary = "좋아요 취소")
-    public ApiResponse<?> deleteTrackLike (
-            @PathVariable(name = "trackId") String trackId,
+    @PostMapping("/{musicId}/likes/toggle")
+    @Operation(summary = "좋아요 토글")
+    public ApiResponse<?> toggleTrackLike (
+            @PathVariable(name = "musicId") String musicId,
             @UserId Long userId
-    ) {
-        DeleteTrackLikeResponseDto dto = likeService.deleteTrackLike(trackId, userId);
+    ){
+        LikeResponseDto dto = likeService.toggleTrackLike(musicId, userId);
         return ApiResponse.ok(dto);
     }
+
 }
