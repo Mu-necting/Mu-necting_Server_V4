@@ -20,12 +20,18 @@ public class UserTrackLike extends BaseEntity {
     private Long userId;
 
     @NotNull
-    private Long likeId;
+    private String trackId;
 
-    public static UserLike toEntity(Long userId, Long likeId) {
-        return UserLike.builder()
-                .likeId(likeId)
+    private boolean isLiked;
+
+    @Version
+    private Integer version;
+
+    public static UserTrackLike toEntity(Long userId, String trackId, boolean isLiked) {
+        return UserTrackLike.builder()
+                .trackId(trackId)
                 .userId(userId)
+                .isLiked(isLiked)
                 .build();
     }
 
