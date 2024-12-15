@@ -20,6 +20,7 @@ public class TrackService {
     private final TrackLikeRepository likeRepository;
     private final CommentRepository commentRepository;
 
+    // todo: 삭제
     @Transactional(readOnly = true)
     public GetTrackDetailsResponseDto getTrackDetails(String trackId, Long userId) {
         spotifyService.validateTrackExists(trackId);

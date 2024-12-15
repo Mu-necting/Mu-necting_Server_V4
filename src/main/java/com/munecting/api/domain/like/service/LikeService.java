@@ -26,6 +26,7 @@ public class LikeService {
     private final SpotifyService spotifyService;
     private final UserService userService;
 
+    // todo: 삭제
     @Transactional(readOnly = true)
     public boolean isTrackLikedByUser(String trackId, Long userId) {
         return likeRepository.existsByUserIdAndTrackId(userId, trackId);

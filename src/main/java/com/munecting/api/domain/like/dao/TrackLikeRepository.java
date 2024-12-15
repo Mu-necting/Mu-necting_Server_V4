@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface TrackLikeRepository extends JpaRepository<TrackLike, Long> {
 
+    // todo: 삭제
     int countByTrackId(String trackId);
 
     boolean existsByUserIdAndTrackId(Long userId, String trackId);
