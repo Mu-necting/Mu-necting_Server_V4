@@ -94,6 +94,9 @@ public class LikeService {
             backoff = @Backoff(100))
     @Transactional
     public LikeResponseDto toggleTrackLike(String trackId, Long userId) {
+        spotifyService.validateTrackExists(trackId);
+        userService.validateUserExists(userId);
+
         UserTrackLike userLike = userTrackLikeRepository
                 .findByTrackIdAndUserId(trackId, userId)
                 .orElseGet(() -> {
