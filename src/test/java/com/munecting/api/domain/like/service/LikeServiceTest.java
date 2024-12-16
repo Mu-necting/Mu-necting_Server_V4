@@ -96,7 +96,7 @@ class LikeServiceTest {
         assertThat(response.userLiked()).isFalse();
     }
 
-    @DisplayName("한 유저가 동시에 좋아요를 요청해도 데이터 정합성을 보장한다.")
+    @DisplayName("한 유저가 동시에 좋아요를 요청할 때, 성공/실패에 따른 최종 좋아요 상태를 검증한다.")
     @Test
     public void toggleTrackLike_ConcurrentAccess_withOneUser() throws InterruptedException {
         // given
@@ -155,7 +155,7 @@ class LikeServiceTest {
         }
     }
 
-    @DisplayName("여러 유저가 동시에 좋아요를 요청해도 데이터 정합성을 보장한다.")
+    @DisplayName("여러 유저가 동시에 좋아요를 요청했을 때 성공한 요청 수와 트랙 좋아요 수가 일치한다.")
     @Test
     public void toggleTrackLike_ConcurrentAccess_withManyUsers() throws InterruptedException{
         // given
