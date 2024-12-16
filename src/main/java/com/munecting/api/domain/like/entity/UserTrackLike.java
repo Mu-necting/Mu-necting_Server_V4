@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "trackId"}))
 public class UserTrackLike extends BaseEntity {
 
     @Id

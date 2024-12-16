@@ -21,6 +21,7 @@ public class TrackLike extends BaseEntity {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private String trackId;
 
     @NotNull
