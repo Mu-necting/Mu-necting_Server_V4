@@ -37,4 +37,12 @@ public class TrackLike extends BaseEntity {
                 .build();
     }
 
+    public void increaseLikeCount() {
+        ++likeCount;
+    }
+
+    public void decreaseLikeCount() {
+        --likeCount;
+    }
+
 }

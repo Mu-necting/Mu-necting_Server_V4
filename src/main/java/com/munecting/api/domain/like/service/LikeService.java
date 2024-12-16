@@ -88,18 +88,39 @@ public class LikeService {
                 .collect(Collectors.toList());
     }
 
+    @Retryable(
+            retryFor = {ObjectOptimisticLockingFailureException.class},
+            maxAttempts = 5,
+            backoff = @Backoff(100))
     @Transactional
-    public DeleteTrackLikeResponseDto deleteTrackLike(String trackId, Long userId) {
-        spotifyService.validateTrackExists(trackId);
-        userService.validateUserExists(userId);
+    public LikeResponseDto toggleTrackLike(String trackId, Long userId) {
+        UserTrackLike userLike = userTrackLikeRepository
+                .findByTrackIdAndUserId(trackId, userId)
+                .orElseGet(() -> {
+                    UserTrackLike newUserLike = UserTrackLike.toEntity(userId, trackId, false);
+                    return userTrackLikeRepository.save(newUserLike);
+                });
 
-        boolean isLikedTrack = isTrackLikedByUser(trackId, userId);
-        if (isLikedTrack) {
-            likeRepository.deleteByTrackIdAndUserId(trackId, userId);
-            isLikedTrack = false;
+        userLike.toggle();
+
+        TrackLike trackLike = trackLikeRepository.findByTrackId(trackId)
+                .orElseGet(() -> trackLikeRepository.save(TrackLike.toEntity(0, trackId)));
+
+        if (userLike.isLiked()) {
+            trackLike.increaseLikeCount();
         }
 
-        int likeCount = likeRepository.countByTrackId(trackId);
-        return DeleteTrackLikeResponseDto.of(trackId, isLikedTrack, likeCount);
+        if (!userLike.isLiked()) {
+            trackLike.decreaseLikeCount();
+        }
+
+        return LikeResponseDto.of(userLike.isLiked(), trackLike.getLikeCount());
     }
+
+    @Recover
+    public LikeResponseDto recoverToggleTrackLike(String trackId, Long userId) {
+        log.warn("트랙 아이디- {}에 대한 userId- {}의 좋아요 요청 처리 중 문제가 발생하였습니다. ", trackId, userId);
+        throw new ConflictException(Status.LIKE_REQUEST_CONFLICT);
+    }
+
 }

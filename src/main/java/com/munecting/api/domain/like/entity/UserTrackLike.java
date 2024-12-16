@@ -36,4 +36,8 @@ public class UserTrackLike extends BaseEntity {
                 .build();
     }
 
+    public void toggle() {
+        isLiked = !isLiked;
+    }
+
 }

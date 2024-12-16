@@ -24,4 +24,6 @@ public interface UserTrackLikeRepository extends JpaRepository<UserTrackLike, Lo
 
     void deleteByUserId(Long userId);
 
+    Optional<UserTrackLike> findByTrackIdAndUserId(@NotNull String trackId, @NotNull Long userId);
+
 }
