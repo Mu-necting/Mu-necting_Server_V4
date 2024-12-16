@@ -48,6 +48,9 @@ public enum Status {
     INVALID_NICKNAME_VALUE(HttpStatus.BAD_REQUEST, "USER_NICKNAME400", "닉네임은 한글, 영문, 숫자, 언더바(_)만 사용 가능하며, 첫 글자는 언더바 또는 숫자일 수 없습니다."),
     DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "USER_NICKNAME409","이미 사용 중인 닉네임입니다."),
 
+    // 좋아요 오류 응답
+    LIKE_REQUEST_CONFLICT(HttpStatus.CONFLICT, "LIKE409", "좋아요 요청 처리 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."),
+
     // AWS 오류 응답
     AWS_S3_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AWS500", "이미지 업로드에 실패하였습니다."),
     ;
