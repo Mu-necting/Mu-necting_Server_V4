@@ -27,7 +27,6 @@ public class LikeController {
             @RequestParam(required = false) Long cursor,
             @RequestParam(required = false, defaultValue = "20") int size
     ) {
-        // TODO: Like entity 변경으로 인한 로직 수정 필요
         GetLikePlaylistResponseDto dto = likeService.getLikedTracks(userId, cursor, size);
         return ApiResponse.ok(dto);
     }

@@ -17,9 +17,10 @@ public interface UserTrackLikeRepository extends JpaRepository<UserTrackLike, Lo
 
     boolean existsByUserIdAndTrackId(Long userId, String trackId);
 
+    @Query("SELECT userLike from UserTrackLike userLike where userLike.userId = :userId and userLike.isLiked = true")
     Slice<UserTrackLike> findByUserId(@Param("userId") Long userId, Pageable pageable);
 
-    @Query("SELECT l from UserTrackLike l where l.userId = :userId and l.id < :id")
+    @Query("SELECT userLike from UserTrackLike userLike where userLike.userId = :userId and userLike.id < :id and userLike.isLiked = true")
     Slice<UserTrackLike> findByUserId(@Param("userId") Long userId, @Param("id") Long cursor, Pageable pageable);
 
     void deleteByUserId(Long userId);

@@ -61,8 +61,7 @@ public class LikeService {
         return getLikeSlice(userId, cursor, pageable);
     }
 
-    @Transactional(readOnly = true)
-    public Slice<UserTrackLike> getLikeSlice(Long userId, Long cursor, Pageable pageable) {
+    private Slice<UserTrackLike> getLikeSlice(Long userId, Long cursor, Pageable pageable) {
         if (cursor == null) {
             return userTrackLikeRepository.findByUserId(userId, pageable);
         } else {

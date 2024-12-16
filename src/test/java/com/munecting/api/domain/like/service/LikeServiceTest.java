@@ -2,7 +2,11 @@ package com.munecting.api.domain.like.service;
 
 import com.munecting.api.domain.like.dao.TrackLikeRepository;
 import com.munecting.api.domain.like.dao.UserTrackLikeRepository;
+import com.munecting.api.domain.like.dto.response.GetLikePlaylistResponseDto;
 import com.munecting.api.domain.like.dto.response.LikeResponseDto;
+import com.munecting.api.domain.like.dto.response.LikeTrackResponseDto;
+import com.munecting.api.domain.like.dto.response.TrackResponseDto;
+import com.munecting.api.domain.like.entity.UserTrackLike;
 import com.munecting.api.domain.uploadedMusic.dao.UploadedMusicRepository;
 import com.munecting.api.domain.uploadedMusic.dto.request.MusicRequestDto;
 import com.munecting.api.domain.uploadedMusic.entity.UploadedMusic;
@@ -11,6 +15,7 @@ import com.munecting.api.domain.user.constant.SocialType;
 import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.domain.user.entity.User;
 import com.munecting.api.global.error.exception.ConflictException;
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -61,6 +68,44 @@ class LikeServiceTest {
         trackLikeRepository.deleteAllInBatch();
         uploadedMusicRepository.deleteAllInBatch();
         userTrackLikeRepository.deleteAllInBatch();
+    }
+
+    @DisplayName("좋아요를 누른 음악을 최신순으로 조회한다.")
+    @Test
+    public void getLikedTracks(){
+        //given
+        String trackId1 = "4eyBiwsaGBRCjACGZKZsf7";
+        String trackId2 = "4twllsTUoTAFxiVeq3bNjq";
+        String trackId3 = "3d3ELsqKlQ7WA0a10Isu3l";
+        String trackId4 = "2D7qr3pMwinXpACxiUBtNC";
+
+        UserTrackLike userTrackLike1 = UserTrackLike.toEntity(2L, trackId1, true);
+        UserTrackLike userTrackLike2 = UserTrackLike.toEntity(2L, trackId2, true);
+        UserTrackLike userTrackLike3 = UserTrackLike.toEntity(2L, trackId3, true);
+        UserTrackLike userTrackLike4 = UserTrackLike.toEntity(2L, trackId4, false);
+
+        userTrackLikeRepository.saveAll(List.of(userTrackLike1, userTrackLike2, userTrackLike3, userTrackLike4));
+
+        //when
+        GetLikePlaylistResponseDto response = likeService.getLikedTracks(2L, null, 5);
+
+
+        //then
+        List<LikeTrackResponseDto> likeTrackResponseDtos = response.likePlaylist();
+        assertThat(likeTrackResponseDtos)
+                .hasSize(3)
+                .extracting("likeId")
+                .containsExactly(3L, 2L, 1L);
+
+        List<TrackResponseDto> trackResponseDtos = likeTrackResponseDtos.stream().map(likeTrackResponse -> likeTrackResponse.track()).toList();
+        assertThat(trackResponseDtos)
+                .hasSize(3)
+                .extracting("trackId", "trackTitle")
+                .containsExactlyInAnyOrder(
+                        Tuple.tuple("4eyBiwsaGBRCjACGZKZsf7", "If there was practice in love"),
+                        Tuple.tuple("4twllsTUoTAFxiVeq3bNjq", "Can't Love You Anymore (With OHHYUK)"),
+                        Tuple.tuple("3d3ELsqKlQ7WA0a10Isu3l", "LOVE SCENARIO")
+                );
     }
 
     @DisplayName("유저가 좋아요를 누르지 않았던 음악이라면 좋아요를 추가한다.")
