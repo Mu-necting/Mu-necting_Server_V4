@@ -74,6 +74,10 @@ dependencies {
 	// redisson
 	implementation 'org.redisson:redisson-spring-boot-starter:3.37.0'
 
+	// retry
+	implementation 'org.springframework.retry:spring-retry'
+	implementation 'org.springframework:spring-aspects'
+
 	// Actuator
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
