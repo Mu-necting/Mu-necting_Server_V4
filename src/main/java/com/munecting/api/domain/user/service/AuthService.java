@@ -103,8 +103,7 @@ public class AuthService {
     }
 
     public String getToken(Long userId) {
-        String accessToken = issueNewAccessToken(userId);
-        return accessToken;
+        return issueNewAccessToken(userId);
     }
 
     private String issueNewAccessToken(Long userId) {
