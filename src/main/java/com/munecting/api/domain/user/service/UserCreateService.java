@@ -14,12 +14,15 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
+import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserCreateService {
+
+    private static final int RETRY_DELAY_MILLIS = 100;
+    private static final int RETRY_MAX_ATTEMPTS = 15;
 
     private final UserRepository userRepository;
     private final UserNicknameService nicknameService;
@@ -27,8 +30,8 @@ public class UserCreateService {
     @Transactional(propagation = REQUIRES_NEW)
     @Retryable(
             retryFor = DataIntegrityViolationException.class,
-            maxAttempts = 20,
-            backoff = @Backoff(delay = 100)
+            maxAttempts = RETRY_MAX_ATTEMPTS,
+            backoff = @Backoff(delay = RETRY_DELAY_MILLIS)
     )
     public User createUser(String socialId, SocialType socialType) {
         User newUser = User.toEntity(
