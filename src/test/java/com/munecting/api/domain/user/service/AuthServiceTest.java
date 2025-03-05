@@ -98,7 +98,7 @@ class AuthServiceTest {
         when(oidcService.getOidcUserInfo(socialType, idTokenOfUser2))
                 .thenReturn(OidcUserInfo.of(subOfUser2));
 
-        when(nicknameService.generateUniqueNickname())
+        when(nicknameService.generateRandomNickname())
                 .thenReturn("행복한 뮤넥터1")
                 .thenReturn("행복한 뮤넥터1")
                 .thenReturn("깜찍한 뮤넥터3");
@@ -148,7 +148,7 @@ class AuthServiceTest {
 
         assertThat(user1.get().getNickname()).isNotEqualTo(user2.get().getNickname());
 
-        verify(nicknameService, times(3)).generateUniqueNickname();
+        verify(nicknameService, times(3)).generateRandomNickname();
         verify(authService, times(2)).getOrCreateUser(any());
         verify(oidcService, times(2)).getOidcUserInfo(any(), any());
     }
@@ -194,7 +194,7 @@ class AuthServiceTest {
                 .hasSize(numberOfThreads);
     }
 
-    @DisplayName("토큰 발급에 문제가 생겨도 새로운 유저의 회원가입은 유지된다.")
+    @DisplayName("JWT 발급에 문제가 생겨도 새로운 유저의 회원가입은 유지된다.")
     @Test
     public void getOrCreateUser_whenTokenIssuanceFails_thenUserIsCreated() {
         //given
@@ -220,7 +220,7 @@ class AuthServiceTest {
 
         String duplicatedNickname = "행복한 뮤넥터1";
         userRepository.save(User.toEntity("KAKAO_sub", duplicatedNickname, Role.USER, SocialType.APPLE));
-        when(nicknameService.generateUniqueNickname())
+        when(nicknameService.generateRandomNickname())
                 .thenReturn(duplicatedNickname);
 
         //when //then
