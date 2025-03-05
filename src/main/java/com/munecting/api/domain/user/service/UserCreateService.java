@@ -27,7 +27,7 @@ public class UserCreateService {
     private final UserRepository userRepository;
     private final UserNicknameService nicknameService;
 
-    @Transactional(propagation = REQUIRES_NEW)
+    @Transactional(propagation = REQUIRED)
     @Retryable(
             retryFor = DataIntegrityViolationException.class,
             maxAttempts = RETRY_MAX_ATTEMPTS,
