@@ -34,7 +34,7 @@ public class UserNicknameService {
 
     private final UserRepository userRepository;
 
-    public String generateUniqueNickname() {
+    public String generateRandomNickname() {
         String chars = generateRandomCharacter();
         int num = generateRandomNumber(chars.length());
 

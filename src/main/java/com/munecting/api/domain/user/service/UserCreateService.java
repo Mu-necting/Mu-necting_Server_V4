@@ -36,7 +36,7 @@ public class UserCreateService {
     public User createUser(String socialId, SocialType socialType) {
         User newUser = User.toEntity(
                 socialId,
-                nicknameService.generateUniqueNickname(),
+                nicknameService.generateRandomNickname(),
                 Role.USER,
                 socialType
         );
