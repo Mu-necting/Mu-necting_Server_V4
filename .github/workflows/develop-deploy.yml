@@ -46,7 +46,7 @@ jobs:
 
       # Gradle test
       - name: Test with Gradle
-        run: ./gradlew test --stacktrace --info
+        run: ./gradlew test 
 
       # Gradle build
       - name: Build Gradle
