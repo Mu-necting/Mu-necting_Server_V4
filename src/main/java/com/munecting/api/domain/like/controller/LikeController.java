@@ -3,6 +3,7 @@ package com.munecting.api.domain.like.controller;
 import com.munecting.api.domain.like.dto.response.AddTrackLikeResponseDto;
 import com.munecting.api.domain.like.dto.response.DeleteTrackLikeResponseDto;
 import com.munecting.api.domain.like.dto.response.GetLikePlaylistResponseDto;
+import com.munecting.api.domain.like.dto.response.LikeResponseDto;
 import com.munecting.api.domain.like.service.LikeService;
 import com.munecting.api.global.auth.user.UserId;
 import com.munecting.api.global.common.dto.response.ApiResponse;
@@ -18,15 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class LikeController {
 
     private final LikeService likeService;
-    @PostMapping("/{trackId}/likes")
-    @Operation(summary = "좋아요 누르기")
-    public ApiResponse<?> addTrackLike(
-            @PathVariable(name = "trackId") String trackId,
-            @UserId Long userId
-    ) {
-        AddTrackLikeResponseDto dto = likeService.addTrackLike(trackId, userId);
-        return ApiResponse.created(dto);
-    }
 
     @GetMapping("/liked")
     @Operation(summary = "좋아요한 음악 조회")
@@ -39,13 +31,14 @@ public class LikeController {
         return ApiResponse.ok(dto);
     }
 
-    @DeleteMapping("/{trackId}/likes")
-    @Operation(summary = "좋아요 취소")
-    public ApiResponse<?> deleteTrackLike (
+    @PostMapping("/{trackId}/likes/toggle")
+    @Operation(summary = "좋아요 토글")
+    public ApiResponse<?> toggleTrackLike (
             @PathVariable(name = "trackId") String trackId,
             @UserId Long userId
-    ) {
-        DeleteTrackLikeResponseDto dto = likeService.deleteTrackLike(trackId, userId);
+    ){
+        LikeResponseDto dto = likeService.toggleTrackLike(trackId, userId);
         return ApiResponse.ok(dto);
     }
+
 }

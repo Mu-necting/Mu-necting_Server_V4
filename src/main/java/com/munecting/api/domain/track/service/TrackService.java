@@ -1,7 +1,7 @@
 package com.munecting.api.domain.track.service;
 
 import com.munecting.api.domain.comment.dao.CommentRepository;
-import com.munecting.api.domain.like.dao.LikeRepository;
+import com.munecting.api.domain.like.dao.TrackLikeRepository;
 import com.munecting.api.domain.like.service.LikeService;
 import com.munecting.api.domain.spotify.service.SpotifyService;
 import com.munecting.api.domain.track.dto.response.GetTrackDetailsResponseDto;
@@ -17,9 +17,10 @@ public class TrackService {
     private final SpotifyService spotifyService;
     private final UserService userService;
     private final LikeService likeService;
-    private final LikeRepository likeRepository;
+    private final TrackLikeRepository likeRepository;
     private final CommentRepository commentRepository;
 
+    // todo: 삭제
     @Transactional(readOnly = true)
     public GetTrackDetailsResponseDto getTrackDetails(String trackId, Long userId) {
         spotifyService.validateTrackExists(trackId);

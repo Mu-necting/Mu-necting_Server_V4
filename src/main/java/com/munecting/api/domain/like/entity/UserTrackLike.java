@@ -3,19 +3,15 @@ package com.munecting.api.domain.like.entity;
 import com.munecting.api.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Table(name = "\"Like\"")
-public class Like extends BaseEntity {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "trackId"}))
+public class UserTrackLike extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +23,21 @@ public class Like extends BaseEntity {
     @NotNull
     private String trackId;
 
-    public static Like toEntity(Long userId, String trackId) {
-        return Like.builder()
-                .userId(userId)
+    private boolean isLiked;
+
+    @Version
+    private Integer version;
+
+    public static UserTrackLike toEntity(Long userId, String trackId, boolean isLiked) {
+        return UserTrackLike.builder()
                 .trackId(trackId)
+                .userId(userId)
+                .isLiked(isLiked)
                 .build();
     }
+
+    public void toggle() {
+        isLiked = !isLiked;
+    }
+
 }
