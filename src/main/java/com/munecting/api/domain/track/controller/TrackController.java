@@ -21,6 +21,7 @@ public class TrackController {
 
     private final TrackService trackService;
 
+    // todo :  삭제
     @GetMapping("/{trackId}/stats")
     @Operation(summary = "좋아요와 댓글 개수 조회")
     public ApiResponse<?> getTrackDetails(
@@ -30,4 +31,5 @@ public class TrackController {
         GetTrackDetailsResponseDto dto = trackService.getTrackDetails(trackId, userId);
         return ApiResponse.ok(dto);
     }
+
 }
