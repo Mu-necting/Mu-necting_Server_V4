@@ -2,7 +2,6 @@ package com.munecting.api.domain.user.service;
 
 import com.munecting.api.domain.oidc.dto.OidcUserInfo;
 import com.munecting.api.domain.oidc.service.OidcService;
-import com.munecting.api.domain.user.constant.Role;
 import com.munecting.api.domain.user.dto.request.LogoutRequestDto;
 import com.munecting.api.domain.user.dto.request.RefreshTokenRequestDto;
 import com.munecting.api.domain.user.dto.request.LoginRequestDto;
@@ -11,7 +10,6 @@ import com.munecting.api.domain.user.dto.response.ValidateTokenResponseDto;
 import com.munecting.api.domain.user.entity.User;
 import com.munecting.api.domain.user.dao.UserRepository;
 import com.munecting.api.global.auth.jwt.JwtProvider;
-import com.munecting.api.domain.user.constant.SocialType;
 import com.munecting.api.global.common.dto.response.Status;
 import com.munecting.api.global.error.exception.UnauthorizedException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -33,7 +31,7 @@ public class AuthService {
     private final RedisTemplate<String, String> redisTemplate;
     private final OidcService oidcService;
     private final UserRepository userRepository;
-    private final UserNicknameService nicknameService;
+    private final UserCreateService userCreateService;
 
     @Value("${jwt.refresh.expiration}")
     private long refreshTokenExpiration;
@@ -77,27 +75,18 @@ public class AuthService {
         return "RT:" + userId;
     }
 
-    @Transactional
     public UserTokenResponseDto getOrCreateUser(LoginRequestDto dto) {
-        String socialId = generateSocialId(dto);
-
+        String socialId = validateAndObtainUserInfo(dto);
         User user = userRepository.findBySocialId(socialId)
-                .orElseGet(() -> createUser(socialId, dto.socialType()));
+                .orElseGet(() -> userCreateService.createUser(socialId, dto.socialType()));
 
         return issueTokensForUser(user);
     }
 
-    private String generateSocialId(LoginRequestDto dto) {
+    private String validateAndObtainUserInfo(LoginRequestDto dto) {
         OidcUserInfo oidcUserInfo = oidcService.getOidcUserInfo(dto.socialType(), dto.idToken());
 
         return dto.socialType().toString() + "_" + oidcUserInfo.sub();
-    }
-
-    private User createUser(String socialId, SocialType socialType) {
-        User newUser = User.toEntity(
-                socialId, nicknameService.generateUniqueNickname(), Role.USER, socialType);
-
-        return userRepository.save(newUser);
     }
 
     private UserTokenResponseDto issueTokensForUser(User user) {
@@ -114,8 +103,7 @@ public class AuthService {
     }
 
     public String getToken(Long userId) {
-        String accessToken = issueNewAccessToken(userId);
-        return accessToken;
+        return issueNewAccessToken(userId);
     }
 
     private String issueNewAccessToken(Long userId) {
