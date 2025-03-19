@@ -210,7 +210,7 @@ class AuthServiceTest {
                 .isNotEmpty();
     }
 
-    @DisplayName("닉네임을 재생성할 수 있는 횟수는 최대 20번이다.")
+    @DisplayName("닉네임을 재생성할 수 있는 횟수는 최대 15번이다.")
     @Test
     public void getOrCreateUser_whenNicknameGenerationExceedsMaxRetries(){
         //given
@@ -228,7 +228,7 @@ class AuthServiceTest {
                 .isInstanceOf(NicknameException.class)
                 .hasMessage("닉네임 생성에 실패하였습니다.");
 
-        verify(userCreateService, times(20)).createUser(anyString(), any(SocialType.class));
+        verify(userCreateService, times(15)).createUser(anyString(), any(SocialType.class));
     }
 
     private LoginRequestDto createRequestDto() {
