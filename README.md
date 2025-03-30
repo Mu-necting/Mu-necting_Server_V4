@@ -22,7 +22,9 @@
 - Google API Client
 
 ## 🛠️ 시스템 아키텍처
-![뮤넥팅_다이이어그램 drawio](https://github.com/user-attachments/assets/de876f50-cd40-4a7b-99eb-0fb4863a84cd)
+![뮤넥팅 drawio (1)](https://github.com/user-attachments/assets/61a4640b-97c9-4ae5-ab3d-1f0855744723)
+
+
 
 ## 👥 팀원  
 
